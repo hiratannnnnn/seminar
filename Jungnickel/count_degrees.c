@@ -1,3 +1,5 @@
+// 1-2-16.c
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -48,41 +50,41 @@ int	*count_degrees(int *prufer, int n)
 	return (degrees);
 }
 
-int	main(int argc, char *argv[])
-{
-	int n;
-	int *prufer;
-	int *degrees;
-	int vertices;
-	int i;
+// int	main(int argc, char *argv[])
+// {
+// 	int n;
+// 	int *prufer;
+// 	int *degrees;
+// 	int vertices;
+// 	int i;
 
-	if (argc < 2)
-	{
-		int prufer_1indexed[] = {4, 4, 4, 5};
-		n = sizeof(prufer_1indexed) / sizeof(prufer_1indexed[0]);
-		prufer = (int *)malloc(sizeof(int) * n);
-		for (i = 0; i < n; i++)
-			prufer[i] = prufer_1indexed[i] - 1;
-	}
-	else
-	{
-		n = argc - 1;
-		prufer = (int *)malloc(sizeof(int) * n);
-		for (i = 0; i < n; i++)
-			prufer[i] = atoi(argv[i + 1]) - 1;
-	}
-	vertices = n + 2;
-	degrees = count_degrees(prufer, n);
+// 	if (argc < 2)
+// 	{
+// 		int prufer_1indexed[] = {4, 4, 4, 5};
+// 		n = sizeof(prufer_1indexed) / sizeof(prufer_1indexed[0]);
+// 		prufer = (int *)malloc(sizeof(int) * n);
+// 		for (i = 0; i < n; i++)
+// 			prufer[i] = prufer_1indexed[i] - 1;
+// 	}
+// 	else
+// 	{
+// 		n = argc - 1;
+// 		prufer = (int *)malloc(sizeof(int) * n);
+// 		for (i = 0; i < n; i++)
+// 			prufer[i] = atoi(argv[i + 1]) - 1;
+// 	}
+// 	vertices = n + 2;
+// 	degrees = count_degrees(prufer, n);
 
-	for (i = 0; i < vertices; i++)
-	{
-		printf("%d", degrees[i]);
-		if (i != vertices - 1)
-			printf(" ");
-	}
-	printf("\n");
+// 	for (i = 0; i < vertices; i++)
+// 	{
+// 		printf("%d", degrees[i]);
+// 		if (i != vertices - 1)
+// 			printf(" ");
+// 	}
+// 	printf("\n");
 
-	free(degrees);
-	free(prufer);
-	return (0);
-}
+// 	free(degrees);
+// 	free(prufer);
+// 	return (0);
+// }

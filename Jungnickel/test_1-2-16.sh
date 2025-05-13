@@ -41,6 +41,7 @@ run_test 2 1 2 3 4
 run_test 3 2 2 2
 run_test 4 3 3 5 5
 run_test 5 1 1 1 1 1
+run_test 6 5 5 5 4 3 6 6 2 1 8
 
 rm -f test_1-2-16
 

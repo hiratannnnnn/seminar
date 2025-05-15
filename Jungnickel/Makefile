@@ -24,12 +24,13 @@ clean:
 
 fclean: clean
 	rm -f $(TARGET)
+	rm -f $(LIB)
 
 delres:
 	rm -rf result_*
 	rm -rf results_*
-	rm -rf *.out
-	rm -rf *.exe
+	rm -f *.out
+	rm -f *.exe
 
 re: fclean all
 

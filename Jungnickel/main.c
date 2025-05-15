@@ -13,5 +13,5 @@ int	main(void)
 			ft_putnbr(result[i][j]);
 		ft_putstr("\n");
 	}
+	free_array_int(result, r);
 }
-

@@ -1,26 +1,35 @@
 CC = gcc
-CFLAGS = -Wall -O2
+CFLAGS = -Wall -Wextra -Werror -O2
 LDFLAGS = -lm
 TARGET = jung
-SRCS = main.c count_degrees.c generate_matrix.c generate_prufer_code.c is_tree.c print_graph.c
+LIB = libjung.a
+SRCS = main.c
 OBJS = $(SRCS:.c=.o)
+LIBSRCS = is_tree.c generate_adj.c utils.c utils_free.c
+LIBOBJS = $(LIBSRCS:.c=.o)
 
-all: $(TARGET)
+all: $(LIB) $(TARGET)
 
-$(TARGET): $(OBJS)
-	$(CC) -o $@ $(OBJS) $(LDFLAGS)
+$(LIB): $(LIBOBJS)
+	$(AR) rcs $@ $^
+
+$(TARGET): $(OBJS) $(LIB)
+	$(CC) -o $@ $(OBJS) $(LIB) $(LDFLAGS)
 
 %.o: %.c jung.h
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 clean:
-	rm -f $(OBJS)
+	rm -f $(OBJS) $(LIBOBJS)
 
 fclean: clean
 	rm -f $(TARGET)
 
 delres:
 	rm -rf result_*
+	rm -rf results_*
+	rm -rf *.out
+	rm -rf *.exe
 
 re: fclean all
 

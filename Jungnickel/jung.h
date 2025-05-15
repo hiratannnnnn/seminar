@@ -1,32 +1,36 @@
 #ifndef JUNG_H
-#define JUNG_H
+# define JUNG_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
+# include <math.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
 
-// 1-2-16: プルーファーコードから次数列を計算
-int *count_degrees(int *prufer, int n);
+int		*count_degrees(int *prufer, int n);
 
-// 1-2-17: 次数列からプルーファーコードを生成
-int *generate_prufer_code(int *degrees, int n);
+// generate_adj.c
+int		**generate_adj(int r, int c);
 
-// 1-2-17-2: 次数列から隣接行列を生成
-int **generate_matrix(int *degs, int n);
+int		*generate_prufer_code(int *degrees, int n);
 
-// print_graph: 隣接行列からグラフを描画
-void draw_graph(int **matrix, int n);
+int		**generate_matrix(int *degs, int n);
 
-// is_tree: 隣接行列が木を表しているか判定
-int is_tree(int **matrix, int n);
+void	draw_graph(int **matrix, int n);
 
-// ユーティリティ関数: 最小次数頂点を見つける
-int find_min_vertex(int *degs, int n);
+int		is_tree(int **matrix, int n);
 
-// ユーティリティ関数: 最大次数頂点を見つける
-int find_max_vertex(int *degs, int n, int exclude);
+int		find_min_vertex(int *degs, int n);
 
-// ユーティリティ関数: プルーファーコードで次に使用する最小頂点を見つける
-int find_min(int *prufer, int *appeared, int vertices, int n, int current_index);
+int		find_max_vertex(int *degs, int n, int exclude);
+
+int		find_min(int *prufer, int *appeared, int vertices, int n,
+			int current_index);
+
+// utils_free.c
+void	free_array_int(int **arr, const int r);
+
+// utils.c
+void	ft_putnbr(long n);
+void	ft_putstr(char const *str);
 
 #endif

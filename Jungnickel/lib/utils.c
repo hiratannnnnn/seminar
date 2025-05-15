@@ -1,4 +1,4 @@
-#include "jung.h"
+#include "../jung.h"
 
 void	ft_putnbr(long n)
 {
@@ -12,9 +12,7 @@ void	ft_putnbr(long n)
 		write(1, "-", 1);
 	}
 	if (num >= 10)
-	{
 		ft_putnbr(num / 10);
-	}
 	c = num % 10 + '0';
 	write(1, &c, 1);
 }

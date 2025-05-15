@@ -1,11 +1,16 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -O2
+CFLAGS = #-Wall -Wextra -Werror -O2
 LDFLAGS = -lm
 TARGET = jung
 LIB = libjung.a
-SRCS = main.c
+SRCS = main.c algo_EULER.c
 OBJS = $(SRCS:.c=.o)
-LIBSRCS = is_tree.c generate_adj.c utils.c utils_free.c
+LIBSRCS = lib/is_tree.c \
+lib/generate_adj.c \
+lib/utils.c \
+lib/utils_free.c \
+lib/utils_edges.c \
+lib/utils_lists.c
 LIBOBJS = $(LIBSRCS:.c=.o)
 
 all: $(LIB) $(TARGET)
@@ -17,6 +22,9 @@ $(TARGET): $(OBJS) $(LIB)
 	$(CC) -o $@ $(OBJS) $(LIB) $(LDFLAGS)
 
 %.o: %.c jung.h
+	$(CC) -c $< -o $@ $(CFLAGS)
+
+lib/%.o: lib/%.c jung.h
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 clean:

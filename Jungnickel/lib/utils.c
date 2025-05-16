@@ -22,12 +22,3 @@ void	ft_putstr(char const *str)
 	while (*str)
 		write(1, str++, 1);
 }
-
-// int	main(void)
-// {
-// 	int	n;
-
-// 	n = 1123412341;
-// 	ft_putnbr(n);
-// 	return (0);
-// }

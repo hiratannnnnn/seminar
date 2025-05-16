@@ -69,6 +69,6 @@ void			ft_putstr(char const *str);
 Node			*create_node(int edge_id);
 void			append_node(Node **head, Node *new_node);
 void			insert_node_after(Node *pos, Node *new_node);
-void			free_node_list(Node *head);
+Node 			*get_last_node(Node *head);
 
 #endif

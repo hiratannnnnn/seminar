@@ -4,6 +4,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/**
+ * @todo カスみたいな実装を改良します
+ */
+
 int find_min_vertex(int *degs, int n)
 {
     int min_v = -1;
@@ -36,7 +40,7 @@ int find_max_vertex(int *degs, int vertices, int exclude)
     return max_v;
 }
 
-int **generate_matrix(int *degs, int n)
+int **generate_matrix_from_degree(int *degs, int n)
 {
     // 最初の次数を保存（デバッグ用）
     int *orig_degs = (int *)malloc(sizeof(int) * n);

@@ -30,11 +30,11 @@ typedef struct Node
 
 int				*count_degrees(int *prufer, int n);
 
-// generate_adj.c
-int				**generate_adj(int r, int c);
+// generate_matrix.c
+int				**generate_matrix(int r, int c);
 
 int				*generate_prufer_code(int *degrees, int n);
-int				**generate_matrix(int *degs, int n);
+int				**generate_matrix_from_degree(int *degs, int n);
 void			draw_graph(int **matrix, int n);
 int				is_tree(int **matrix, int n);
 int				find_min_vertex(int *degs, int n);

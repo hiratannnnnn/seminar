@@ -10,7 +10,7 @@
  * 			or NULL on failure.
  */
 
-int	*generate_prufer_code(int n)
+int	*generate_random_prufer(int n)
 {
 	int i;
 
@@ -53,11 +53,14 @@ int *count_degrees_from(const int *prufer, int n)
  * @brief Generates a random undirected adjacency matrix of TREE
  * and writes it to a file.
  *
+ * HAS TO BE FREED
+ *
  * @param n Number of vertices
- * @param filename Output file name
+ * @return Pointer to the generated adjacency matrix (n, n),
+ * 			or NULL on failure.
  */
 
-void generate_random_tree(int n, char const *filename)
+int **generate_random_tree(int n)
 {
 	int **matrix;
 	int *prufer, *degree;
@@ -66,23 +69,20 @@ void generate_random_tree(int n, char const *filename)
 	// initialization
 	matrix = generate_matrix(n, n);
 	if (!matrix)
-		return;
-	// print_matrix(matrix, n, n);
+		return NULL;
 	srand((unsigned int)time(NULL));
-	prufer = generate_prufer_code(n);
+	prufer = generate_random_prufer(n);
 	if (!prufer)
 	{
-		ft_putstr("Failed to allocate prufer code.\n");
 		free_array_int(matrix, n);
-		return;
+		return NULL;
 	}
 	degree = count_degrees_from(prufer, n);
 	if (!degree)
 	{
-		ft_putstr("Failed to allocate degree array.\n");
 		free(prufer);
 		free_array_int(matrix, n);
-		return;
+		return NULL;
 	}
 	// initialization
 
@@ -101,7 +101,6 @@ void generate_random_tree(int n, char const *filename)
 			}
 		}
 	}
-	// ft_putstr("debug: last two nodes\n");
 		// the last two nodes
 	int u = -1;
 	int v = -1;
@@ -119,26 +118,10 @@ void generate_random_tree(int n, char const *filename)
 		matrix[v][u] = 1;
 	}
 		// the last two nodes
-	// print_matrix(matrix, n, n);
-
-	// write to file
-	FILE *fp = fopen(filename, "w");
-	if (!fp)
-	{
-		ft_putstr("Failed to open file.\n");
-		free(prufer);
-		free(degree);
-		free_array_int(matrix, n);
-		return;
-	}
-	fprintf(fp, "%d\n", n);
-	for (i = 0; i < n; i++)
-		for (j = 0; j < n; j++)
-			fprintf(fp, "%d%c", matrix[i][j], (j == n - 1) ? '\n' : ' ');
-	fclose(fp);
-	// write to file
+	// build the tree from the Prufer code
 
 	free(prufer);
 	free(degree);
-	free_array_int(matrix, n);
+	return matrix;
+	// free_array_int(matrix, n);
 }

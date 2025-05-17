@@ -30,6 +30,8 @@ typedef struct s_euler_ctx
  * This function follows the procedure TRACE as described in Hierholzer's algorithm,
  * using the context structure to manage state.
  *
+ * this algorithm is guaranteed to halt on Eulerian graphs.
+ *
  * @param vs Array of pointers to Vertex structures (the graph)
  * @param v  Starting vertex
  * @param ctx Pointer to the Euler context structure
@@ -129,7 +131,7 @@ void	algo_euler(Vertex **vs, int n, int s, Node **K)
 		e = vs[i]->incidence;
 		while (e)
 		{
-			ctx.new_edge[e->id] = 1;
+			ctx.new_edge[e->id] = 1; // set edges those are actually in G
 			e = e->next;
 		}
 		i++;

@@ -3,10 +3,11 @@ CFLAGS = #-Wall -Wextra -Werror -O2
 LDFLAGS = -lm
 TARGET = jung
 LIB = libjung.a
-SRCS = main.c algo_EULER.c
+SRCS = main.c
 OBJS = $(SRCS:.c=.o)
 LIBSRCS = lib/generate_matrix.c \
 lib/generate_random_adj.c \
+lib/generate_random_euler.c \
 lib/generate_random_tree.c \
 lib/is_tree.c \
 lib/read_adj.c \
@@ -34,7 +35,7 @@ lib/%.o: lib/%.c jung.h
 clean:
 	rm -f $(OBJS) $(LIBOBJS)
 
-fclean: clean
+fclean: clean delres
 	rm -f $(TARGET)
 	rm -f $(LIB)
 
@@ -43,6 +44,7 @@ delres:
 	rm -rf results_*
 	rm -f *.out
 	rm -f *.exe
+	rm -f *_graph.txt
 
 re: fclean all
 

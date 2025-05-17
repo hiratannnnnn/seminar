@@ -41,10 +41,13 @@ int				**generate_matrix(int r, int c);
 // generate_random_adj.c
 void 			generate_random_adj(int n, double edge_prob, char const *filename);
 
+// generate_random_euler.c
+int 			**generate_random_euler(int n);
+
 // generate_random_tree.c
-int				*generate_prufer_code(int n);
+int				*generate_random_prufer(int n);
 int 			*count_degrees_from(const int *prufer, int n);
-void 			generate_random_tree(int n, char const *filename);
+int 			**generate_random_tree(int n);
 
 
 // is_tree.c
@@ -75,6 +78,7 @@ void			free_vertex_array(Vertex **vs, int n);
 // utils_print.c
 void 			print_matrix(int **matrix, int r, int c);
 void			print_array_int(int *arr, int n);
+int				write_to_file(int **matrix, int n, char const *filename);
 
 // utils.c
 void			ft_putnbr(long n);

@@ -1,10 +1,10 @@
 // 1-2-17.c
-// generate_prufer_code
+// generate_random_prufer
 
 #include <stdio.h>
 #include <stdlib.h>
 
-int	*generate_prufer_code(int *degrees, int vertices)
+int	*generate_random_prufer(int *degrees, int vertices)
 {
 	int	n;
 	int	*prufer;
@@ -59,7 +59,7 @@ int	*generate_prufer_code(int *degrees, int vertices)
 // 		printf("%d ", degrees[i]);
 // 	printf("\n");
 
-// 	prufer = generate_prufer_code(degrees, vertices);
+// 	prufer = generate_random_prufer(degrees, vertices);
 
 // 	printf("Prufer code: ");
 // 	for (i = 0; i < vertices - 2; i++)

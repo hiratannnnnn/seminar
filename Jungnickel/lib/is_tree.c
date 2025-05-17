@@ -1,6 +1,4 @@
 #include "../jung.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 static void	dfs(int **matrix, int n, int vertex, int *visited);
 

@@ -5,9 +5,13 @@ TARGET = jung
 LIB = libjung.a
 SRCS = main.c algo_EULER.c
 OBJS = $(SRCS:.c=.o)
-LIBSRCS = lib/is_tree.c \
-lib/generate_adj.c \
+LIBSRCS = lib/generate_matrix.c \
+lib/generate_random_adj.c \
+lib/generate_random_tree.c \
+lib/is_tree.c \
+lib/read_adj.c \
 lib/utils.c \
+lib/utils_print.c \
 lib/utils_free.c \
 lib/utils_edges.c \
 lib/utils_lists.c

@@ -1,6 +1,6 @@
 #include "jung.h"
 
-void	print_euler_tour(Node *K)
+static void	print_euler_tour(Node *K)
 {
 	Node	*cur;
 
@@ -17,23 +17,36 @@ void	print_euler_tour(Node *K)
 
 int	main(void)
 {
-	int		n;
-	Vertex	**vs;
-	Node	*K;
+	// int		n;
+	// Vertex	**vs;
+	// Node	*K;
 
-	n = 5;
-	K = NULL;
-	vs = create_vertex_array(n);
-	add_edge(vs, 0, 1, 0);
-	add_edge(vs, 1, 2, 1);
-	add_edge(vs, 2, 3, 2);
-	add_edge(vs, 4, 0, 3);
-	add_edge(vs, 1, 3, 4);
-	add_edge(vs, 1, 4, 5);
-	print_vertices((const Vertex **)vs, n);
-	algo_euler(vs, n, 0, &K);
-	print_euler_tour(K);
-	free_node_list(K);
-	free_vertex_array(vs, n);
+	// n = 5;
+	// K = NULL;
+	// vs = create_vertex_array(n);
+	// add_edge(vs, 0, 1, 0);
+	// add_edge(vs, 1, 2, 1);
+	// add_edge(vs, 2, 3, 2);
+	// add_edge(vs, 4, 0, 3);
+	// add_edge(vs, 1, 3, 4);
+	// add_edge(vs, 1, 4, 5);
+	// print_vertices((const Vertex **)vs, n);
+	// algo_euler(vs, n, 0, &K);
+	// print_euler_tour(K);
+	// free_node_list(K);
+	// free_vertex_array(vs, n);
+	int num = 5;
+	generate_random_tree(num, "random_graph.txt");
+
+
+
+	int **matrix;
+	int n;
+
+	// matrix = read_adj(&n, "random_graph.txt");
+	// if (matrix == NULL)
+	// 	return (printf("adsfasdfadsf"), 0);
+	// print_matrix(matrix, n, n);
+	// free_array_int(matrix, n);
 	return (0);
 }

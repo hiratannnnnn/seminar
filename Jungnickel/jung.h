@@ -4,7 +4,9 @@
 # include <math.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <time.h>
 # include <unistd.h>
+
 
 typedef struct Edge
 {
@@ -28,19 +30,28 @@ typedef struct Node
 	struct Node	*next;
 }				Node;
 
-int				*count_degrees(int *prufer, int n);
+
 
 // generate_matrix.c
 int				**generate_matrix(int r, int c);
 
-int				*generate_prufer_code(int *degrees, int n);
-int				**generate_matrix_from_degree(int *degs, int n);
-void			draw_graph(int **matrix, int n);
+
+
+
+// generate_random_adj.c
+void 			generate_random_adj(int n, double edge_prob, char const *filename);
+
+// generate_random_tree.c
+int				*generate_prufer_code(int n);
+int 			*count_degrees_from(const int *prufer, int n);
+void 			generate_random_tree(int n, char const *filename);
+
+
+// is_tree.c
 int				is_tree(int **matrix, int n);
-int				find_min_vertex(int *degs, int n);
-int				find_max_vertex(int *degs, int n, int exclude);
-int				find_min(int *prufer, int *appeared, int vertices, int n,
-					int current_index);
+
+// read_adj.c
+int 			**read_adj(int *n, char const *filename);
 
 // algo_EULER.c
 void			algo_euler(Vertex **vs, int n, int s, Node **K);
@@ -60,6 +71,10 @@ void			free_edge_list(Edge *head);
 void			free_node_list(Node *head);
 void			free_vertex(Vertex *vertex);
 void			free_vertex_array(Vertex **vs, int n);
+
+// utils_print.c
+void 			print_matrix(int **matrix, int r, int c);
+void			print_array_int(int *arr, int n);
 
 // utils.c
 void			ft_putnbr(long n);

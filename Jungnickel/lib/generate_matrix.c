@@ -20,10 +20,17 @@ int	**generate_matrix(int r, int c)
 	int	j;
 
 	result = (int **)malloc(sizeof(int *) * r);
+	if (!result)
+		return NULL;
 	i = 0;
 	while (i < r)
 	{
 		result[i] = (int *)malloc(sizeof(int) * c);
+		if (!result[i])
+		{
+			free_array_int(result, i);
+			return NULL;
+		}
 		j = 0;
 		while (j < c)
 		{

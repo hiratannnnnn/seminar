@@ -15,7 +15,6 @@
 
 int **read_adj(int *n, char const *filename)
 {
-	ft_putstr("asdasfd");
 	FILE *fp;
 	int **matrix;
 	int i, j;

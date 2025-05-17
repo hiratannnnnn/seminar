@@ -19,7 +19,7 @@ int	*generate_prufer_code(int n)
 	int *prufer = (int *)malloc((n - 2) * sizeof(int));
 	if (!prufer)
 		return NULL;
-	for (i = 0; i < n; i++)
+	for (i = 0; i < n - 2; i++)
 		prufer[i] = rand() % n;
 	return prufer;
 }
@@ -45,7 +45,7 @@ int *count_degrees_from(const int *prufer, int n)
 	for (i = 0; i < n; i++)
 		degree[i] = 1;
 	for (i = 0; i < n - 2; i++)
-		degree[prufer[i]]++;\
+		degree[prufer[i]]++;
 	return degree;
 }
 
@@ -86,9 +86,6 @@ void generate_random_tree(int n, char const *filename)
 	}
 	// initialization
 
-	print_array_int(degree, n);
-	print_array_int(prufer, n-2);
-
 	// build the tree from the Prufer code
 	for (i = 0; i < n - 2; i++)
 	{
@@ -104,7 +101,7 @@ void generate_random_tree(int n, char const *filename)
 			}
 		}
 	}
-	ft_putstr("debug: last two nodes\n");
+	// ft_putstr("debug: last two nodes\n");
 		// the last two nodes
 	int u = -1;
 	int v = -1;
@@ -122,10 +119,7 @@ void generate_random_tree(int n, char const *filename)
 		matrix[v][u] = 1;
 	}
 		// the last two nodes
-	print_matrix(matrix, n, n);
-
-
-	// build the tree from the Prufer code
+	// print_matrix(matrix, n, n);
 
 	// write to file
 	FILE *fp = fopen(filename, "w");

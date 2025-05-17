@@ -35,7 +35,7 @@ int	main(void)
 	// print_euler_tour(K);
 	// free_node_list(K);
 	// free_vertex_array(vs, n);
-	int num = 5;
+	int num = 12;
 	generate_random_tree(num, "random_graph.txt");
 
 
@@ -43,10 +43,10 @@ int	main(void)
 	int **matrix;
 	int n;
 
-	// matrix = read_adj(&n, "random_graph.txt");
-	// if (matrix == NULL)
-	// 	return (printf("adsfasdfadsf"), 0);
-	// print_matrix(matrix, n, n);
-	// free_array_int(matrix, n);
+	matrix = read_adj(&n, "random_graph.txt");
+	if (matrix == NULL)
+		return (printf("adsfasdfadsf"), 0);
+	print_matrix(matrix, n, n);
+	free_array_int(matrix, n);
 	return (0);
 }

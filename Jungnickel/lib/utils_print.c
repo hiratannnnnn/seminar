@@ -9,7 +9,7 @@ void print_matrix(int **matrix, int r, int c)
 	ft_putnbr(r);
 	ft_putstr(", ");
 	ft_putnbr(c);
-	ft_putstr(" ).");
+	ft_putstr(" )\n");
 }
 
 void print_array_int(int *arr, int n)

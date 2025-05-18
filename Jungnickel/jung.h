@@ -30,13 +30,8 @@ typedef struct Node
 	struct Node	*next;
 }				Node;
 
-
-
 // generate_matrix.c
 int				**generate_matrix(int r, int c);
-
-
-
 
 // generate_random_adj.c
 void 			generate_random_adj(int n, double edge_prob, char const *filename);
@@ -48,7 +43,6 @@ int 			**generate_random_euler(int n);
 int				*generate_random_prufer(int n);
 int 			*count_degrees_from(const int *prufer, int n);
 int 			**generate_random_tree(int n);
-
 
 // is_tree.c
 int				is_tree(int **matrix, int n);

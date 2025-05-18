@@ -16,8 +16,8 @@
 
 typedef struct s_euler_ctx
 {
-	int		*used;			// length of n
-	int		*new_edge;		// length of |E|
+	int		*used;			// length n
+	int		*new_edge;		// length |E|
 	int		*used_list;		// list of vertices that used[v] is TRUE
 	int		used_list_size;	// size of used_list
 	int		*e_pos;			// position of vertices in K
@@ -48,13 +48,13 @@ static void	trace(t_euler_ctx *ctx, Vertex **vs, int v,  Node **C)
 		edge = vs[v]->incidence;
 		while (edge && !ctx->new_edge[edge->id])
 			edge = edge->next;
-		if (!edge)
+		if (!edge) // all edges incident with v are used
 			return ;
 		ctx->new_edge[edge->id] = 0;
 		node = create_node(edge->id);
-		append_node(C, node);
-		if ((ctx->e_pos)[v] == -1)
-			(ctx->e_pos)[v] = node->edge_id;
+		append_node(C, node); // append the node to the last of C
+		if ((ctx->e_pos)[v] == -1) // v is not in K yet ?
+			(ctx->e_pos)[v] = node->edge_id; // wherever is fine
 		v = edge->to;
 		if (!ctx->used[v])
 		{

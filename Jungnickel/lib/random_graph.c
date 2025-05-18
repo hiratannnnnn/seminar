@@ -8,7 +8,7 @@
  * @param filename Output file name
  */
 
-void generate_random_adj(int n, double edge_prob, char const *filename)
+void generate_random_graph(int n, double edge_prob, char const *filename)
 {
 	int **matrix;
 	int i, j;
@@ -36,7 +36,7 @@ void generate_random_adj(int n, double edge_prob, char const *filename)
 	FILE *fp = fopen(filename, "w");
 	if (!fp)
 	{
-		ft_putstr("Failed to open file.\n");
+		printf("Failed to open file.\n");
 		free_array_int(matrix, n);
 		return;
 	}

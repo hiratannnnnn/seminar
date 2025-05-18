@@ -1,0 +1,64 @@
+#include "../jung.h"
+
+/**
+ * @brief Converts an adjacency matrix to a vertex list representation
+ * 
+ * Creates a list of vertices with incident edges based on the adjacency matrix.
+ * The returned structure can be used with algo_euler and other functions
+ * expecting the vertex-edge list representation.
+ *
+ * @param matrix Adjacency matrix (n x n)
+ * @param n Number of vertices
+ * @return Array of Vertex pointers, or NULL on failure
+ */
+
+Vertex      **adj_matrix_to_vertices(int **matrix, int n)
+{
+    Vertex **vertices;
+    int edge_id;
+    int i, j;
+
+    vertices = create_vertex_array(n);
+    if (!vertices)
+        return NULL;
+    
+    edge_id = 0;
+    for (i = 0; i < n; i++)
+        for (j = i; j < n; j++)
+            if (matrix[i][j])
+                add_edge(vertices, i, j, edge_id++);
+    return vertices;
+}
+
+/**
+ * @brief Converts a vertex list representation to an adjacency matrix
+ * 
+ * @param vertices Array of Vertex pointers
+ * @param n Number of vertices
+ * @return Adjacency matrix, or NULL on failure
+ */
+
+int **vertices_to_adj_matrix(Vertex **vertices, int n)
+{
+    int **matrix;
+    Edge *edge;
+    int i;
+
+    matrix = generate_matrix(n, n);
+    if (!matrix)
+        return NULL;
+    for (i = 0; i < n; i++)
+    {
+        edge = vertices[i]->incidence;
+        while (edge)
+        {
+            matrix[edge->from][edge->to] = 1;
+            if (edge->from != edge->to)
+                matrix[edge->to][edge->from] = 1;
+            edge = edge->next;
+        }
+    }
+
+    return matrix;
+}
+

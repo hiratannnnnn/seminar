@@ -1,5 +1,25 @@
 #include "../jung.h"
 
+/**
+ * @brief Returns the degree of each vertex based on the adjacency matrix
+ * 
+ * @param matrix The adjacency matrix
+ * @param n Number of vertices
+ * @param degree Array to store degree values
+ */
+void compute_degrees(int **matrix, int n, int *degree)
+{
+    int i, j;
+
+    for (i = 0; i < n; i++)
+    {
+        degree[i] = 0;
+        for (j = 0; j < n; j++)
+            if (matrix[i][j])
+                degree[i]++;
+    }
+}
+
 static void	dfs(int **matrix, int n, int vertex, int *visited);
 
 /**
@@ -48,4 +68,23 @@ static void	dfs(int **matrix, int n, int vertex, int *visited)
 	for (int i = 0; i < n; i++)
 		if (matrix[vertex][i] && !visited[i])
 			dfs(matrix, n, i, visited);
+}
+
+/**
+ * @brief Identifies vertices with odd degree and stores them in odd_list
+ * 
+ * @param degree Array of vertex degrees
+ * @param n Number of vertices
+ * @param odd_list Array to store indices of odd-degree vertices
+ * @return Number of odd-degree vertices found
+ */
+int find_odd_vertices(int *degree, int n, int *odd_list)
+{
+    int i, odd_count = 0;
+
+    for (i = 0; i < n; i++)
+        if (degree[i] % 2 == 1)
+            odd_list[odd_count++] = i;
+
+    return odd_count;
 }

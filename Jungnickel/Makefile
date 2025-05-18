@@ -3,18 +3,22 @@ CFLAGS = #-Wall -Wextra -Werror -O2
 LDFLAGS = -lm
 TARGET = jung
 LIB = libjung.a
-SRCS = main.c
+SRCS = main.c algo_EULER.c
 OBJS = $(SRCS:.c=.o)
-LIBSRCS = lib/generate_matrix.c \
-lib/generate_random_adj.c \
-lib/generate_random_euler.c \
-lib/generate_random_tree.c \
-lib/is_tree.c \
+LIBSRCS = lib/graph_analysis.c \
+lib/graph_connections.c \
+lib/graph_conversion.c \
+lib/matrix_operations.c \
+lib/path_operations.c \
+lib/random_euler.c \
+lib/random_graph.c \
+lib/random_tree.c \
 lib/read_adj.c \
-lib/utils.c \
+lib/utils_basic.c \
 lib/utils_print.c \
 lib/utils_free.c \
 lib/utils_edges.c \
+lib/utils_euler.c \
 lib/utils_lists.c
 LIBOBJS = $(LIBSRCS:.c=.o)
 

@@ -1,48 +1,42 @@
 #include "jung.h"
 
-static void	print_euler_tour(Node *K)
+int main(void)
 {
-	Node	*cur;
+    int n = 12;
+    int **matrix;
+    Vertex **vertices;
+    Node *euler_tour = NULL;
 
-	cur = K;
-	ft_putstr("Euler tour (edge ids): ");
-	while (cur)
-	{
-		ft_putnbr(cur->edge_id);
-		ft_putstr(" ");
-		cur = cur->next;
-	}
-	ft_putstr("\n");
-}
+    // ランダムなオイラーグラフを生成
+    matrix = generate_random_euler(n);
+    if (!matrix) {
+        printf("Error generating graph\n");
+        return 1;
+    }
 
-int	main(void)
-{
-	// int		n;
-	// Vertex	**vs;
-	// Node	*K;
+    // 隣接行列を表示
+    print_matrix(matrix, n, n);
 
-	// n = 5;
-	// K = NULL;
-	// vs = create_vertex_array(n);
-	// add_edge(vs, 0, 1, 0);
-	// add_edge(vs, 1, 2, 1);
-	// add_edge(vs, 2, 3, 2);
-	// add_edge(vs, 4, 0, 3);
-	// add_edge(vs, 1, 3, 4);
-	// add_edge(vs, 1, 4, 5);
-	// print_vertices((const Vertex **)vs, n);
-	// algo_euler(vs, n, 0, &K);
-	// print_euler_tour(K);
-	// free_node_list(K);
-	// free_vertex_array(vs, n);
-	int n = 12;
-	int **matrix;
-	matrix = generate_random_euler(n);
+    // 頂点表現に変換
+    vertices = adj_matrix_to_vertices(matrix, n);
+    if (!vertices) {
+        free_array_int(matrix, n);
+        return 1;
+    }
 
+    // オイラーツアーを探索
+    algo_euler(vertices, n, 0, &euler_tour);
 
+    // オイラーツアーを表示
+    if (euler_tour) {
+        print_euler_tour_edges(euler_tour);
+        print_euler_tour_vertices(euler_tour, vertices);
+    }
 
+    // 後処理
+    free_node_list(euler_tour);
+    free_vertex_array(vertices, n);
+    free_array_int(matrix, n);
 
-	print_matrix(matrix, n, n);
-	free_array_int(matrix, n);
-	return (0);
+    return 0;
 }

@@ -11,7 +11,6 @@
  * @param n Number of vertices
  * @return Array of Vertex pointers, or NULL on failure
  */
-
 Vertex      **adj_matrix_to_vertices(int **matrix, int n)
 {
     Vertex **vertices;
@@ -21,7 +20,6 @@ Vertex      **adj_matrix_to_vertices(int **matrix, int n)
     vertices = create_vertex_array(n);
     if (!vertices)
         return NULL;
-    
     edge_id = 0;
     for (i = 0; i < n; i++)
         for (j = i; j < n; j++)
@@ -37,7 +35,6 @@ Vertex      **adj_matrix_to_vertices(int **matrix, int n)
  * @param n Number of vertices
  * @return Adjacency matrix, or NULL on failure
  */
-
 int **vertices_to_adj_matrix(Vertex **vertices, int n)
 {
     int **matrix;

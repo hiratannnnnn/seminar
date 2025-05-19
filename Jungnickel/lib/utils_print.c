@@ -15,11 +15,6 @@ void print_matrix(int **matrix, int r, int c)
 			return;
 		print_array_int(matrix[i], c);
 	}
-	printf("size=( ");
-	printf("%d", r);
-	printf(", ");
-	printf("%d", c);
-	printf(" )\n");
 }
 
 void print_array_int(int *arr, int n)

@@ -49,6 +49,7 @@ delres:
 	rm -f *.out
 	rm -f *.exe
 	rm -f *_graph.txt
+	rm -f *_path.txt
 
 re: fclean all
 

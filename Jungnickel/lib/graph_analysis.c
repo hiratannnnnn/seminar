@@ -36,32 +36,34 @@ static void	dfs(int **matrix, int n, int vertex, int *visited);
  * @return 1 if the matrix represents a tree, 0 otherwise
  */
 
-int	is_tree(int **adj, int n)
+int	is_tree(int **matrix, int n)
 {
+	int i, j;
 	int	edge_count;
 	int	*visited;
 
 	edge_count = 0;
-	for (int i = 0; i < n; i++)
-		for (int j = i + 1; j < n; j++)
-			if (adj[i][j])
+	for (i = 0; i < n; i++)
+		for (j = i + 1; j < n; j++)
+			if (matrix[i][j])
 				edge_count++;
 	if (edge_count != n - 1)
 		return (0);
 	visited = (int *)calloc(n, sizeof(int));
-	dfs(adj, n, 0, visited);
+	dfs(matrix, n, 0, visited);
 	for (int i = 0; i < n; i++)
-	{
 		if (!visited[i])
-		{
-			free(visited);
-			return (0);
-		}
-	}
+			return (free(visited), 0);
 	free(visited);
 	return (1);
 }
 
+/**
+ * @brief Check if the @param matrix is CONNECTED or not.
+ * 
+ * if all vertices are connected each other, each element of
+ * @param visited will be 1.
+ */
 static void	dfs(int **matrix, int n, int vertex, int *visited)
 {
 	visited[vertex] = 1;

@@ -8,7 +8,7 @@ void print_matrix(int **matrix, int r, int c)
 		return;
 	}
 
-	int i, j;
+	int i;
 	for (i = 0; i < r; i++)
 	{
 		if (!matrix[i])

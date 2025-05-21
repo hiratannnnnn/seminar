@@ -1,4 +1,4 @@
-#include "../jung.h"
+#include "lib.h"
 
 /**
  * @brief Generates a random Prufer code for a tree with n vertices.
@@ -128,7 +128,7 @@ int **generate_random_tree(int n)
 
 /**
  * @brief Builds a tree from a Prufer code into the adjacency matrix
- * 
+ *
  * @param matrix Adjacency matrix to build into
  * @param prufer Prufer code array
  * @param degree Working array for vertex degrees
@@ -137,7 +137,7 @@ int **generate_random_tree(int n)
 void build_tree_from(int **matrix, int *prufer, int *degree, int n)
 {
     int i, j, u = -1, v = -1;
-    
+
     // Process Prufer code
     for (i = 0; i < n - 2; i++) {
         for (j = 0; j < n; j++) {
@@ -149,7 +149,7 @@ void build_tree_from(int **matrix, int *prufer, int *degree, int n)
             }
         }
     }
-    
+
     // Connect last two vertices
     for (i = 0; i < n; i++) {
         if (degree[i] == 1) {
@@ -157,7 +157,7 @@ void build_tree_from(int **matrix, int *prufer, int *degree, int n)
             else v = i;
         }
     }
-    
+
     if (u != -1 && v != -1) {
         matrix[u][v] = matrix[v][u] = 1;
     }

@@ -1,4 +1,4 @@
-#include "../jung.h"
+#include "lib.h"
 
 /**
  * @brief Finds a path between two vertices using depth-first search

@@ -1,4 +1,4 @@
-#include "../jung.h"
+#include "lib.h"
 
 void print_matrix(int **matrix, int r, int c)
 {

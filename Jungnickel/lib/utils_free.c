@@ -1,4 +1,4 @@
-#include "../jung.h"
+#include "lib.h"
 
 void	free_edge_list(Edge *head)
 {

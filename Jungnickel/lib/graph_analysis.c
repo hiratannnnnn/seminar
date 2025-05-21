@@ -1,8 +1,8 @@
-#include "../jung.h"
+#include "lib.h"
 
 /**
  * @brief Returns the degree of each vertex based on the adjacency matrix
- * 
+ *
  * @param matrix The adjacency matrix
  * @param n Number of vertices
  * @param degree Array to store degree values
@@ -60,7 +60,7 @@ int	is_tree(int **matrix, int n)
 
 /**
  * @brief Check if the @param matrix is CONNECTED or not.
- * 
+ *
  * if all vertices are connected each other, each element of
  * @param visited will be 1.
  */
@@ -74,7 +74,7 @@ static void	dfs(int **matrix, int n, int vertex, int *visited)
 
 /**
  * @brief Identifies vertices with odd degree and stores them in odd_list
- * 
+ *
  * @param degree Array of vertex degrees
  * @param n Number of vertices
  * @param odd_list Array to store indices of odd-degree vertices

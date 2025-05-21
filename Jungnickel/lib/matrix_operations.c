@@ -1,4 +1,4 @@
-#include "../jung.h"
+#include "lib.h"
 
 /**
  * @brief Creates an adjacency matrix with specified dimensions
@@ -79,10 +79,10 @@ void	free_array_int(int **arr, const int r)
  {
 	 FILE *fp;
 	 int i, j;
- 
+
 	 if (!matrix)
 		 return (-2);
- 
+
 	 fp = fopen(filename, "w");
 	 if (!fp)
 	 {
@@ -100,4 +100,3 @@ void	free_array_int(int **arr, const int r)
 	 fclose(fp);
 	 return (0);
  }
- 

@@ -1,4 +1,4 @@
-#include "../jung.h"
+#include "lib.h"
 
 /**
  * @brief Reads an adjacency matrix from a file.

@@ -1,8 +1,8 @@
-#include "../jung.h"
+#include "lib.h"
 
 /**
  * @brief Converts an adjacency matrix to a vertex list representation
- * 
+ *
  * Creates a list of vertices with incident edges based on the adjacency matrix.
  * The returned structure can be used with algo_euler and other functions
  * expecting the vertex-edge list representation.
@@ -30,7 +30,7 @@ Vertex      **adj_matrix_to_vertices(int **matrix, int n)
 
 /**
  * @brief Converts a vertex list representation to an adjacency matrix
- * 
+ *
  * @param vertices Array of Vertex pointers
  * @param n Number of vertices
  * @return Adjacency matrix, or NULL on failure
@@ -58,4 +58,3 @@ int **vertices_to_adj_matrix(Vertex **vertices, int n)
 
     return matrix;
 }
-

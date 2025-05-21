@@ -1,4 +1,4 @@
-#include "../jung.h"
+#include "lib.h"
 
 void	ft_putnbr(long n)
 {

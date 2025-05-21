@@ -1,4 +1,4 @@
-#include "../jung.h"
+#include "lib.h"
 
 /**
  * @brief Makes a graph Eulerian by ensuring all vertices have even degree

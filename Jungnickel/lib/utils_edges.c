@@ -1,4 +1,4 @@
-#include "../jung.h"
+#include "lib.h"
 
 Edge	*create_edge(int id, int from, int to)
 {

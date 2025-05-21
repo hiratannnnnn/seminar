@@ -1,4 +1,4 @@
-#include "jung.h"
+#include "lib.h"
 
 /**
  * @brief Structure to hold the working state for the Euler tour algorithm.
@@ -48,13 +48,13 @@ static void	trace(t_euler_ctx *ctx, Vertex **vs, int v,  Node **C)
 		edge = vs[v]->incidence;
 		while (edge && !ctx->new_edge[edge->id])
 			edge = edge->next;
-		if (!edge) // all edges incident with v are used
+		if (!edge) 								// all edges incident with v are used
 			return ;
 		ctx->new_edge[edge->id] = 0;
 		node = create_node(edge->id);
-		append_node(C, node); // append the node to the last of C
-		if ((ctx->e_pos)[v] == -1) // v is not in K yet ?
-			(ctx->e_pos)[v] = node->edge_id; // wherever is fine
+		append_node(C, node); 					// append the node to the last of C
+		if ((ctx->e_pos)[v] == -1)				// v is not in K yet ?
+			(ctx->e_pos)[v] = node->edge_id; 	// wherever is fine
 		v = edge->to;
 		if (!ctx->used[v])
 		{

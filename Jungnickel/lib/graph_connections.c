@@ -1,4 +1,4 @@
-#include "../jung.h"
+#include "lib.h"
 
 /**
  * @brief Finds an alternate trail for two already connected vertices
@@ -62,7 +62,6 @@ int make_cycle(int **matrix, int n, int v)
     return 0;
 }
 
-
 /**
  * @brief Finds a common unconnected vertex for two vertices
  *
@@ -78,12 +77,10 @@ int find_common_vertex(int **matrix, int n, int v1, int v2)
 
     for (i = 0; i < n; i++)
     {
-        if (
-            i != v1 &&          // not v1, nor v2
-            i != v2 &&
-            !matrix[v1][i] &&   // not connected
-            !matrix[v2][i]
-        ) {
+        if (i != v1 &&                   // not v1, nor v2
+            i != v2 && !matrix[v1][i] && // not connected
+            !matrix[v2][i])
+        {
             matrix[v1][i] = matrix[i][v1] = 1;
             matrix[v2][i] = matrix[i][v2] = 1;
             return (1);
@@ -115,10 +112,9 @@ int pair_odd_vertices(int **matrix, int n, int *odd_list, int odd_count)
         v2 = odd_list[i + 1];
         if (!matrix[v1][v2])
             matrix[v1][v2] = matrix[v2][v1] = 1;
-        else
-            if (!make_trail(matrix, n, v1, v2))
-                if (!find_common_vertex(matrix, n, v1, v2))
-                    return (0);
+        else if (!make_trail(matrix, n, v1, v2))
+            if (!find_common_vertex(matrix, n, v1, v2))
+                return (0);
     }
     // adding edges
     return (1);

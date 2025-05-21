@@ -1,4 +1,4 @@
-#include "../jung.h"
+#include "lib.h"
 
 Node	*create_node(int edge_id)
 {

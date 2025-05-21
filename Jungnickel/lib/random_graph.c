@@ -1,4 +1,4 @@
-#include "../jung.h"
+#include "lib.h"
 
 /**
  * @brief Generates a random undirected adjacency matrix and writes it to a file.

@@ -75,28 +75,70 @@ void	free_array_int(int **arr, const int r)
  * - Error handling and memory deallocation must be performed by the caller.
  */
 
- int write_to_file(int **matrix, int n, char const *filename)
- {
-	 FILE *fp;
-	 int i, j;
+int write_adjacent_matrix(int **matrix, int n, char const *filename)
+{
+	FILE 	*fp;
+	int 	i, j;
 
-	 if (!matrix)
-		 return (-2);
+	if (!matrix)
+		return (-2);
+	fp = fopen(filename, "w");
+	if (!fp)
+	{
+		printf("Failed to open file.\n");
+		return (-1);
+	}
+	fprintf(fp, "%d\n", n);
+	for (i = 0; i < n; i++)
+		for (j = 0; j < n; j++)
+		{
+			if (!matrix[i])
+				return (fclose(fp), -2);
+			fprintf(fp, "%d%c", matrix[i][j], (j == n - 1) ? '\n' : ' ');
+		}
+	fclose(fp);
+	return (0);
+}
 
-	 fp = fopen(filename, "w");
-	 if (!fp)
-	 {
-		 printf("Failed to open file.\n");
-		 return (-1);
-	 }
-	 fprintf(fp, "%d\n", n);
-	 for (i = 0; i < n; i++)
-		 for (j = 0; j < n; j++)
-		 {
-			 if (!matrix[i])
-				 return (fclose(fp), -2);
-			 fprintf(fp, "%d%c", matrix[i][j], (j == n - 1) ? '\n' : ' ');
-		 }
-	 fclose(fp);
-	 return (0);
- }
+/**
+ * @brief write adjacent list to file
+ *
+ * @param matrix adjacency matrix size of (n, n)
+ * @param n 	 size
+ * @param filename name of file
+ */
+
+int write_adjacent_list(int **matrix, int n, char const *filename)
+{
+	FILE 	*fp;
+	int 	i, j, first;
+
+	if (!matrix)
+		return (-2);
+	fp = fopen(filename, "w");
+	if (!fp)
+	{
+		printf("Failed to open file.\n");
+		return (-1);
+	}
+	fprintf(fp, "%d\n", n);
+	for (i = 0; i < n; i++)
+	{
+		first = 1;
+		fprintf(fp, "%d:", i);
+		for (j = 0; j < n; j++)
+		{
+			if (matrix[i][j])
+			{
+				if (first)
+					first = 0;
+				else
+					fprintf(fp, " ");
+				fprintf(fp, "%d", j);
+			}
+		}
+		fprintf(fp, "%c", '\n');
+	}
+	fclose(fp);
+	return (0);
+}

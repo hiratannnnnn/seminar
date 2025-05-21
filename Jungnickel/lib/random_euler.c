@@ -32,62 +32,19 @@ int make_eulerian(int **matrix, int n)
     return result;
 }
 
-/**
- * @brief Generates a random connected Eulerian graph
- *
- * Creates a graph where all vertices have even degree, ensuring
- * it is Eulerian. The graph is guaranteed to be connected.
- *
- * @param n Number of vertices
- * @return Pointer to the generated adjacency matrix (n, n)
- *         or NULL on failure
- */
-int **generate_random_euler(int n)
+static void add_edges_randomly(int **matrix, int n)
 {
-    int **matrix;
-    int *prufer;
-    int *degree;
+    int max_edges;
+    int current_edges;
+    int remaining_edges;
+    int trials;
+    int max_trials;
 
-    if (n < 3) return NULL;
-
-    // Random seed
-    srand(time(NULL) + clock());
-
-    // Initialization
-    prufer = generate_random_prufer(n);
-    if (!prufer) return NULL;
-
-    degree = count_degrees_from(prufer, n);
-    if (!degree) {
-        free(prufer);
-        return NULL;
-    }
-
-    matrix = generate_matrix(n, n);
-    if (!matrix) {
-        free(prufer);
-        free(degree);
-        return NULL;
-    }
-    // End initialization
-
-    // Create tree structure
-    build_tree_from(matrix, prufer, degree, n);
-    if (write_to_file(matrix, n, "tree_graph.txt") < 0)
-        printf("Warning: Failed to write tree graph to file\n");
-
-    // Make graph Eulerian
-    if (!make_eulerian(matrix, n)) {
-        printf("Warning: Failed to make the graph Eulerian\n");
-    }
-
-    // randomly append cycles
-    int max_edges = n * (n - 1) / 2;
-    int current_edges = sum_matrix(matrix, n, n) / 2;
-    int remaining_edges = max_edges - current_edges;
-    int trials = 0;
-    int max_trials = n * 10;
-
+    max_edges = n * (n - 1) / 2;
+    current_edges = sum_matrix(matrix, n, n) / 2;
+    remaining_edges = max_edges - current_edges;
+    trials = 0;
+    max_trials = n * 10;
     while (remaining_edges > 0 && trials < max_trials)
     {
         double prob = (double)remaining_edges / max_edges;
@@ -104,13 +61,54 @@ int **generate_random_euler(int n)
             break;
         trials++;
     }
+}
 
-    // Save result
-    if (write_to_file(matrix, n, "euler_graph.txt") < 0) {
+/**
+ * @brief Generates a random connected Eulerian graph
+ *
+ * Creates a graph where all vertices have even degree, ensuring
+ * it is Eulerian. The graph is guaranteed to be connected.
+ *
+ * @param n Number of vertices
+ * @return Pointer to the generated adjacency matrix (n, n)
+ *         or NULL on failure
+ */
+int **generate_random_euler(int n)
+{
+    int **matrix;
+    int *prufer;
+    int *degree;
+
+    if (n < 3)
+        return NULL;
+    srand(time(NULL) + clock());
+
+    // Initialization
+    prufer = generate_random_prufer(n);
+    if (!prufer) return NULL;
+    degree = count_degrees_from(prufer, n);
+    if (!degree) {
+        free(prufer);
+        return NULL;
+    }
+    matrix = generate_matrix(n, n);
+    if (!matrix) {
+        free(prufer);
+        free(degree);
+        return NULL;
+    }
+    // Initialization
+
+    build_tree_from(matrix, prufer, degree, n);
+    if (write_adjacent_matrix(matrix, n, "tree_graph.txt") < 0)
+        printf("Warning: Failed to write tree graph to file\n");
+    if (!make_eulerian(matrix, n)) {
+        printf("Warning: Failed to make the graph Eulerian\n");
+    }
+    add_edges_randomly(matrix, n);
+    if (write_adjacent_matrix(matrix, n, "euler_graph.txt") < 0) {
         printf("Warning: Failed to write Euler graph to file\n");
     }
-
-    // Clean up
     free(prufer);
     free(degree);
 

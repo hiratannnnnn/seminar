@@ -16,7 +16,7 @@ int main(int ac, char **av)
     // printf("%d\n", sum_matrix(matrix, n, n));
 
     // print_matrix(matrix, n, n);
-    vertices = adj_matrix_to_vertices(matrix, n);
+    vertices = adj_matrix_to_vertices(matrix, n, 1);
     if (!vertices)
         return (free_array_int(matrix, n), 1);
     euler_tour = NULL;

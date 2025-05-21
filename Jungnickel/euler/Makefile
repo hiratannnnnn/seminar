@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror -O2 -I../include
 LDFLAGS = -lm
 TARGET = euler
-SRCS = algo_EULER.c utils_euler.c main.c
+SRCS = algo_EULER.c main.c
 OBJS = $(SRCS:.c=.o)
 LIBDIR = ../lib
 LIB = $(LIBDIR)/lib.a

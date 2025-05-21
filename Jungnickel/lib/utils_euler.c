@@ -14,7 +14,6 @@ void print_euler_tour_edges(Node *tour)
         printf("Euler tour is empty\n");
         return;
     }
-
     cur = tour;
     printf("Euler tour (edge IDs): ");
     while (cur)
@@ -45,10 +44,8 @@ void print_euler_tour_vertices(Node *tour, Vertex **vs)
         printf("Euler tour is empty\n");
         return;
     }
-
-    // Find starting vertex (any vertex incident with the first edge)
     cur = tour;
-    for (i = 0; i < 100; i++)  // Assuming fewer than 100 vertices
+    for (i = 0; i < 100; i++)           // Assuming fewer than 100 vertices
     {
         if (!vs[i])
             continue;
@@ -68,20 +65,15 @@ void print_euler_tour_vertices(Node *tour, Vertex **vs)
         if (found)
             break;
     }
-
     if (current_vertex == -1)
     {
         printf("Error: Could not find starting vertex\n");
         return;
     }
-
-    // Print the tour
     printf("Euler tour (vertices): %d", current_vertex);
-
     cur = tour;
     while (cur)
     {
-        // Find the next vertex (the other end of the current edge from current_vertex)
         edge = vs[current_vertex]->incidence;
         found = 0;
         while (edge)
@@ -95,10 +87,8 @@ void print_euler_tour_vertices(Node *tour, Vertex **vs)
             }
             edge = edge->next;
         }
-
         if (!found)
-            printf(" -> ?");  // Error case: edge not found
-
+            printf(" -> ?");
         cur = cur->next;
     }
     printf("\n");

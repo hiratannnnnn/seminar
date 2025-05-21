@@ -44,22 +44,21 @@ Vertex	**create_vertex_array(int n)
 	return (vs);
 }
 
-void	add_edge(Vertex **vs, int from, int to, int edge_id)
+void	add_directed_edge(Vertex **vs, int from, int to, int edge_id)
 {
-	Edge	*edge1;
-	Edge	*edge2;
-
-	edge1 = create_edge(edge_id, from, to);
-	if (!edge1)
-		return ;
-	edge1->next = vs[from]->incidence;
-	vs[from]->incidence = edge1;
-	edge2 = create_edge(edge_id, to, from);
-	if (!edge2)
-		return ;
-	edge2->next = vs[to]->incidence;
-	vs[to]->incidence = edge2;
+	Edge *edge = create_edge(edge_id, from, to);
+	if (!edge)
+		return;
+	edge->next = vs[from]->incidence;
+	vs[from]->incidence = edge;
 }
+
+void	add_undirected_edge(Vertex **vs, int from, int to, int edge_id)
+{
+	add_directed_edge(vs, from, to, edge_id);
+	add_directed_edge(vs, to, from ,edge_id);
+}
+
 
 void	print_vertex(const Vertex *v)
 {

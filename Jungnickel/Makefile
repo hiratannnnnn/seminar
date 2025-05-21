@@ -20,6 +20,7 @@ delres:
 	find . -name "*.out" -exec rm -f {} +
 	find . -name "*.exe" -exec rm -f {} +
 	find . -name "*_graph.txt" -exec rm -f {} +
+	find . -name "*_list.txt" -exec rm -f {} +
 	find . -name "*_path.txt" -exec rm -f {} +
 
 re: fclean all

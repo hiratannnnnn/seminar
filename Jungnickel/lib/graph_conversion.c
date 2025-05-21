@@ -9,9 +9,10 @@
  *
  * @param matrix Adjacency matrix (n x n)
  * @param n Number of vertices
+ * @param undirected 1 if undirected, 0 if directed
  * @return Array of Vertex pointers, or NULL on failure
  */
-Vertex      **adj_matrix_to_vertices(int **matrix, int n)
+Vertex      **adj_matrix_to_vertices(int **matrix, int n, int undirected)
 {
     Vertex **vertices;
     int edge_id;
@@ -22,9 +23,18 @@ Vertex      **adj_matrix_to_vertices(int **matrix, int n)
         return NULL;
     edge_id = 0;
     for (i = 0; i < n; i++)
-        for (j = i; j < n; j++)
-            if (matrix[i][j])
-                add_edge(vertices, i, j, edge_id++);
+    {
+        if (undirected)
+        {
+            for (j = i + 1; j < n; j++)
+                if (matrix[i][j])
+                    add_undirected_edge(vertices, i, j, edge_id++);
+        }
+        else
+            for (j = 0; j < n; j++)
+                if (matrix[i][j])
+                    add_directed_edge(vertices, i, j, edge_id++);
+    }
     return vertices;
 }
 

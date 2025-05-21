@@ -1,13 +1,13 @@
 #include "lib.h"
 
 /**
- * @brief Generates a random undirected adjacency matrix and writes it to a file.
+ * @brief Generates a random directed adjacency matrix and writes it to a file.
  *
  * @param n Number of vertices
  * @param edge_prob 0.0～1.0, edge probability between any two vertices
  */
 
-int 	**generate_random_graph(int n, double edge_prob)
+int 	**generate_random_digraph(int n, double edge_prob)
 {
 	int **matrix;
 	int i, j;
@@ -18,20 +18,13 @@ int 	**generate_random_graph(int n, double edge_prob)
 		return (NULL);
 	// initialization
 
-	// generate random matrix
 	srand((unsigned int)time(NULL));
 	for (i = 0; i < n; i++)
-	{
-		for (j = i + 1; j < n; j++)
+		for (j = 0; j < n; j++)
 		{
+			if (i == j) continue;
 			if ((double)rand() / RAND_MAX < edge_prob)
-			{
 				matrix[i][j] = 1;
-				matrix[j][i] = 1; // not for digraphs
-			}
 		}
-	}
-	// generate random matrix
-
 	return (matrix);
 }

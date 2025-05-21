@@ -20,10 +20,12 @@ int 		write_adjacent_list		(int **matrix, int n, char const *filename);
 /* ========= Graph Generation =========*/
 
 // random_digraph.c
-int 		**generate_random_digraph(int n, double edge_prob);
+int 		**generate_random_digraph	(int n, double edge_prob);
+void 		save_random_digraph			(int n, double edge_prob, char const *filename);
 
 // random_graph.c
-int 		**generate_random_graph(int n, double edge_prob);
+int 		**generate_random_graph		(int n, double edge_prob);
+void 		save_random_graph			(int n, double edge_prob, char const *filename);
 
 // random_tree.c
 int			*generate_random_prufer	(int n);
@@ -81,8 +83,8 @@ Vertex		*create_vertex			(int id);
 Vertex		**create_vertex_array	(int n);
 void		add_directed_edge		(Vertex **vs, int from, int to, int edge_id);
 void		add_undirected_edge		(Vertex **vs, int from, int to, int edge_id);
-void		print_vertex			(const Vertex *v);
-void		print_vertices			(const Vertex **vs, int n);
+void		print_vertex			(Vertex *v);
+void		print_vertices			(Vertex **vs, int n);
 void		print_edge_list			(Edge *head);
 
 /* ========= Euler Tour Utilities =========*/

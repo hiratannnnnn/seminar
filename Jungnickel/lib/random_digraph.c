@@ -3,6 +3,8 @@
 /**
  * @brief Generates a random directed adjacency matrix and writes it to a file.
  *
+ * HAS TO BE FREED
+ *
  * @param n Number of vertices
  * @param edge_prob 0.0～1.0, edge probability between any two vertices
  */
@@ -27,4 +29,15 @@ int 	**generate_random_digraph(int n, double edge_prob)
 				matrix[i][j] = 1;
 		}
 	return (matrix);
+}
+
+void 		save_random_digraph(int n, double edge_prob, char const *filename)
+{
+	int **matrix;
+
+	matrix = generate_random_digraph(n, edge_prob);
+	if (!matrix)
+		return ;
+	write_adjacent_matrix(matrix, n, filename);
+	free_array_int(matrix, n);
 }

@@ -60,7 +60,7 @@ void	add_undirected_edge(Vertex **vs, int from, int to, int edge_id)
 }
 
 
-void	print_vertex(const Vertex *v)
+void	print_vertex(Vertex *v)
 {
 	if (!v)
 		return ;
@@ -70,7 +70,7 @@ void	print_vertex(const Vertex *v)
 	ft_putstr("\n");
 }
 
-void	print_vertices(const Vertex **vs, int n)
+void	print_vertices(Vertex **vs, int n)
 {
 	int	i;
 

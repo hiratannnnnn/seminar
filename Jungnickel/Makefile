@@ -1,18 +1,16 @@
-all: lib euler
+DIRS = lib euler topsort
 
-lib:
-	$(MAKE) -C lib
+all: $(DIRS)
 
-euler:
-	$(MAKE) -C euler
+$(DIRS):
+	$(MAKE) -C $@
 
 clean:
-	$(MAKE) -C lib clean
-	$(MAKE) -C euler clean
+	for dir in $(DIRS); do $(MAKE) -C $$dir clean; done
 
 fclean:	delres
-	$(MAKE) -C lib fclean
-	$(MAKE) -C euler fclean
+	for dir in $(DIRS); do $(MAKE) -C $$dir fclean; done
+
 
 delres:
 	find . -name "result_*" -exec rm -rf {} +
@@ -25,4 +23,4 @@ delres:
 
 re: fclean all
 
-.PHONY: all lib euler clean fclean re
+.PHONY: all $(DIRS) clean fclean re delres

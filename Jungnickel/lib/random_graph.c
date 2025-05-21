@@ -35,3 +35,14 @@ int 	**generate_random_graph(int n, double edge_prob)
 
 	return (matrix);
 }
+
+void 		save_random_graph(int n, double edge_prob, char const *filename)
+{
+	int **matrix;
+
+	matrix = generate_random_graph(n, edge_prob);
+	if (!matrix)
+		return ;
+	write_adjacent_matrix(matrix, n, filename);
+	free_array_int(matrix, n);
+}

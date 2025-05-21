@@ -8,7 +8,19 @@
 
 int		main(void)
 {
-	
+	int 	n;
+	int 	**matrix;
+	Vertex **vs;
+
+	n = 12;
+	save_random_digraph(n, 0.7, "test_graph.txt");
+
+	matrix = read_adj(&n, "test_graph.txt");
+	vs = adj_matrix_to_vertices(matrix, n, 0); // directed = 0
+	print_vertices(vs, n);
+	free_array_int(matrix, n);
+	free_vertex_array(vs, n);
+	return (0);
 }
 // typedef struct Vertex
 // {

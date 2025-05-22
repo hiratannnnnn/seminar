@@ -4,13 +4,14 @@
 // (d) a list L of the vertices v having ind(v) = 0;
 // (e) a Boolean variable acyclic and an integer variable N (for counting).
 
-#include "lib.h"
+#include "topsort.h"
 
 int		main(void)
 {
 	int 	n;
 	int 	**matrix;
-	Vertex **vs;
+	Vertex	**vs;
+	int		*topnr;
 
 	n = 12;
 	save_random_digraph(n, 0.7, "test_graph.txt");
@@ -18,6 +19,12 @@ int		main(void)
 	matrix = read_adj(&n, "test_graph.txt");
 	vs = adj_matrix_to_vertices(matrix, n, 0); // directed = 0
 	print_vertices(vs, n);
+
+	topnr = calloc(n, sizeof(int));
+	if (topnr)
+	{
+		
+	}
 	free_array_int(matrix, n);
 	free_vertex_array(vs, n);
 	return (0);

@@ -14,3 +14,18 @@
 // (13) od
 // (14) od
 // (15) if N = n + 1 then acyclic ← true else acyclic ← false f
+
+#include		"topsort.h"
+
+int		topsort(Vertex **vs, int n, int *topnr)
+{
+	int 	*ind;
+	int 	acyclic;
+	int 	N;
+	
+	ind = calloc(n, sizeof(int));
+	if (!ind)
+		return -1;
+	acyclic = 0;
+	
+}

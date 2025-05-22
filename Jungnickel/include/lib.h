@@ -16,12 +16,14 @@ int			**generate_matrix		(int r, int c);
 void		free_array_int			(int **arr, const int r);
 int			write_adjacent_matrix	(int **matrix, int n, char const *filename);
 int 		write_adjacent_list		(int **matrix, int n, char const *filename);
+void 		save_some_matrix		(int n, double edge_prob,
+									int **(*gen_some_mat)(int, double), char const *filename);
 
 /* ========= Graph Generation =========*/
 
 // random_digraph.c
 int 		**generate_random_digraph	(int n, double edge_prob);
-void 		save_random_digraph			(int n, double edge_prob, char const *filename);
+int			**generate_random_DAG		(int n, double edge_prob);
 
 // random_graph.c
 int 		**generate_random_graph		(int n, double edge_prob);
@@ -106,14 +108,6 @@ void		free_node_list		(Node *head);
 void		free_vertex			(Vertex *vertex);
 void		free_vertex_array	(Vertex **vs, int n);
 
-// utils_print.c
-void 		print_matrix		(int **matrix, int r, int c);
-void		print_array_int		(int *arr, int n);
-void		print_vertex		(Vertex *v);
-void		print_vertices		(Vertex **vs, int n);
-void		print_edge_list		(Edge *head);
-void 		print_path_node		(PathNode *head);
-
 // utils_lists.c
 Node		*create_node		(int edge_id);
 void		append_node			(Node **head, Node *new_node);
@@ -126,5 +120,16 @@ void		append_pathnode		(PathNode **head, PathNode *new_pathnode);
 void		insert_pathnode_after(PathNode *pos, PathNode *new_pathnode);
 PathNode	*get_last_pathnode	(PathNode *head);
 PathNode 	*pathnode_pop_first	(PathNode **head);
+
+// utils_math.c
+int			*random_perm		(int n);
+
+// utils_print.c
+void 		print_matrix		(int **matrix, int r, int c);
+void		print_array_int		(int *arr, int n);
+void		print_vertex		(Vertex *v);
+void		print_vertices		(Vertex **vs, int n);
+void		print_edge_list		(Edge *head);
+void 		print_path_node		(PathNode *head);
 
 #endif

@@ -20,14 +20,24 @@ def plot_graph_circle(n, matrix, path=None, step=None):
 	angles = np.linspace(0, 2 * np.pi, n, endpoint=False)
 	xs = np.cos(angles)
 	ys = np.sin(angles)
+	ax = plt.gca()
 
 	# 通常の辺
 	for i in range(n):
-		for j in range(i+1, n):
+		for j in range(n):
 			if matrix[i][j]:
-				plt.plot([xs[i], xs[j]],
-						 [ys[i], ys[j]],
-						 'k-', lw=1, zorder=1)
+				if matrix[j][i] and i < j:
+					ax.plot([xs[i], xs[j]], [ys[i], ys[j]], color='k', lw=1, zorder=1)
+				elif not matrix[j][i]:
+					ax.annotate(
+						'',
+						xy=(xs[j], ys[j]), xytext=(xs[i], ys[i]),
+						arrowprops=dict(
+							arrowstyle="-|>", color='k', lw=1,
+							shrinkA=15, shrinkB=15, mutation_scale=15
+						),
+						zorder=1
+					)
 	# パスを強調（矢印で方向を表現）
 	if path and step is not None and step > 0:
 		ax = plt.gca()
@@ -62,7 +72,7 @@ if __name__ == "__main__":
 	plt.figure(figsize=(6, 6))
 
 	if path:
-		current_step = 1  # 最初は1本だけ表示
+		current_step = 1
 
 		def on_key(event):
 			global current_step

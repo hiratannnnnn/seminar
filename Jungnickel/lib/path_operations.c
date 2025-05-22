@@ -24,7 +24,7 @@ PathNode *find_path_dfs(
     {
         result = create_pathnode(current);
         if (!result)
-            return NULL;
+            return (NULL);
         return result;
     }
 
@@ -47,7 +47,7 @@ PathNode *find_path_dfs(
                         free(temp);
                     }
                     visited[current] = 0;
-                    return NULL;
+                    return (NULL);
                 }
                 new_head->next = rest_path;
                 visited[current] = 0;
@@ -56,7 +56,7 @@ PathNode *find_path_dfs(
         }
     }
     visited[current] = 0;
-    return NULL;
+    return (NULL);
 }
 
 PathNode *find_cycle_dfs(
@@ -71,7 +71,7 @@ PathNode *find_cycle_dfs(
     {
         result = create_pathnode(current);
         if (!result)
-            return NULL;
+            return (NULL);
         return result;
     }
 
@@ -96,7 +96,7 @@ PathNode *find_cycle_dfs(
                         free(temp);
                     }
                     visited[current] = 0;
-                    return NULL;
+                    return (NULL);
                 }
                 new_head->next = rest_path;
                 visited[current] = 0;
@@ -105,7 +105,7 @@ PathNode *find_cycle_dfs(
         }
     }
     visited[current] = 0;
-    return NULL;
+    return (NULL);
 }
 
 // Add edges along the path found by DFS

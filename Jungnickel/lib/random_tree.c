@@ -15,10 +15,10 @@ int	*generate_random_prufer(int n)
 	int i;
 
 	if (n < 2)
-		return NULL;
+		return (NULL);
 	int *prufer = (int *)malloc((n - 2) * sizeof(int));
 	if (!prufer)
-		return NULL;
+		return (NULL);
 	for (i = 0; i < n - 2; i++)
 		prufer[i] = rand() % n;
 	return prufer;
@@ -41,7 +41,7 @@ int *count_degrees_from(const int *prufer, int n)
 
 	int *degree = (int *)malloc(n * sizeof(int));
 	if (!degree)
-		return NULL;
+		return (NULL);
 	for (i = 0; i < n; i++)
 		degree[i] = 1;
 	for (i = 0; i < n - 2; i++)
@@ -69,20 +69,20 @@ int **generate_random_tree(int n)
 	// initialization
 	matrix = generate_matrix(n, n);
 	if (!matrix)
-		return NULL;
+		return (NULL);
 	srand((unsigned int)time(NULL));
 	prufer = generate_random_prufer(n);
 	if (!prufer)
 	{
 		free_array_int(matrix, n);
-		return NULL;
+		return (NULL);
 	}
 	degree = count_degrees_from(prufer, n);
 	if (!degree)
 	{
 		free(prufer);
 		free_array_int(matrix, n);
-		return NULL;
+		return (NULL);
 	}
 	// initialization
 

@@ -14,7 +14,8 @@ int		main(void)
 	int		*topnr;
 
 	n = 12;
-	// save_random_digraph(n, 0.7, "test_graph.txt");
+	srand(time(NULL) + clock());
+	save_some_matrix(n, 0.1, generate_random_DAG, "test_graph.txt");
 
 	matrix = read_adj(&n, "test_graph.txt");
 	vs = adj_matrix_to_vertices(matrix, n, 0); // directed = 0

@@ -22,14 +22,14 @@ int **read_adj(int *n, char const *filename)
 	// opening file
 	fp = fopen(filename, "r");
 	if (!fp)
-		return NULL;
+		return (NULL);
 	// opening file
 
 	// set size n
 	if (fscanf(fp, "%d", n) != 1)
 	{
 		fclose(fp);
-		return NULL;
+		return (NULL);
 	}
 	// set size n
 
@@ -38,7 +38,7 @@ int **read_adj(int *n, char const *filename)
 	if (!matrix)
 	{
 		fclose(fp);
-		return NULL;
+		return (NULL);
 	}
 	// initialize matrix *** has to be freed
 
@@ -51,7 +51,7 @@ int **read_adj(int *n, char const *filename)
 			{
 				free_array_int(matrix, i);
 				fclose(fp);
-				return NULL;
+				return (NULL);
 			}
 		}
 	}
@@ -86,14 +86,14 @@ int **read_list(int *n, char const *filename)
 	// opening file
 	fp = fopen(filename, "r");
 	if (!fp)
-		return NULL;
+		return (NULL);
 	// opening file
 
 	// set size n
 	if (fscanf(fp, "%d", n) != 1)
 	{
 		fclose(fp);
-		return NULL;
+		return (NULL);
 	}
 	// set size n
 
@@ -102,7 +102,7 @@ int **read_list(int *n, char const *filename)
 	if (!matrix)
 	{
 		fclose(fp);
-		return NULL;
+		return (NULL);
 	}
 	// initialize matrix *** has to be freed
 

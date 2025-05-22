@@ -50,7 +50,7 @@ void	insert_node_after(Node *pos, Node *new_node)
 Node *get_last_node(Node *head)
 {
 	if (!head)
-		return NULL;
+		return (NULL);
 	while (head->next)
 		head = head->next;
 	return head;
@@ -61,7 +61,7 @@ Node	*node_pop_first(Node **head)
 	Node *first;
 
 	if (!head || !*head)
-		return NULL;
+		return (NULL);
 	first = *head;
 	*head = first->next;
 	if (*head)
@@ -112,7 +112,7 @@ void		insert_pathnode_after(PathNode *pos, PathNode *new_pathnode)
 PathNode	*get_last_pathnode(PathNode *head)
 {
 	if (!head)
-		return NULL;
+		return (NULL);
 	while (head->next)
 		head = head->next;
 	return head;
@@ -123,7 +123,7 @@ PathNode 	*pathnode_pop_first(PathNode **head)
 	PathNode *first;
 
 	if (!head || !*head)
-		return NULL;
+		return (NULL);
 	first = *head;
 	*head = first->next;
 	if (*head)

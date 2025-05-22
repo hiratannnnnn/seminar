@@ -80,22 +80,22 @@ int **generate_random_euler(int n)
     int *degree;
 
     if (n < 3)
-        return NULL;
+        return (NULL);
     srand(time(NULL) + clock());
 
     // Initialization
     prufer = generate_random_prufer(n);
-    if (!prufer) return NULL;
+    if (!prufer) return (NULL);
     degree = count_degrees_from(prufer, n);
     if (!degree) {
         free(prufer);
-        return NULL;
+        return (NULL);
     }
     matrix = generate_matrix(n, n);
     if (!matrix) {
         free(prufer);
         free(degree);
-        return NULL;
+        return (NULL);
     }
     // Initialization
 

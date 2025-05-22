@@ -25,19 +25,29 @@ int 	**generate_random_digraph(int n, double edge_prob)
 		for (j = 0; j < n; j++)
 		{
 			if (i == j) continue;
-			if ((double)rand() / RAND_MAX < edge_prob)
+			if ((double)rand() / (RAND_MAX + 1.0) < edge_prob)
 				matrix[i][j] = 1;
 		}
 	return (matrix);
 }
 
-void 		save_random_digraph(int n, double edge_prob, char const *filename)
+int 	**generate_random_DAG(int n, double edge_prob)
 {
 	int **matrix;
+	int i, j;
+	int *topnr;
 
-	matrix = generate_random_digraph(n, edge_prob);
+	matrix = generate_matrix(n, n);
 	if (!matrix)
-		return ;
-	write_adjacent_matrix(matrix, n, filename);
-	free_array_int(matrix, n);
+		return (NULL);
+
+	topnr = random_perm(n);
+	for (i = 0; i < n; i++)
+		for (j = 0; j < n; j++)
+			if (topnr[i] < topnr[j])
+				if (topnr[i] + 1 == topnr[j] ||
+					((double)rand() / (RAND_MAX + 1.0) < edge_prob))
+					matrix[i][j] = 1;
+	free(topnr);
+	return (matrix);
 }

@@ -20,7 +20,7 @@ Vertex      **adj_matrix_to_vertices(int **matrix, int n, int undirected)
 
     vertices = create_vertex_array(n);
     if (!vertices)
-        return NULL;
+        return (NULL);
     edge_id = 0;
     for (i = 0; i < n; i++)
     {
@@ -53,7 +53,7 @@ int **vertices_to_adj_matrix(Vertex **vertices, int n)
 
     matrix = generate_matrix(n, n);
     if (!matrix)
-        return NULL;
+        return (NULL);
     for (i = 0; i < n; i++)
     {
         edge = vertices[i]->incidence;

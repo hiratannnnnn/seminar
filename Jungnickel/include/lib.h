@@ -119,9 +119,12 @@ Node		*create_node		(int edge_id);
 void		append_node			(Node **head, Node *new_node);
 void		insert_node_after	(Node *pos, Node *new_node);
 Node 		*get_last_node		(Node *head);
+Node	 	*node_pop_first		(Node **head);
+
 PathNode	*create_pathnode	(int vertex_id);
 void		append_pathnode		(PathNode **head, PathNode *new_pathnode);
 void		insert_pathnode_after(PathNode *pos, PathNode *new_pathnode);
 PathNode	*get_last_pathnode	(PathNode *head);
+PathNode 	*pathnode_pop_first	(PathNode **head);
 
 #endif

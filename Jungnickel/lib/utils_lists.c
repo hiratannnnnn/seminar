@@ -56,6 +56,19 @@ Node *get_last_node(Node *head)
 	return head;
 }
 
+Node	*node_pop_first(Node **head)
+{
+	Node *first;
+
+	if (!head || !*head)
+		return NULL;
+	first = *head;
+	*head = first->next;
+	if (*head)
+		(*head)->prev = NULL;
+	return first;
+}
+
 PathNode	*create_pathnode(int vertex_id)
 {
 	PathNode	*node;
@@ -103,4 +116,17 @@ PathNode	*get_last_pathnode(PathNode *head)
 	while (head->next)
 		head = head->next;
 	return head;
+}
+
+PathNode 	*pathnode_pop_first(PathNode **head)
+{
+	PathNode *first;
+
+	if (!head || !*head)
+		return NULL;
+	first = *head;
+	*head = first->next;
+	if (*head)
+		(*head)->prev = NULL;
+	return first;
 }

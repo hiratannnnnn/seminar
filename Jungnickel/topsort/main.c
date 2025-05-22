@@ -14,17 +14,22 @@ int		main(void)
 	int		*topnr;
 
 	n = 12;
-	save_random_digraph(n, 0.7, "test_graph.txt");
+	// save_random_digraph(n, 0.7, "test_graph.txt");
 
 	matrix = read_adj(&n, "test_graph.txt");
 	vs = adj_matrix_to_vertices(matrix, n, 0); // directed = 0
 	print_vertices(vs, n);
 
 	topnr = calloc(n, sizeof(int));
-	if (topnr)
+	if (!topnr)
 	{
-		
+		free_array_int(matrix, n);
+		free_vertex_array(vs, n);
+		return (1);
 	}
+
+	printf("%d\n", topsort(vs, n, topnr));
+	print_array_int(topnr, n);
 	free_array_int(matrix, n);
 	free_vertex_array(vs, n);
 	return (0);

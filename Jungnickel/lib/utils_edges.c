@@ -39,6 +39,11 @@ Vertex	**create_vertex_array(int n)
 	while (i < n)
 	{
 		vs[i] = create_vertex(i);
+		if (!vs[i])
+		{
+			free_vertex_array(vs, i);
+			return (NULL);
+		}
 		i++;
 	}
 	return (vs);
@@ -57,42 +62,4 @@ void	add_undirected_edge(Vertex **vs, int from, int to, int edge_id)
 {
 	add_directed_edge(vs, from, to, edge_id);
 	add_directed_edge(vs, to, from ,edge_id);
-}
-
-
-void	print_vertex(Vertex *v)
-{
-	if (!v)
-		return ;
-	ft_putstr("vId: ");
-	ft_putnbr(v->id);
-	print_edge_list(v->incidence);
-	ft_putstr("\n");
-}
-
-void	print_vertices(Vertex **vs, int n)
-{
-	int	i;
-
-	i = 0;
-	if (!vs)
-		return ;
-	while (i < n)
-	{
-		print_vertex(vs[i]);
-		i++;
-	}
-}
-
-void	print_edge_list(Edge *head)
-{
-	Edge	*cur;
-
-	cur = head;
-	while (cur)
-	{
-		ft_putstr(" -> ");
-		ft_putnbr(cur->to);
-		cur = cur->next;
-	}
 }

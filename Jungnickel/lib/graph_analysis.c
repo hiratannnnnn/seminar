@@ -20,6 +20,30 @@ void compute_degrees(int **matrix, int n, int *degree)
     }
 }
 
+/**
+ * @brief Returns the degree of each vertex based on the adjacency list.
+ *
+ * @param vs The adjacency List
+ * @param n Number of vertices
+ * @param degree Array to store degree values
+ */
+
+void compute_degrees_from_list(Vertex **vs, int n, int *degree)
+{
+	int i;
+	Edge *list;
+
+	for (i = 0; i < n; i++)
+	{
+		list = vs[i]->incidence;
+		while (list)
+		{
+			degree[list->to]++;
+			list = list->next;
+		}
+	}
+}
+
 static void	dfs(int **matrix, int n, int vertex, int *visited);
 
 /**

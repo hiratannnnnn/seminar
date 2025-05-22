@@ -26,3 +26,54 @@ void print_array_int(int *arr, int n)
 		printf((i == n - 1) ? "\n" : " ");
 	}
 }
+
+
+void	print_vertex(Vertex *v)
+{
+	if (!v)
+		return ;
+	ft_putstr("vId: ");
+	ft_putnbr(v->id);
+	print_edge_list(v->incidence);
+	ft_putstr("\n");
+}
+
+void	print_vertices(Vertex **vs, int n)
+{
+	int	i;
+
+	i = 0;
+	if (!vs)
+		return ;
+	while (i < n)
+	{
+		print_vertex(vs[i]);
+		i++;
+	}
+}
+
+void	print_edge_list(Edge *head)
+{
+	Edge	*cur;
+
+	cur = head;
+	while (cur)
+	{
+		printf(" -> ");
+		printf("%d", cur->to);
+		cur = cur->next;
+	}
+}
+
+void 	print_path_node(PathNode *head)
+{
+	PathNode	*cur;
+
+	cur = head;
+	while (cur)
+	{
+		printf(" -> ");
+		printf("%d", cur->vertex);
+		cur = cur->next;
+	}
+}

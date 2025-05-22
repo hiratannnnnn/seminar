@@ -22,11 +22,9 @@ PathNode *find_path_dfs(
 
     if (current == end)
     {
-        result = malloc(sizeof(PathNode));
+        result = create_pathnode(current);
         if (!result)
             return NULL;
-        result->vertex = current;
-        result->next = NULL;
         return result;
     }
 
@@ -38,7 +36,7 @@ PathNode *find_path_dfs(
             rest_path = find_path_dfs(matrix, n, i, end, visited, path);
             if (rest_path)
             {
-                new_head = malloc(sizeof(PathNode));
+                new_head = create_pathnode(current);
                 if (!new_head)
                 {
                     PathNode *temp;
@@ -51,7 +49,6 @@ PathNode *find_path_dfs(
                     visited[current] = 0;
                     return NULL;
                 }
-                new_head->vertex = current;
                 new_head->next = rest_path;
                 visited[current] = 0;
                 return new_head;
@@ -72,11 +69,9 @@ PathNode *find_cycle_dfs(
 
     if (current == start && depth >= 2)
     {
-        result = malloc(sizeof(PathNode));
+        result = create_pathnode(current);
         if (!result)
             return NULL;
-        result->vertex = current;
-        result->next = NULL;
         return result;
     }
 
@@ -90,7 +85,7 @@ PathNode *find_cycle_dfs(
             rest_path = find_cycle_dfs(matrix, n, start, i, visited, depth + 1);
             if (rest_path)
             {
-                new_head = malloc(sizeof(PathNode));
+                new_head = create_pathnode(current);
                 if (!new_head)
                 {
                     PathNode *temp;
@@ -103,7 +98,6 @@ PathNode *find_cycle_dfs(
                     visited[current] = 0;
                     return NULL;
                 }
-                new_head->vertex = current;
                 new_head->next = rest_path;
                 visited[current] = 0;
                 return new_head;

@@ -3,32 +3,33 @@
 
 /* ========= Data Structure =========*/
 
-typedef struct Edge
+typedef struct 	Edge
 {
-    int         id;
-    int         from;
-    int         to;
-    int         used;
-    struct Edge *next;
+    int         id;			// edge_id
+    int         from;   	// vertex from
+    int         to;     	// vertex to
+    int         used;		// for any extra uses
+    struct Edge *next;		// for edge list
 }               Edge;
 
-typedef struct Vertex
+typedef struct 	Vertex
 {
-    int         id;
-    Edge        *incidence;
+    int         id;			// vertex id
+    Edge        *incidence;	// incidence list (edge list)
 }               Vertex;
 
-typedef struct Node
+typedef struct 	Node
 {
-    int         edge_id;
-    struct Node *prev;
-    struct Node *next;
+    int         edge_id; 	// edge id
+    struct Node *prev;		// prev node
+    struct Node *next;		// next node
 }               Node;
 
-typedef struct PathNode
+typedef struct 	PathNode
 {
-    int             vertex;
-    struct PathNode *next;
-}                   PathNode;
+    int             vertex;	// vertex id
+    struct PathNode *prev;	// prev node
+    struct PathNode *next;	// next node
+}				PathNode;
 
 #endif

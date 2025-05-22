@@ -40,17 +40,18 @@ int			make_eulerian			(int **matrix, int n);
 /* ========= Graph Analysis =========*/
 
 // graph_analysis.c
-int			is_tree				(int **matrix, int n);
-void		compute_degrees		(int **matrix, int n, int *degree);
-int			find_odd_vertices	(int *degree, int n, int *odd_list);
+int			is_tree						(int **matrix, int n);
+void		compute_degrees				(int **matrix, int n, int *degree);
+int			find_odd_vertices			(int *degree, int n, int *odd_list);
+void		compute_degrees_from_list	(Vertex **vs, int n, int *degree);
 
 /* ========= Path Finding =========*/
 
 // path_operations.c
-PathNode	*find_path_dfs		(int **matrix, int n, int current, int end, int *visited, PathNode *path);
-PathNode	*find_cycle_dfs		(int **matrix, int n, int start, int current, int *visited, int depth);
-void		add_edges_along_path(int **matrix, PathNode *path);
-void		free_path			(PathNode *path);
+PathNode	*find_path_dfs			(int **matrix, int n, int current, int end, int *visited, PathNode *path);
+PathNode	*find_cycle_dfs			(int **matrix, int n, int start, int current, int *visited, int depth);
+void		add_edges_along_path	(int **matrix, PathNode *path);
+void		free_path				(PathNode *path);
 
 // graph_connections.c
 int			make_trail				(int **matrix, int n, int v1, int v2);
@@ -83,9 +84,6 @@ Vertex		*create_vertex			(int id);
 Vertex		**create_vertex_array	(int n);
 void		add_directed_edge		(Vertex **vs, int from, int to, int edge_id);
 void		add_undirected_edge		(Vertex **vs, int from, int to, int edge_id);
-void		print_vertex			(Vertex *v);
-void		print_vertices			(Vertex **vs, int n);
-void		print_edge_list			(Edge *head);
 
 /* ========= Euler Tour Utilities =========*/
 
@@ -111,12 +109,19 @@ void		free_vertex_array	(Vertex **vs, int n);
 // utils_print.c
 void 		print_matrix		(int **matrix, int r, int c);
 void		print_array_int		(int *arr, int n);
+void		print_vertex		(Vertex *v);
+void		print_vertices		(Vertex **vs, int n);
+void		print_edge_list		(Edge *head);
+void 		print_path_node		(PathNode *head);
 
 // utils_lists.c
 Node		*create_node		(int edge_id);
 void		append_node			(Node **head, Node *new_node);
 void		insert_node_after	(Node *pos, Node *new_node);
 Node 		*get_last_node		(Node *head);
-
+PathNode	*create_pathnode	(int vertex_id);
+void		append_pathnode		(PathNode **head, PathNode *new_pathnode);
+void		insert_pathnode_after(PathNode *pos, PathNode *new_pathnode);
+PathNode	*get_last_pathnode	(PathNode *head);
 
 #endif

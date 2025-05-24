@@ -7,7 +7,6 @@
 有向で連結な木、およびグラフのランダム生成
 algo_TOPSORTの実装
 
-グラフGで構造体を作ってしまって、そこに隣接行列とサイズを入れる、場合によっては頂点の隣接リストも保持できる
   "editor.acceptSuggestionOnEnter": "off"
 "editor.tokenColorCustomizations": {
       "textMateRules": [

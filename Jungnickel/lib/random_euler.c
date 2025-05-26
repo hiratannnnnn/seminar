@@ -10,11 +10,11 @@
 int make_eulerian(int **matrix, int n)
 {
     // Allocate working memory
-    int *degree = (int *)malloc(n * sizeof(int));
-    int *odd_list = (int *)malloc(n * sizeof(int));
+    int *degree = (int *)xmalloc(n * sizeof(int));
+    int *odd_list = (int *)xmalloc(n * sizeof(int));
     if (!degree || !odd_list) {
-        if (degree) free(degree);
-        if (odd_list) free(odd_list);
+        if (degree) xfree(degree, n * sizeof(int));
+        if (odd_list) xfree(odd_list, n * sizeof(int));
         return 0;
     }
 
@@ -26,8 +26,8 @@ int make_eulerian(int **matrix, int n)
     int result = pair_odd_vertices(matrix, n, odd_list, odd_count);
 
     // Clean up
-    free(degree);
-    free(odd_list);
+    xfree(degree, n * sizeof(int));
+    xfree(odd_list, n * sizeof(int));
 
     return result;
 }
@@ -88,13 +88,13 @@ int **generate_random_euler(int n)
     if (!prufer) return (NULL);
     degree = count_degrees_from(prufer, n);
     if (!degree) {
-        free(prufer);
+        xfree(prufer, sizeof(int) * n);
         return (NULL);
     }
     matrix = generate_matrix(n, n);
     if (!matrix) {
-        free(prufer);
-        free(degree);
+        xfree(prufer, sizeof(int) * n);
+        xfree(degree, sizeof(int) * n);
         return (NULL);
     }
     // Initialization
@@ -109,8 +109,8 @@ int **generate_random_euler(int n)
     if (write_adjacent_matrix(matrix, n, "euler_graph.txt") < 0) {
         printf("Warning: Failed to write Euler graph to file\n");
     }
-    free(prufer);
-    free(degree);
+    xfree(prufer, sizeof(int) * n);
+    xfree(degree, sizeof(int) * n);
 
     return matrix;
 }

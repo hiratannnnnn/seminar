@@ -4,7 +4,7 @@ Edge	*create_edge(int id, int from, int to)
 {
 	Edge	*edge;
 
-	edge = (Edge *)malloc(sizeof(Edge));
+	edge = (Edge *)xmalloc(sizeof(Edge));
 	if (!edge)
 		return (NULL);
 	edge->id = id;
@@ -19,7 +19,7 @@ Vertex	*create_vertex(int id)
 {
 	Vertex	*vertex;
 
-	vertex = (Vertex *)malloc(sizeof(Vertex));
+	vertex = (Vertex *)xmalloc(sizeof(Vertex));
 	if (!vertex)
 		return (NULL);
 	vertex->id = id;
@@ -32,7 +32,7 @@ Vertex	**create_vertex_array(int n)
 	int		i;
 	Vertex	**vs;
 
-	vs = (Vertex **)malloc(sizeof(Vertex *) * n);
+	vs = (Vertex **)xmalloc(sizeof(Vertex *) * n);
 	if (!vs)
 		return (NULL);
 	i = 0;

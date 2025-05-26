@@ -44,7 +44,7 @@ PathNode *find_path_dfs(
                     {
                         temp = rest_path;
                         rest_path = rest_path->next;
-                        free(temp);
+                        xfree(temp, sizeof(PathNode));
                     }
                     visited[current] = 0;
                     return (NULL);
@@ -93,7 +93,7 @@ PathNode *find_cycle_dfs(
                     {
                         temp = rest_path;
                         rest_path = rest_path->next;
-                        free(temp);
+                        xfree(temp, sizeof(PathNode));
                     }
                     visited[current] = 0;
                     return (NULL);
@@ -135,6 +135,6 @@ void free_path(PathNode *path)
     {
         temp = path;
         path = path->next;
-        free(temp);
+        xfree(temp, sizeof(PathNode));
     }
 }

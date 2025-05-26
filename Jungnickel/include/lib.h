@@ -9,11 +9,14 @@
 # include <unistd.h>
 # include "types.h"
 
+size_t	mem;
+size_t	mem_peak;
+
 /* ========= Matrix Operations =========*/
 
 // matrix_operations.c
 int			**generate_matrix		(int r, int c);
-void		free_array_int			(int **arr, const int r);
+void		free_matrix_int			(int **arr, int const r, int const c);
 int			write_adjacent_matrix	(int **matrix, int n, char const *filename);
 int 		write_adjacent_list		(int **matrix, int n, char const *filename);
 void 		save_some_matrix		(int n, double edge_prob,
@@ -131,5 +134,10 @@ void		print_vertex		(Vertex *v);
 void		print_vertices		(Vertex **vs, int n);
 void		print_edge_list		(Edge *head);
 void 		print_path_node		(PathNode *head);
+
+// xmalloc.c
+void		*xmalloc			(size_t size);
+void		*xcalloc			(int n, size_t size_each);
+void		xfree				(void *ptr, size_t size);
 
 #endif

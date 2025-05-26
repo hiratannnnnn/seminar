@@ -48,6 +48,6 @@ int 	**generate_random_DAG(int n, double edge_prob)
 				if (topnr[i] + 1 == topnr[j] ||
 					((double)rand() / (RAND_MAX + 1.0) < edge_prob))
 					matrix[i][j] = 1;
-	free(topnr);
+	xfree(topnr, sizeof(int) * n);
 	return (matrix);
 }

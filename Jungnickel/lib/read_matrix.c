@@ -49,7 +49,7 @@ int **read_adj(int *n, char const *filename)
 		{
 			if (fscanf(fp, "%d", &matrix[i][j]) != 1)
 			{
-				free_array_int(matrix, i);
+				free_matrix_int(matrix, i, *n);
 				fclose(fp);
 				return (NULL);
 			}

@@ -73,12 +73,12 @@ int	is_tree(int **matrix, int n)
 				edge_count++;
 	if (edge_count != n - 1)
 		return (0);
-	visited = (int *)calloc(n, sizeof(int));
+	visited = (int *)xcalloc(n, sizeof(int));
 	dfs(matrix, n, 0, visited);
 	for (int i = 0; i < n; i++)
 		if (!visited[i])
-			return (free(visited), 0);
-	free(visited);
+			return (xfree(visited, sizeof(int) * n), 0);
+	xfree(visited, sizeof(int) * n);
 	return (1);
 }
 

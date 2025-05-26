@@ -44,5 +44,5 @@ void 		save_random_graph(int n, double edge_prob, char const *filename)
 	if (!matrix)
 		return ;
 	write_adjacent_matrix(matrix, n, filename);
-	free_array_int(matrix, n);
+	free_matrix_int(matrix, n, n);
 }

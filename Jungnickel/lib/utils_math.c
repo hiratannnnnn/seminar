@@ -11,7 +11,7 @@ int		*random_perm(int n)
 	int *perm;
 	int i, j, tmp;
 
-	perm = malloc(sizeof(int) * n);
+	perm = xmalloc(sizeof(int) * n);
 	if (!perm)
 		return (NULL);
 	for (i = 0; i < n; i++)

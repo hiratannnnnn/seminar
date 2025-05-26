@@ -16,7 +16,7 @@ int	*generate_random_prufer(int n)
 
 	if (n < 2)
 		return (NULL);
-	int *prufer = (int *)malloc((n - 2) * sizeof(int));
+	int *prufer = (int *)xmalloc((n - 2) * sizeof(int));
 	if (!prufer)
 		return (NULL);
 	for (i = 0; i < n - 2; i++)
@@ -39,7 +39,7 @@ int *count_degrees_from(const int *prufer, int n)
 {
 	int i;
 
-	int *degree = (int *)malloc(n * sizeof(int));
+	int *degree = (int *)xmalloc(n * sizeof(int));
 	if (!degree)
 		return (NULL);
 	for (i = 0; i < n; i++)
@@ -74,14 +74,14 @@ int **generate_random_tree(int n)
 	prufer = generate_random_prufer(n);
 	if (!prufer)
 	{
-		free_array_int(matrix, n);
+		free_matrix_int(matrix, n, n);
 		return (NULL);
 	}
 	degree = count_degrees_from(prufer, n);
 	if (!degree)
 	{
-		free(prufer);
-		free_array_int(matrix, n);
+		xfree(prufer, sizeof(int) * n);
+		free_matrix_int(matrix, n, n);
 		return (NULL);
 	}
 	// initialization
@@ -120,10 +120,10 @@ int **generate_random_tree(int n)
 		// the last two nodes
 	// build the tree from the Prufer code
 
-	free(prufer);
-	free(degree);
+	xfree(prufer, sizeof(int) * n);
+	xfree(degree, sizeof(int) * n);
 	return matrix;
-	// free_array_int(matrix, n);
+	// free_matrix_int(matrix, n, n);
 }
 
 /**

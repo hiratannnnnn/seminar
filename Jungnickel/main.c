@@ -12,7 +12,7 @@ int 	main(void)
 	print_matrix(matrix, n, n);
 
 	write_adjacent_list(matrix, n, "test_graph.txt");
-	free_array_int(matrix, n);
+	free_matrix_int(matrix, n, n);
 
 	printf("\n");
 
@@ -21,6 +21,6 @@ int 	main(void)
 	if (!matrix)
 		return (1);
 	print_matrix(matrix, n, n);
-	free_array_int(matrix, n);
+	free_matrix_int(matrix, n, n);
 	return (0);
 }

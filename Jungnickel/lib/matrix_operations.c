@@ -19,16 +19,16 @@ int	**generate_matrix(int r, int c)
 	int	i;
 	int	j;
 
-	result = (int **)malloc(sizeof(int *) * r);
+	result = (int **)xmalloc(sizeof(int *) * r);
 	if (!result)
 		return (NULL);
 	i = 0;
 	while (i < r)
 	{
-		result[i] = (int *)malloc(sizeof(int) * c);
+		result[i] = (int *)xmalloc(sizeof(int) * c);
 		if (!result[i])
 		{
-			free_array_int(result, i);
+			free_matrix_int(result, i, c);
 			return (NULL);
 		}
 		j = 0;
@@ -42,19 +42,18 @@ int	**generate_matrix(int r, int c)
 	return (result);
 }
 
-void	free_array_int(int **arr, const int r)
+void	free_matrix_int(int **matrix, int const r, int const c)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	while (i < r)
 	{
-		free(arr[i]);
+		xfree(matrix[i], sizeof(int) * c);
 		i++;
 	}
-	free(arr);
+	xfree(matrix, sizeof(int *) * r);
 }
-
 
 /**
  * @brief Writes an adjacency matrix to a text file.
@@ -152,5 +151,5 @@ void 	save_some_matrix(int n, double edge_prob,
 	if (!matrix)
 		return ;
 	write_adjacent_matrix(matrix, n, filename);
-	free_array_int(matrix, n);
+	free_matrix_int(matrix, n, n);
 }

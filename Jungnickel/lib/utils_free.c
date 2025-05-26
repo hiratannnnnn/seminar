@@ -9,7 +9,7 @@ void	free_edge_list(Edge *head)
 	while (cur)
 	{
 		next = cur->next;
-		free(cur);
+		xfree(cur, sizeof(Edge));
 		cur = next;
 	}
 }
@@ -23,7 +23,7 @@ void	free_node_list(Node *head)
 	while (cur)
 	{
 		next = cur->next;
-		free(cur);
+		xfree(cur, sizeof(Node));
 		cur = next;
 	}
 }
@@ -33,7 +33,7 @@ void	free_vertex(Vertex *vertex)
 	if (!vertex)
 		return ;
 	free_edge_list(vertex->incidence);
-	free(vertex);
+	xfree(vertex, sizeof(Vertex));
 }
 
 void	free_vertex_array(Vertex **vs, int n)
@@ -48,5 +48,5 @@ void	free_vertex_array(Vertex **vs, int n)
 		free_vertex(vs[i]);
 		i++;
 	}
-	free(vs);
+	xfree(vs, sizeof(Vertex *) * n);
 }

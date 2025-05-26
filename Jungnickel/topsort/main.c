@@ -6,6 +6,9 @@
 
 #include "topsort.h"
 
+size_t	mem 		= 0;
+size_t	mem_peak 	= 0;
+
 int		main(void)
 {
 	int 	n;
@@ -13,7 +16,7 @@ int		main(void)
 	Vertex	**vs;
 	int		*topnr;
 
-	n = 12;
+	n = 30;
 	srand(time(NULL) + clock());
 	save_some_matrix(n, 0.1, generate_random_DAG, "test_graph.txt");
 
@@ -21,30 +24,24 @@ int		main(void)
 	vs = adj_matrix_to_vertices(matrix, n, 0); // directed = 0
 	print_vertices(vs, n);
 
-	topnr = calloc(n, sizeof(int));
+	topnr = xcalloc(n, sizeof(int));
 	if (!topnr)
 	{
-		free_array_int(matrix, n);
+		free_matrix_int(matrix, n, n);
 		free_vertex_array(vs, n);
 		return (1);
 	}
-
+    printf("mem: %d\n", mem);
 	printf("%d\n", topsort(vs, n, topnr));
 	print_array_int(topnr, n);
-	free_array_int(matrix, n);
+
+	// free
+	free_matrix_int(matrix, n, n);
 	free_vertex_array(vs, n);
+	xfree(topnr, sizeof(int) * n);
+
+    printf("mem_peak: %d\n", mem_peak);
+    printf("remaining mem: %d\n", mem);
+
 	return (0);
 }
-// typedef struct Vertex
-// {
-//     int         id;
-//     Edge        *incidence;
-// }               Vertex;
-// typedef struct Edge
-// {
-//     int         id;
-//     int         from;
-//     int         to;
-//     int         used;
-//     struct Edge *next;
-// }               Edge;

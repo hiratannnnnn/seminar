@@ -16,7 +16,7 @@ int make_trail(int **matrix, int n, int v1, int v2)
     int *visited;
     PathNode *path;
 
-    visited = calloc(n, sizeof(int));
+    visited = xcalloc(n, sizeof(int));
     if (!visited)
         return (0);
     path = find_path_dfs(matrix, n, v1, v2, visited, NULL);
@@ -24,11 +24,11 @@ int make_trail(int **matrix, int n, int v1, int v2)
     {
         add_edges_along_path(matrix, path);
         free_path(path);
-        free(visited);
+        xfree(visited, sizeof(int) * n);
         return (1);
     }
     matrix[v1][v2] = matrix[v2][v1] = 1;
-    free(visited);
+    xfree(visited, sizeof(int) * n);
     return (0);
 }
 
@@ -47,7 +47,7 @@ int make_cycle(int **matrix, int n, int v)
     int *visited;
     PathNode *cycle;
 
-    visited = calloc(n, sizeof(int));
+    visited = xcalloc(n, sizeof(int));
     if (!visited)
         return 0;
     cycle = find_cycle_dfs(matrix, n, v, v, visited, 0);
@@ -55,10 +55,10 @@ int make_cycle(int **matrix, int n, int v)
     {
         add_edges_along_path(matrix, cycle);
         free_path(cycle);
-        free(visited);
+        xfree(visited, sizeof(int) * n);
         return 1;
     }
-    free(visited);
+    xfree(visited, sizeof(int) * n);
     return 0;
 }
 

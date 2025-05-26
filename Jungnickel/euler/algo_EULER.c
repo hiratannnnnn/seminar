@@ -117,11 +117,11 @@ void	algo_euler(Vertex **vs, int n, int s, Node **K)
 	Node		*C;
 
 	ctx.n = n;
-    ctx.used = (int *)calloc(n, sizeof(int));
-    ctx.new_edge = (int *)calloc(n * n, sizeof(int));
-    ctx.used_list = (int *)malloc(sizeof(int) * n);
+    ctx.used = (int *)xcalloc(n, sizeof(int));
+    ctx.new_edge = (int *)xcalloc(n * n, sizeof(int));
+    ctx.used_list = (int *)xmalloc(sizeof(int) * n);
     ctx.used_list_size = 0;
-    ctx.e_pos = (int *)malloc(sizeof(int) * n);
+    ctx.e_pos = (int *)xmalloc(sizeof(int) * n);
 	i = 0;
 	while (i < n)
 		ctx.e_pos[i++] = -1;
@@ -146,8 +146,8 @@ void	algo_euler(Vertex **vs, int n, int s, Node **K)
 		trace(&ctx, vs, u,&C);
 		insert_C_in_K(K, C, ctx.e_pos[u]);
 	}
-	free(ctx.used);
-	free(ctx.new_edge);
-	free(ctx.used_list);
-	free(ctx.e_pos);
+	xfree(ctx.used, sizeof(int) * n);
+	xfree(ctx.new_edge, sizeof(int) * n * n);
+	xfree(ctx.used_list, sizeof(int) * n);
+	xfree(ctx.e_pos, sizeof(int) * n);
 }

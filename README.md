@@ -4,8 +4,12 @@
 まだまだ勉強量が足りないので、勉強しましょう
 
 次やること
-有向で連結な木、およびグラフのランダム生成
-algo_TOPSORTの実装
+
+・closure [G]の生成
+・Line Graph
+・勉強のために、使用したメモリの量、かかった時間の表示
+
+
 
   "editor.acceptSuggestionOnEnter": "off"
 "editor.tokenColorCustomizations": {

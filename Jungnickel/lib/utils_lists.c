@@ -4,7 +4,7 @@ Node	*create_node(int edge_id)
 {
 	Node	*node;
 
-	node = (Node *)malloc(sizeof(Node));
+	node = (Node *)xmalloc(sizeof(Node));
 	if (!node)
 		return (NULL);
 	node->edge_id = edge_id;
@@ -73,7 +73,7 @@ PathNode	*create_pathnode(int vertex_id)
 {
 	PathNode	*node;
 
-	node = (PathNode *)malloc(sizeof(PathNode));
+	node = (PathNode *)xmalloc(sizeof(PathNode));
 	if (!node)
 		return (NULL);
 	node->vertex = vertex_id;

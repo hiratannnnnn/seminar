@@ -115,7 +115,7 @@ void euler_tour_to_edge_list(Node *tour, int **edges, int *edge_count)
     }
 
     // Allocate edge list
-    edge_list = (int *)malloc(count * sizeof(int));
+    edge_list = (int *)xmalloc(count * sizeof(int));
     if (!edge_list)
     {
         *edges = NULL;
@@ -166,7 +166,7 @@ int is_euler_tour(Node *tour, Vertex **vs, int n)
     }
 
     // Allocate array to track used edges
-    used_edges = (int *)calloc(total_edges, sizeof(int));
+    used_edges = (int *)xcalloc(total_edges, sizeof(int));
     if (!used_edges)
         return 0;
 
@@ -191,7 +191,7 @@ int is_euler_tour(Node *tour, Vertex **vs, int n)
         }
     }
 
-    free(used_edges);
+    xfree(used_edges, sizeof(int) * total_edges);
 
     // An Euler tour must use all edges exactly once
     return (all_used && edge_count == total_edges);

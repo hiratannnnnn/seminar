@@ -16,6 +16,7 @@ size_t	mem_peak;
 
 // matrix_operations.c
 int			**generate_matrix		(int r, int c);
+int			**copy_matrix			(int **matrix, int r, int c);
 void		free_matrix_int			(int **arr, int const r, int const c);
 int			write_adjacent_matrix	(int **matrix, int n, char const *filename);
 int 		write_adjacent_list		(int **matrix, int n, char const *filename);
@@ -111,6 +112,10 @@ void		free_node_list		(Node *head);
 void		free_vertex			(Vertex *vertex);
 void		free_vertex_array	(Vertex **vs, int n);
 
+// utils_hamilton.c
+int			**closure_of		(int **matrix, int n);
+
+
 // utils_lists.c
 Node		*create_node		(int edge_id);
 void		append_node			(Node **head, Node *new_node);
@@ -134,6 +139,7 @@ void		print_vertex		(Vertex *v);
 void		print_vertices		(Vertex **vs, int n);
 void		print_edge_list		(Edge *head);
 void 		print_path_node		(PathNode *head);
+void		print_mem_peak		(	);
 
 // xmalloc.c
 void		*xmalloc			(size_t size);

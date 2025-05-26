@@ -7,9 +7,6 @@
 
 ・closure [G]の生成
 ・Line Graph
-・勉強のために、使用したメモリの量、かかった時間の表示
-
-
 
   "editor.acceptSuggestionOnEnter": "off"
 "editor.tokenColorCustomizations": {

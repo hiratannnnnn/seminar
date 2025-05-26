@@ -1,4 +1,4 @@
-DIRS = lib euler topsort
+DIRS = lib euler test topsort
 
 all: $(DIRS)
 

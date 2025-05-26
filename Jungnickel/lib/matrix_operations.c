@@ -42,6 +42,20 @@ int	**generate_matrix(int r, int c)
 	return (result);
 }
 
+int		**copy_matrix(int **matrix, int r, int c)
+{
+	int **dest;
+	int i, j;
+
+	dest = generate_matrix(r, c);
+	if (!dest)
+		return (NULL);
+	for (i = 0; i < r; i++)
+		for (j = 0; j < c; j++)
+			dest[i][j] = matrix[i][j];
+	return dest;
+}
+
 void	free_matrix_int(int **matrix, int const r, int const c)
 {
 	int i;

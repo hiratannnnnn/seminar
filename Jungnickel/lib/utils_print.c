@@ -77,3 +77,9 @@ void 	print_path_node(PathNode *head)
 		cur = cur->next;
 	}
 }
+
+void	print_mem_peak()
+{
+	printf("mem_peak: %d\n", mem_peak);
+	printf("remaining mem: %d\n", mem);
+}

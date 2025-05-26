@@ -71,6 +71,13 @@ int			pair_odd_vertices		(int **matrix, int n, int *odd_list, int odd_count);
 Vertex		**adj_matrix_to_vertices	(int **matrix, int n, int undirected);
 int			**vertices_to_adj_matrix	(Vertex **vertices, int n);
 
+// utils_edge_list.c
+Node		*edge_list_from_adj_list	(Vertex **vs, int n, int is_undir);
+size_t		count_nodes					(Node *head);
+
+// line_graph.c
+int			**line_graph_from_adj_list	(Vertex **vs, int n, int *size, int is_undir);
+
 /* ========= Input Processing =========*/
 
 // read_matrix.c
@@ -99,6 +106,9 @@ void		ft_putstr		(char const *str);
 int			sum_matrix		(int **matrix, int r, int c);
 int			sum_array		(int *arr, int n);
 
+// utils_edge_list.c
+Node		*edge_list_from_adj_list	(Vertex **vs, int n, int is_undir);
+
 // utils_euler.c
 void  		print_euler_tour_edges		(Node *tour);
 void  		print_euler_tour_vertices	(Node *tour, Vertex **vs);
@@ -117,7 +127,7 @@ int			**closure_of		(int **matrix, int n);
 
 
 // utils_lists.c
-Node		*create_node		(int edge_id);
+Node		*create_node		(Edge *edge);
 void		append_node			(Node **head, Node *new_node);
 void		insert_node_after	(Node *pos, Node *new_node);
 Node 		*get_last_node		(Node *head);

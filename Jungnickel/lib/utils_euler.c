@@ -18,7 +18,7 @@ void print_euler_tour_edges(Node *tour)
     printf("Euler tour (edge IDs): ");
     while (cur)
     {
-        printf("%d", cur->edge_id);
+        printf("%d", cur->edge->id);
         if (cur->next)
             printf(" -> ");
         cur = cur->next;
@@ -54,7 +54,7 @@ void print_euler_tour_vertices(Node *tour, Vertex **vs)
         edge = vs[i]->incidence;
         while (edge)
         {
-            if (edge->id == cur->edge_id)
+            if (edge->id == cur->edge->id)
             {
                 current_vertex = i;
                 found = 1;
@@ -78,7 +78,7 @@ void print_euler_tour_vertices(Node *tour, Vertex **vs)
         found = 0;
         while (edge)
         {
-            if (edge->id == cur->edge_id)
+            if (edge->id == cur->edge->id)
             {
                 current_vertex = edge->to;
                 printf(" -> %d", current_vertex);
@@ -128,7 +128,7 @@ void euler_tour_to_edge_list(Node *tour, int **edges, int *edge_count)
     count = 0;
     while (current)
     {
-        edge_list[count++] = current->edge_id;
+        edge_list[count++] = current->edge->id;
         current = current->next;
     }
 
@@ -174,8 +174,8 @@ int is_euler_tour(Node *tour, Vertex **vs, int n)
     current = tour;
     while (current)
     {
-        if (current->edge_id < total_edges)
-            used_edges[current->edge_id] = 1;
+        if (current->edge->id < total_edges)
+            used_edges[current->edge->id] = 1;
         current = current->next;
         edge_count++;
     }
@@ -227,7 +227,7 @@ int write_euler_tour_vertices(Node *tour, Vertex **vs, const char *filename)
         edge = vs[i]->incidence;
         while (edge)
         {
-            if (edge->id == cur->edge_id)
+            if (edge->id == cur->edge->id)
             {
                 current_vertex = i;
                 found = 1;
@@ -257,7 +257,7 @@ int write_euler_tour_vertices(Node *tour, Vertex **vs, const char *filename)
         found = 0;
         while (edge)
         {
-            if (edge->id == cur->edge_id)
+            if (edge->id == cur->edge->id)
             {
                 current_vertex = edge->to;
                 fprintf(fp, " %d", current_vertex);

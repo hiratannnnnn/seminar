@@ -1,13 +1,13 @@
 #include "lib.h"
 
-Node	*create_node(int edge_id)
+Node	*create_node(Edge *edge)
 {
 	Node	*node;
 
 	node = (Node *)xmalloc(sizeof(Node));
 	if (!node)
 		return (NULL);
-	node->edge_id = edge_id;
+	node->edge = edge;
 	node->prev = NULL;
 	node->next = NULL;
 	return (node);

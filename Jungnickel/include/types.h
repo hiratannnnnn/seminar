@@ -20,7 +20,8 @@ typedef struct 	Vertex
 
 typedef struct 	Node
 {
-    int         edge_id; 	// edge id
+    // int         edge_id; 	// edge id
+    Edge		*edge;
     struct Node *prev;		// prev node
     struct Node *next;		// next node
 }               Node;

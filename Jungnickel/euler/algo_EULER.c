@@ -51,10 +51,10 @@ static void	trace(t_euler_ctx *ctx, Vertex **vs, int v,  Node **C)
 		if (!edge) 								// all edges incident with v are used
 			return ;
 		ctx->new_edge[edge->id] = 0;
-		node = create_node(edge->id);
+		node = create_node(edge);
 		append_node(C, node); 					// append the node to the last of C
 		if ((ctx->e_pos)[v] == -1)				// v is not in K yet ?
-			(ctx->e_pos)[v] = node->edge_id; 	// wherever is fine
+			(ctx->e_pos)[v] = node->edge->id; 	// wherever is fine
 		v = edge->to;
 		if (!ctx->used[v])
 		{
@@ -81,7 +81,7 @@ static void	insert_C_in_K(Node **K, Node *C, int insert_edge_id)
 	if (!C)
 		return ;
 	cur = *K;
-	while (cur && cur->edge_id != insert_edge_id)
+	while (cur && cur->edge->id != insert_edge_id)
 		cur = cur->next;
 	if (!cur)
 	{

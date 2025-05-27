@@ -15,135 +15,129 @@ size_t	mem_peak;
 /* ========= Matrix Operations =========*/
 
 // matrix_operations.c
-int			**generate_matrix		(int r, int c);
-int			**copy_matrix			(int **matrix, int r, int c);
-void		free_matrix_int			(int **arr, int const r, int const c);
-int			write_adjacent_matrix	(int **matrix, int n, char const *filename);
-int 		write_adjacent_list		(int **matrix, int n, char const *filename);
-void 		save_some_matrix		(int n, double edge_prob,
+int			**generate_matrix		(int r, int c);									// ok
+int			**copy_matrix			(int **matrix, int r, int c); 					// ok
+void		free_matrix_int			(int **arr, int const r, int const c);			// ok
+int			write_adjacent_matrix	(int **matrix, int n, char const *filename);	// ok
+int 		write_adjacent_list		(int **matrix, int n, char const *filename);	// ok
+void 		save_some_matrix		(int n, double edge_prob,						// ok
 									int **(*gen_some_mat)(int, double), char const *filename);
 
 /* ========= Graph Generation =========*/
 
 // random_digraph.c
-int 		**generate_random_digraph	(int n, double edge_prob);
-int			**generate_random_DAG		(int n, double edge_prob);
+int 		**generate_random_digraph	(int n, double edge_prob);					// ok
+int			**generate_random_DAG		(int n, double edge_prob);					// ok
 
 // random_graph.c
-int 		**generate_random_graph		(int n, double edge_prob);
-void 		save_random_graph			(int n, double edge_prob, char const *filename);
+int 		**generate_random_graph		(int n, double edge_prob);					// ok, maybe name
+void 		save_random_graph			(int n, double edge_prob, char const *filename); // deprecated
 
 // random_tree.c
-int			*generate_random_prufer	(int n);
-int 		*count_degrees_from		(const int *prufer, int n);
-int 		**generate_random_tree	(int n);
-void		build_tree_from			(int **matrix, int *prufer, int *degree, int n);
+int			*generate_random_prufer	(int n);					// ok, but maybe still can be generalized
+int 		*count_degrees_from		(const int *prufer, int n);				// can be static
+int 		**generate_random_tree	(int n);										// ok
+void		build_tree_from			(int **matrix, int *prufer, int *degree, int n);// ok
 
 // random_euler.c
-int 		**generate_random_euler	(int n);
-int			make_eulerian			(int **matrix, int n);
+// broke because was totally unreadable ^^
+
 
 /* ========= Graph Analysis =========*/
 
 // graph_analysis.c
-int			is_tree						(int **matrix, int n);
-void		compute_degrees				(int **matrix, int n, int *degree);
-int			find_odd_vertices			(int *degree, int n, int *odd_list);
-void		compute_degrees_from_list	(Vertex **vs, int n, int *degree);
+int			is_tree						(int **matrix, int n);					// ok, but when use?
+void		compute_degrees				(int **matrix, int n, int *degree);		// ok
+int			find_odd_vertices			(int *degree, int n, int *odd_list);	// ok, but too narrow?
+void		compute_degrees_from_list	(Vertex **vs, int n, int *degree);		// ok?
 
 /* ========= Path Finding =========*/
 
 // path_operations.c
-PathNode	*find_path_dfs			(int **matrix, int n, int current, int end, int *visited, PathNode *path);
-PathNode	*find_cycle_dfs			(int **matrix, int n, int start, int current, int *visited, int depth);
-void		add_edges_along_path	(int **matrix, PathNode *path);
-void		free_path				(PathNode *path);
+// todo
 
 // graph_connections.c
-int			make_trail				(int **matrix, int n, int v1, int v2);
-int			make_cycle				(int **matrix, int n, int v);
-int			find_common_vertex		(int **matrix, int n, int v1, int v2);
-int			pair_odd_vertices		(int **matrix, int n, int *odd_list, int odd_count);
+// todo?
 
 /* ========= Graph Format Conversion =========*/
 
 // graph_conversion.c
-Vertex		**adj_matrix_to_vertices	(int **matrix, int n, int undirected);
-int			**vertices_to_adj_matrix	(Vertex **vertices, int n);
+Vertex		**adj_matrix_to_vertices	(int **matrix, int n, int undirected);	// ok
+int			**vertices_to_adj_matrix	(Vertex **vertices, int n);				// ok
 
 // utils_edge_list.c
-Node		*edge_list_from_adj_list	(Vertex **vs, int n, int is_undir);
-size_t		count_nodes					(Node *head);
+Node		*edge_list_from_adj_list	(Vertex **vs, int n, int is_undir);		// ok?
+size_t		count_nodes					(Node *head);							// ok, name?
 
 // line_graph.c
-int			**line_graph_from_adj_list	(Vertex **vs, int n, char ***names, int *size, int is_undir);
-void	 	free_array_char				(char **ss, int n);
-int 		count_digit					(unsigned int number);
+int			**line_graph_from_adj_list	(Vertex **vs, int n, char ***names, int *size, int is_undir); // ok?
 
 /* ========= Input Processing =========*/
 
 // read_matrix.c
-int 		**read_adj		(int *n, char const *filename);
-int 		**read_list		(int *n, char const *filename);
+int 		**read_adj		(int *n, char const *filename);						// ok
+int 		**read_list		(int *n, char const *filename);						// ok
 
 /* ========= Algorithms =========*/
 
 // algo_euler.c
-void		algo_euler		(Vertex **vs, int n, int s, Node **K);
+void		algo_euler		(Vertex **vs, int n, int s, Node **K);				// ok
 
 /* ========= Utilities =========*/
 
 // utils_edges.c
-Edge		*create_edge			(int id, int from, int to);
-Vertex		*create_vertex			(int id);
-Vertex		**create_vertex_array	(int n);
-void		add_directed_edge		(Vertex **vs, int from, int to, int edge_id);
-void		add_undirected_edge		(Vertex **vs, int from, int to, int edge_id);
+Edge		*create_edge			(int id, int from, int to);					// ok
+int 		len_edge_list			(Edge *head);								// ok, scattered functions
+void		add_directed_edge		(Vertex **vs, int from, int to, int edge_id);	// edge_id?
+void		add_undirected_edge		(Vertex **vs, int from, int to, int edge_id);	// edge_id?
+
+// utils_vertex.c
+Vertex		*create_vertex			(int id);									// ok
+Vertex		**create_vertex_array	(int n);									// ok
 
 /* ========= Euler Tour Utilities =========*/
 
 // utils_basic.c
-void		ft_putnbr		(long n);
-void		ft_putstr		(char const *str);
-int			sum_matrix		(int **matrix, int r, int c);
-int			sum_array		(int *arr, int n);
+void		ft_putnbr		(long n);											// deprecated
+void		ft_putstr		(char const *str);									// deprecated
+int			sum_matrix		(int **matrix, int r, int c);						// ok
+int			sum_array		(int *arr, int n);									// ok
 
 // utils_char.c
-void	 	free_array_char				(char **ss, int n);
-int 		count_digit					(unsigned int number);
+void	 	free_array_char				(char **ss, int n);						// ok
+int 		count_digit					(unsigned int number);					// ok
 
 // utils_edge_list.c
-Node		*edge_list_from_adj_list	(Vertex **vs, int n, int is_undir);
+Node		*edge_list_from_adj_list	(Vertex **vs, int n, int is_undir);		// fine
 
 // utils_euler.c
-void  		print_euler_tour_edges		(Node *tour);
-void  		print_euler_tour_vertices	(Node *tour, Vertex **vs);
-void  		euler_tour_to_edge_list		(Node *tour, int **edges, int *edge_count);
-int   		is_euler_tour				(Node *tour, Vertex **vs, int n);
-int   		write_euler_tour_vertices	(Node *tour, Vertex **vs, const char *filename);
+
 
 // utils_free.c
-void		free_edge_list		(Edge *head);
-void		free_node_list		(Node *head);
-void		free_vertex			(Vertex *vertex);
-void		free_vertex_array	(Vertex **vs, int n);
+void		free_edge_list		(Edge *head);					// ok, but directory messy?
+void		free_node_list		(Node *head);					// ok
+void		free_vertex			(Vertex *vertex);				// ok
+void		free_vertex_array	(Vertex **vs, int n);			// ok
 
 // utils_hamilton.c
-int			**closure_of		(int **matrix, int n);
+int			**closure_of		(int **matrix, int n);			// ok
 
 
-// utils_lists.c
-Node		*create_node		(Edge *edge);
-void		append_node			(Node **head, Node *new_node);
+// utils_node.c
+Node		*create_node		(Edge *edge);					// ok
+void		append_node			(Node **head, Node *new_node);	
 void		insert_node_after	(Node *pos, Node *new_node);
 Node 		*get_last_node		(Node *head);
 Node	 	*node_pop_first		(Node **head);
 
-PathNode	*create_pathnode	(int vertex_id);
+
+// utils_pathnode.c
+PathNode	*create_pathnode	(Vertex *vertex);
 void		append_pathnode		(PathNode **head, PathNode *new_pathnode);
 void		insert_pathnode_after(PathNode *pos, PathNode *new_pathnode);
 PathNode	*get_last_pathnode	(PathNode *head);
 PathNode 	*pathnode_pop_first	(PathNode **head);
+void		free_path			(PathNode *path);
 
 // utils_math.c
 int			*random_perm		(int n);

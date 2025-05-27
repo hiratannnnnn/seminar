@@ -48,7 +48,7 @@ int		topsort(Vertex **vs, int n, int *topnr)
 	{
 		if (ind[i] == 0)
 		{
-			node = create_pathnode(i);
+			node = create_pathnode(vs[i]);
 			if (!node)
 			{
 				free_path(head);
@@ -61,15 +61,15 @@ int		topsort(Vertex **vs, int n, int *topnr)
 	while (head)
 	{
 		node = pathnode_pop_first(&head);
-		printf("looking at: %d\n", node->vertex);
-		topnr[node->vertex] = N++;
-		edge = vs[node->vertex]->incidence;
+		printf("looking at: %d\n", node->v->id);
+		topnr[node->v->id] = N++;
+		edge = vs[node->v->id]->incidence;
 		while (edge)
 		{
 			ind[edge->to]--;
 			if (ind[edge->to] == 0)
 			{
-				next = create_pathnode(edge->to);
+				next = create_pathnode(vs[edge->to]);
 				if (!next)
 				{
 					xfree(node, sizeof(PathNode));

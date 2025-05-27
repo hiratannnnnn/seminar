@@ -20,7 +20,6 @@ typedef struct 	Vertex
 
 typedef struct 	Node
 {
-    // int         edge_id; 	// edge id
     Edge		*edge;
     struct Node *prev;		// prev node
     struct Node *next;		// next node
@@ -28,7 +27,7 @@ typedef struct 	Node
 
 typedef struct 	PathNode
 {
-    int             vertex;	// vertex id
+    Vertex          *v;
     struct PathNode *prev;	// prev node
     struct PathNode *next;	// next node
 }				PathNode;

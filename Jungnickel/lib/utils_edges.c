@@ -15,39 +15,19 @@ Edge	*create_edge(int id, int from, int to)
 	return (edge);
 }
 
-Vertex	*create_vertex(int id)
+int 	len_edge_list(Edge *head)
 {
-	Vertex	*vertex;
+	int count;
 
-	vertex = (Vertex *)xmalloc(sizeof(Vertex));
-	if (!vertex)
-		return (NULL);
-	vertex->id = id;
-	vertex->incidence = NULL;
-	return (vertex);
-}
-
-Vertex	**create_vertex_array(int n)
-{
-	int		i;
-	Vertex	**vs;
-
-	vs = (Vertex **)xmalloc(sizeof(Vertex *) * n);
-	if (!vs)
-		return (NULL);
-	i = 0;
-	while (i < n)
+	count = 0;
+	while (head)
 	{
-		vs[i] = create_vertex(i);
-		if (!vs[i])
-		{
-			free_vertex_array(vs, i);
-			return (NULL);
-		}
-		i++;
+		count++;
+		head = head->next;
 	}
-	return (vs);
+	return count;
 }
+
 
 void	add_directed_edge(Vertex **vs, int from, int to, int edge_id)
 {
@@ -61,5 +41,5 @@ void	add_directed_edge(Vertex **vs, int from, int to, int edge_id)
 void	add_undirected_edge(Vertex **vs, int from, int to, int edge_id)
 {
 	add_directed_edge(vs, from, to, edge_id);
-	add_directed_edge(vs, to, from ,edge_id);
+	add_directed_edge(vs, to, from, edge_id);
 }

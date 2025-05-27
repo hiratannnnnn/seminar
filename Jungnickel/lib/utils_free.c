@@ -14,20 +14,6 @@ void	free_edge_list(Edge *head)
 	}
 }
 
-void	free_node_list(Node *head)
-{
-	Node	*cur;
-	Node	*next;
-
-	cur = head;
-	while (cur)
-	{
-		next = cur->next;
-		xfree(cur, sizeof(Node));
-		cur = next;
-	}
-}
-
 void	free_vertex(Vertex *vertex)
 {
 	if (!vertex)

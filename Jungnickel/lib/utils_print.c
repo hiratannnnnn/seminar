@@ -73,7 +73,7 @@ void 	print_path_node(PathNode *head)
 	while (cur)
 	{
 		printf(" -> ");
-		printf("%d", cur->vertex);
+		printf("%d", cur->v->id);
 		cur = cur->next;
 	}
 }

@@ -4,10 +4,7 @@
 まだまだ勉強量が足りないので、勉強しましょう
 
 次やること
-
-・closure [G]の生成
-・Line Graph
-LINe graph の頂点の名称を管理する。
+ハミルトンサイクルの探索
 
   "editor.acceptSuggestionOnEnter": "off"
 "editor.tokenColorCustomizations": {

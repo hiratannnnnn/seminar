@@ -31,7 +31,6 @@ int		main(void)
 		free_vertex_array(vs, n);
 		return (1);
 	}
-    printf("mem: %d\n", mem);
 	printf("%d\n", topsort(vs, n, topnr));
 	print_array_int(topnr, n);
 
@@ -40,8 +39,7 @@ int		main(void)
 	free_vertex_array(vs, n);
 	xfree(topnr, sizeof(int) * n);
 
-    printf("mem_peak: %d\n", mem_peak);
-    printf("remaining mem: %d\n", mem);
+    print_mem_peak();
 
 	return (0);
 }

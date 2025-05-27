@@ -34,6 +34,7 @@ int 	**closure_of(int **matrix, int n)
 		{
 			for (j = 0; j < n; j++)
 			{
+				if (i == j) continue;
 				if ((degree[i] + degree[j] >= n) && !closure[i][j])
 				{
 					closure[i][j] = closure[j][i] = 1;

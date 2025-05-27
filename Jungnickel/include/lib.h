@@ -76,7 +76,9 @@ Node		*edge_list_from_adj_list	(Vertex **vs, int n, int is_undir);
 size_t		count_nodes					(Node *head);
 
 // line_graph.c
-int			**line_graph_from_adj_list	(Vertex **vs, int n, int *size, int is_undir);
+int			**line_graph_from_adj_list	(Vertex **vs, int n, char ***names, int *size, int is_undir);
+void	 	free_array_char				(char **ss, int n);
+int 		count_digit					(unsigned int number);
 
 /* ========= Input Processing =========*/
 
@@ -105,6 +107,10 @@ void		ft_putnbr		(long n);
 void		ft_putstr		(char const *str);
 int			sum_matrix		(int **matrix, int r, int c);
 int			sum_array		(int *arr, int n);
+
+// utils_char.c
+void	 	free_array_char				(char **ss, int n);
+int 		count_digit					(unsigned int number);
 
 // utils_edge_list.c
 Node		*edge_list_from_adj_list	(Vertex **vs, int n, int is_undir);
@@ -149,6 +155,7 @@ void		print_vertex		(Vertex *v);
 void		print_vertices		(Vertex **vs, int n);
 void		print_edge_list		(Edge *head);
 void 		print_path_node		(PathNode *head);
+void		print_array_char	(char **ss, int n);
 void		print_mem_peak		(	);
 
 // xmalloc.c

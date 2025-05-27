@@ -18,7 +18,6 @@ int main(int ac, char **av)
     // printf("%d\n", sum_matrix(matrix, n, n));
 
     // print_matrix(matrix, n, n);
-    printf("mem: %d\n", mem);
 
     vertices = adj_matrix_to_vertices(matrix, n, 1);
     if (!vertices)
@@ -31,12 +30,10 @@ int main(int ac, char **av)
         // print_euler_tour_vertices(euler_tour, vertices);
         write_euler_tour_vertices(euler_tour, vertices, "euler_path.txt");
     }
-    printf("mem: %d\n", mem);
 
     free_node_list(euler_tour);
     free_vertex_array(vertices, n);
     free_matrix_int(matrix, n, n);
-    printf("mem_peak: %d\n", mem_peak);
-    printf("remaining mem: %d\n", mem);
+    print_mem_peak();
     return (0);
 }

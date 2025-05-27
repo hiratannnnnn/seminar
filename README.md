@@ -7,6 +7,7 @@
 
 ・closure [G]の生成
 ・Line Graph
+LINe graph の頂点の名称を管理する。
 
   "editor.acceptSuggestionOnEnter": "off"
 "editor.tokenColorCustomizations": {

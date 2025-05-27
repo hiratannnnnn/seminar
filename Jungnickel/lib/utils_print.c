@@ -78,8 +78,17 @@ void 	print_path_node(PathNode *head)
 	}
 }
 
+void	print_array_char(char **ss, int n)
+{
+	int i;
+	for (i = 0; i < n; i++)
+	{
+		printf("%s\n", ss[i]);
+	}
+}
+
 void	print_mem_peak()
 {
-	printf("mem_peak: %d\n", mem_peak);
-	printf("remaining mem: %d\n", mem);
+	printf("mem_peak: %d\n", (int)mem_peak);
+	printf("remaining mem: %d\n", (int)mem);
 }

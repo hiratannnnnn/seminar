@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror -I../include
 LDFLAGS = -lm
 TARGET = knight
-SRCS = main.c
+SRCS = main.c board_init.c solve.c
 OBJS = $(SRCS:.c=.o)
 LIBDIR = ../lib
 LIB = $(LIBDIR)/lib.a

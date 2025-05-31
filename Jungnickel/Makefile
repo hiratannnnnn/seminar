@@ -1,4 +1,4 @@
-DIRS = lib euler hamilton test topsort
+DIRS = lib euler hamilton knight test topsort
 
 all: $(DIRS)
 

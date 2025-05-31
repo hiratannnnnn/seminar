@@ -16,12 +16,12 @@ int main(void)
 	Vertex **vs;
 	int n;
 
-	n = 18;
-	matrix = generate_random_graph(n, 0.4);
+	n = 24;
+	matrix = generate_random_undigraph(n, 0.4);
 	write_adjacent_matrix(matrix, n, "a_graph.txt");
 	vs = adj_matrix_to_vertices(matrix, n, 1);
 	print_vertices(vs, n);
-	printf("%d\n", solve(vs, n));
+	printf("%d\n", find_hamilton_cycle(vs, n));
 
 	free_matrix_int(matrix, n, n);
 	free_vertex_array(vs, n);

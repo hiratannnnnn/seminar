@@ -5,5 +5,4 @@
 
 int		solve	(Vertex **vs, int n);
 
-
 #endif

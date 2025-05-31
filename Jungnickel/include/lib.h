@@ -32,7 +32,7 @@ int 		**generate_random_digraph	(int n, double edge_prob);					// ok
 int			**generate_random_DAG		(int n, double edge_prob);					// ok
 
 // random_graph.c
-int 		**generate_random_graph		(int n, double edge_prob);					// ok, maybe name
+int 		**generate_random_undigraph		(int n, double edge_prob);					// ok, maybe name
 void 		save_random_graph			(int n, double edge_prob, char const *filename); // deprecated
 
 // random_tree.c
@@ -54,6 +54,9 @@ int			find_odd_vertices			(int *degree, int n, int *odd_list);	// ok, but too na
 void		compute_degrees_from_list	(Vertex **vs, int n, int *degree);		// ok?
 
 /* ========= Path Finding =========*/
+
+// find_hamilton_cycle.c
+int 		find_hamilton_cycle			(Vertex **vs, int n);
 
 // path_operations.c
 // todo
@@ -127,7 +130,7 @@ int			**closure_of		(int **matrix, int n);			// ok
 
 // utils_node.c
 Node		*create_node		(Edge *edge);					// ok
-void		append_node			(Node **head, Node *new_node);	
+void		append_node			(Node **head, Node *new_node);
 void		insert_node_after	(Node *pos, Node *new_node);
 Node 		*get_last_node		(Node *head);
 Node	 	*node_pop_first		(Node **head);

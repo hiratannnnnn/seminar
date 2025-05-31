@@ -17,7 +17,7 @@ int 	count_digit(unsigned int number)
 {
 	if (number < 10)
 	{
-		return 1;
+		return (1);
 	}
 	return (count_digit(number / 10) + 1);
 }

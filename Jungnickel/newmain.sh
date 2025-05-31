@@ -13,7 +13,7 @@ fi
 
 mkdir "$DIR"
 
-cat > "lib/${DIR}.h" << EOF
+cat > "include/${DIR}.h" << EOF
 #ifndef ${DIR^^}_H
 # define ${DIR^^}_H
 
@@ -71,6 +71,7 @@ int main(void)
 
 
 	proc_end = clock();
+	print_info();
 	return (0);
 }
 EOF

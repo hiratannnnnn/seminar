@@ -7,7 +7,7 @@
  * @param edge_prob 0.0～1.0, edge probability between any two vertices
  */
 
-int 	**generate_random_graph(int n, double edge_prob)
+int 	**generate_random_undigraph(int n, double edge_prob)
 {
 	int **matrix;
 	int i, j;
@@ -40,7 +40,7 @@ void 		save_random_graph(int n, double edge_prob, char const *filename)
 {
 	int **matrix;
 
-	matrix = generate_random_graph(n, edge_prob);
+	matrix = generate_random_undigraph(n, edge_prob);
 	if (!matrix)
 		return ;
 	write_adjacent_matrix(matrix, n, filename);

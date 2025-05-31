@@ -19,6 +19,9 @@ int	**generate_matrix(int r, int c)
 	int	i;
 	int	j;
 
+	if (r < 1 || c < 1)
+		return NULL;
+
 	result = (int **)xmalloc(sizeof(int *) * r);
 	if (!result)
 		return (NULL);

@@ -1,7 +1,9 @@
 #include "hamilton.h"
 
-size_t mem = 0;
-size_t mem_peak = 0;
+size_t 		mem = 0;
+size_t 		mem_peak = 0;
+clock_t		proc_start;
+clock_t		proc_end;
 
 /**
  * @brief look for hamilton cycle.
@@ -9,12 +11,13 @@ size_t mem_peak = 0;
 
 int main(void)
 {
+	proc_start = clock();
 	int **matrix;
 	Vertex **vs;
 	int n;
 
 	n = 18;
-	matrix = generate_random_graph(n, 0.6);
+	matrix = generate_random_graph(n, 0.4);
 	write_adjacent_matrix(matrix, n, "a_graph.txt");
 	vs = adj_matrix_to_vertices(matrix, n, 1);
 	print_vertices(vs, n);
@@ -22,7 +25,8 @@ int main(void)
 
 	free_matrix_int(matrix, n, n);
 	free_vertex_array(vs, n);
-	print_mem_peak();
+	proc_end = clock();
+	print_info();
 	return (0);
 }
 
@@ -38,6 +42,6 @@ int main(void)
 // 	int **matrix = generate_matrix(r, c); // r * c
 
 
-// 	print_mem_peak();
+// 	print_info();
 // 	return (0);
 // }

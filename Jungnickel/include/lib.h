@@ -9,8 +9,10 @@
 # include <unistd.h>
 # include "types.h"
 
-size_t	mem;
-size_t	mem_peak;
+size_t		mem;
+size_t		mem_peak;
+clock_t 	proc_start;
+clock_t		proc_end;
 
 /* ========= Matrix Operations =========*/
 
@@ -137,6 +139,7 @@ void		append_pathnode		(PathNode **head, PathNode *new_pathnode);
 void		insert_pathnode_after(PathNode *pos, PathNode *new_pathnode);
 PathNode	*get_last_pathnode	(PathNode *head);
 PathNode 	*pathnode_pop_first	(PathNode **head);
+void		pathnode_pop_last	(PathNode **head);
 void		free_path			(PathNode *path);
 
 // utils_math.c
@@ -150,7 +153,7 @@ void		print_vertices		(Vertex **vs, int n);
 void		print_edge_list		(Edge *head);
 void 		print_path_node		(PathNode *head);
 void		print_array_char	(char **ss, int n);
-void		print_mem_peak		(	);
+void		print_info			(	);
 
 // xmalloc.c
 void		*xmalloc			(size_t size);

@@ -62,6 +62,20 @@ PathNode 	*pathnode_pop_first(PathNode **head)
 	return first;
 }
 
+void		pathnode_pop_last(PathNode **head)
+{
+	PathNode *last;
+
+	if (!head || !*head)
+		return ;
+	last = get_last_pathnode(*head);
+	if (last->prev)
+		last->prev->next = NULL;
+	else
+		*head = NULL;
+	xfree(last, sizeof(PathNode));
+}
+
 void 	free_path(PathNode *path)
 {
     PathNode *temp;

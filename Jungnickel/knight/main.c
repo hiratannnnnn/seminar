@@ -1,7 +1,9 @@
 #include "lib.h"
 
-size_t mem = 0;
-size_t mem_peak = 0;
+size_t 		mem = 0;
+size_t 		mem_peak = 0;
+clock_t		proc_start;
+clock_t		proc_end;
 
 /**
  * @brief For given dimensions (r, c), determines if a knight (from chess)
@@ -20,7 +22,7 @@ int main(int ac, char **av)
 	int **matrix = generate_matrix(r, c); // r * c
 
 
-	print_mem_peak();
+	print_info();
 	return (0);
 }
 

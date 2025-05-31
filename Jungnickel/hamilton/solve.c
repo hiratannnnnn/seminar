@@ -22,29 +22,26 @@ static int is_all_visited(int *visited, int n)
 static void print_path(PathNode *path)
 {
     if (!path) return;
-    print_path(path->next);
     printf("%d ", path->v->id);
+    print_path(path->next);
 }
 
-static int backtrack(Vertex **vs, int *visited, int s, int n, PathNode *path)
+static int backtrack(Vertex **vs, int *visited, int s, int n, PathNode **head)
 {
     Vertex *v = vs[s];
     Edge *edge = v->incidence;
 
     PathNode *node = create_pathnode(v);
-    node->next = path;
-    path = node;
+    append_pathnode(head, node);
 
     if (is_all_visited(visited, n))
     {
         if (can_goto(edge, 0))
         {
-            print_path(path);
+            print_path(*head);
             printf("0\n");
-            free_path(path);
             return 1;
         }
-        free_path(path);
         return 0;
     }
     while (edge)
@@ -52,26 +49,32 @@ static int backtrack(Vertex **vs, int *visited, int s, int n, PathNode *path)
         if (visited[edge->to] == 0)
         {
             visited[edge->to] = 1;
-            if (backtrack(vs, visited, edge->to, n, path))
+            printf("[DEBUG] ");
+            print_path(*head);
+            printf("\n[DEBUG] Moving to %d\n", edge->to);
+            if (backtrack(vs, visited, edge->to, n, head))
             {
-                // free_path(path);
                 return 1;
             }
             visited[edge->to] = 0;
+            printf("[DEBUG] Returning to %d\n", edge->from);
+            pathnode_pop_last(head);
         }
         edge = edge->next;
     }
-    free_path(path);
     return 0;
 }
 
 int solve(Vertex **vs, int n)
 {
     int *visited = (int *)xcalloc(n, sizeof(int));
+    PathNode *list;
+    list = NULL;
     if (!visited)
         return -1;
     visited[0] = 1;
-    int result = backtrack(vs, visited, 0, n, NULL);
+    int result = backtrack(vs, visited, 0, n, &list);
     xfree(visited, sizeof(int) * n);
+    free_path(list);
     return result;
 }

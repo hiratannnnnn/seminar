@@ -32,10 +32,9 @@ void	print_vertex(Vertex *v)
 {
 	if (!v)
 		return ;
-	ft_putstr("vId: ");
-	ft_putnbr(v->id);
+	printf("vId: %d", v->id);
 	print_edge_list(v->incidence);
-	ft_putstr("\n");
+	printf("\n");
 }
 
 void	print_vertices(Vertex **vs, int n)
@@ -87,8 +86,12 @@ void	print_array_char(char **ss, int n)
 	}
 }
 
-void	print_mem_peak()
+void	print_info()
 {
+	double used_time;
+
+	used_time = ((double) (proc_end - proc_start)) / CLOCKS_PER_SEC;
 	printf("mem_peak: %d\n", (int)mem_peak);
 	printf("remaining mem: %d\n", (int)mem);
+	printf("proccess time: %f\n", used_time);
 }

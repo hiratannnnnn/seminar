@@ -11,7 +11,6 @@ clean:
 fclean:	delres
 	for dir in $(DIRS); do $(MAKE) -C $$dir fclean; done
 
-
 delres:
 	find . -name "result_*" -exec rm -rf {} +
 	find . -name "results_*" -exec rm -rf {} +

@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -O2 -I../include
+CFLAGS = -Wall -Wextra -Werror -I../include
 LDFLAGS = -lm
 TARGET = test
 SRCS = main.c

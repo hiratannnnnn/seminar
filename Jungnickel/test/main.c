@@ -1,19 +1,17 @@
-#include "lib.h"
+// filepath: /c/Users/PC_User/seminar/Jungnickel/test/main.c
+#include "test.h"
 
-size_t 		mem = 0;
-size_t 		mem_peak = 0;
+size_t		mem = 0;
+size_t		mem_peak = 0;
 clock_t		proc_start;
 clock_t		proc_end;
 
-// int main(int ac, char **av)
-// {
-// 	(void)ac;
-// 	printf("%d", count_digit(atoi(av[1])));
-// 	return (0);
-// }
-
 int main(void)
 {
-	print_info();
+	proc_start = clock();
+
+
+
+	proc_end = clock();
 	return (0);
 }

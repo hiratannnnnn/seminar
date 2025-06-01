@@ -120,7 +120,7 @@ int **generate_random_tree(int n)
 		// the last two nodes
 	// build the tree from the Prufer code
 
-	xfree(prufer, sizeof(int) * n);
+	xfree(prufer, sizeof(int) * (n - 2));
 	xfree(degree, sizeof(int) * n);
 	return matrix;
 	// free_matrix_int(matrix, n, n);

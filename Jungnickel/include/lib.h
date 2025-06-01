@@ -119,6 +119,7 @@ Node		*edge_list_from_adj_list	(Vertex **vs, int n, int is_undir);		// fine
 
 
 // utils_free.c
+void		free_array_int		(int *arr, int n);
 void		free_edge_list		(Edge *head);					// ok, but directory messy?
 void		free_node_list		(Node *head);					// ok
 void		free_vertex			(Vertex *vertex);				// ok

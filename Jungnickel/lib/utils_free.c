@@ -1,5 +1,10 @@
 #include "lib.h"
 
+void	free_array_int(int *arr, int n)
+{
+	xfree(arr, sizeof(int) * n);
+}
+
 void	free_edge_list(Edge *head)
 {
 	Edge	*cur;

@@ -76,6 +76,19 @@ void		pathnode_pop_last(PathNode **head)
 	xfree(last, sizeof(PathNode));
 }
 
+int 	pathnode_length(PathNode *head)
+{
+	int length;
+
+	length = 0;
+	while (head)
+	{
+		length++;
+		head = head->next;
+	}
+	return length;
+}
+
 void 	free_path(PathNode *path)
 {
     PathNode *temp;

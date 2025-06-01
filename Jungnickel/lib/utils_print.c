@@ -75,6 +75,7 @@ void 	print_path_node(PathNode *head)
 		printf("%d", cur->v->id);
 		cur = cur->next;
 	}
+	printf("\n");
 }
 
 void	print_array_char(char **ss, int n)

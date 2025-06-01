@@ -69,6 +69,8 @@ int 		find_hamilton_cycle			(Vertex **vs, int n);
 // graph_conversion.c
 Vertex		**adj_matrix_to_vertices	(int **matrix, int n, int undirected);	// ok
 int			**vertices_to_adj_matrix	(Vertex **vertices, int n);				// ok
+int 		**comp_adj_matrix			(int **matrix, int n);
+Vertex 		**comp_adj_list				(int **matrix, int n, int undir);
 
 // utils_edge_list.c
 Node		*edge_list_from_adj_list	(Vertex **vs, int n, int is_undir);		// ok?
@@ -144,6 +146,7 @@ void		insert_pathnode_after(PathNode *pos, PathNode *new_pathnode);
 PathNode	*get_last_pathnode	(PathNode *head);
 PathNode 	*pathnode_pop_first	(PathNode **head);
 void		pathnode_pop_last	(PathNode **head);
+int 		pathnode_length		(PathNode *head);
 void		free_path			(PathNode *path);
 
 // utils_math.c

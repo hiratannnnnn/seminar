@@ -40,7 +40,7 @@ void	insert_node_after(Node *pos, Node *new_node)
 	pos->next = new_node;
 }
 
-Node *get_last_node(Node *head)
+Node 	*get_last_node(Node *head)
 {
 	if (!head)
 		return (NULL);

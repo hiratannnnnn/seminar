@@ -68,3 +68,35 @@ int **vertices_to_adj_matrix(Vertex **vertices, int n)
 
     return matrix;
 }
+
+int **comp_adj_matrix(int **matrix, int n)
+{
+    int **comp;
+    int i, j;
+
+    comp = generate_matrix(n, n);
+    if (!comp)
+        return NULL;
+    for (i = 0; i < n; i++)
+    {
+        for (j = 0; j < n; j++)
+        {
+            if (i == j) continue;
+            comp[i][j] = 1 - matrix[i][j];
+        }
+    }
+    return comp;
+}
+
+Vertex **comp_adj_list(int **matrix, int n, int undir)
+{
+    Vertex **comp_list;
+    int **comp;
+
+    comp = comp_adj_matrix(matrix, n);
+    if (!comp)
+        return NULL;
+    comp_list = adj_matrix_to_vertices(comp, n, undir);
+    free_matrix_int(comp, n, n);
+    return comp_list;
+}

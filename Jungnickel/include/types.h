@@ -32,4 +32,13 @@ typedef struct 	PathNode
     struct PathNode *next;	// next node
 }				PathNode;
 
+typedef struct Euler_ctx
+{
+    Vertex      **vs;
+	int 	    *degree;
+    int         *visited;
+    int 	    start;
+    PathNode    *head;
+}				Euler_ctx;
+
 #endif

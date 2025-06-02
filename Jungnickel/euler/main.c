@@ -11,11 +11,11 @@ int main(void)
     proc_start = clock();
 
     int **matrix;
-    int n = 30;
+    int n = 12;
 
     matrix = generate_random_tree(n);
     print_matrix(matrix, n, n);
-    printf("%d\n", make_eulerian(matrix, n));
+    make_eulerian(matrix, n, 1.0);
 
     // free
     print_matrix(matrix, n, n);

@@ -31,6 +31,11 @@ void 		save_some_matrix		(int n, double edge_prob,						// ok
 int 		**generate_random_digraph	(int n, double edge_prob);					// ok
 int			**generate_random_DAG		(int n, double edge_prob);					// ok
 
+// random_euler.c
+
+int 		**generate_random_euler		(int n, double edge_ratio);
+int			make_eulerian				(int **matrix, int n, double edge_ratio);
+
 // random_graph.c
 int 		**generate_random_undigraph		(int n, double edge_prob);					// ok, maybe name
 void 		save_random_graph			(int n, double edge_prob, char const *filename); // deprecated
@@ -41,13 +46,11 @@ int 		*count_degrees_from		(const int *prufer, int n);				// can be static
 int 		**generate_random_tree	(int n);										// ok
 void		build_tree_from			(int **matrix, int *prufer, int *degree, int n);// ok
 
-// random_euler.c
-// broke because was totally unreadable ^^
-
-
 /* ========= Graph Analysis =========*/
 
 // graph_analysis.c
+int     	need_double_edge			(int *degree, int n);
+int			count_edges					(int *degree, int n);
 int			is_tree						(int **matrix, int n);					// ok, but when use?
 void		compute_degrees				(int **matrix, int n, int *degree);		// ok
 int			find_odd_vertices			(int *degree, int n, int *odd_list);	// ok, but too narrow?
@@ -57,12 +60,6 @@ void		compute_degrees_from_list	(Vertex **vs, int n, int *degree);		// ok?
 
 // find_hamilton_cycle.c
 int 		find_hamilton_cycle			(Vertex **vs, int n);
-
-// path_operations.c
-// todo
-
-// graph_connections.c
-// todo?
 
 /* ========= Graph Format Conversion =========*/
 
@@ -126,8 +123,6 @@ int 		count_digit					(unsigned int number);					// ok
 
 // utils_edge_list.c
 Node		*edge_list_from_adj_list	(Vertex **vs, int n, int is_undir);		// fine
-
-// utils_euler.c
 
 
 // utils_free.c

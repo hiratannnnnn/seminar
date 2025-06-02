@@ -20,6 +20,29 @@ void compute_degrees(int **matrix, int n, int *degree)
     }
 }
 
+int     need_double_edge(int *degree, int n)
+{
+    int i;
+    if (n % 2 == 1)
+        return (0);
+    for (i = 0; i < n; i++)
+    {
+        if (degree[i] == n - 1)
+			return (1);
+    }
+	return (0);
+}
+
+int		count_edges(int *degree, int n)
+{
+	int sum, i;
+
+	sum = 0;
+	for (i = 0; i < n; i++)
+		sum += degree[i];
+	return sum / 2;
+}
+
 /**
  * @brief Returns the degree of each vertex based on the adjacency list.
  *

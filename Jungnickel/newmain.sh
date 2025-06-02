@@ -66,9 +66,14 @@ clock_t		proc_end;
 
 int main(void)
 {
+    setvbuf(stdout, NULL, _IONBF, 0);
 	proc_start = clock();
 
+	int **matrix;
+	int n;
 
+
+	// free
 
 	proc_end = clock();
 	print_info();

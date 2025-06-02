@@ -39,6 +39,8 @@ static void free_ctx(Euler_ctx *ctx, int n)
 		free_vertex_array(ctx->vs, n);
 		ctx->vs = NULL;
 	}
+	if (ctx->head)
+		free_path(&ctx->head);
 }
 
 static int	backtrack_euler(Euler_ctx *ctx, int cur)
@@ -48,15 +50,12 @@ static int	backtrack_euler(Euler_ctx *ctx, int cur)
     PathNode    *node;
     int         length;
 
+	sort_list_by_degree(&ctx->vs[cur]->incidence, ctx->degree, cmp_int_asc);
     v       = ctx->vs[cur];
     edge    = v->incidence;
     node    = create_pathnode(v);
     append_pathnode(&ctx->head, node);
-	// print_path_node(ctx->head);
     length  = pathnode_length(ctx->head);
-	// printf("[DEBUG] length: %d\n", length);
-	// printf("[DEBUG] degree: %d\n", ctx->degree[cur]);
-
 
 	if (length > 1 && ctx->degree[cur] % 2 == 1)
 	{
@@ -68,11 +67,9 @@ static int	backtrack_euler(Euler_ctx *ctx, int cur)
         if (!ctx->visited[edge->to])
         {
 			ctx->visited[edge->to] = 1;
-			// printf("[DEBUG] Moving to %d\n", edge->to);
 			if (backtrack_euler(ctx, edge->to))
 				return (1);
 			ctx->visited[edge->to] = 0;
-			// printf("[DEBUG] Returning to %d\n", edge->from);
 			pathnode_pop_last(&ctx->head);
         }
         edge = edge->next;
@@ -126,50 +123,53 @@ static void	add_path(int **matrix, Euler_ctx *ctx)
 	}
 }
 
+/**
+ * @return -2 malloc error nado
+ * @return -1 impossible to make eulerian
+ * @return 1  success
+ */
+
+int		euler_ctx_init(Euler_ctx *ctx, int **matrix, int n)
+{
+	ctx->degree = xmalloc(sizeof(int) * n);
+	if (!ctx->degree)
+		return (-2);
+	compute_degrees(matrix, n, ctx->degree);
+	ctx->visited = xmalloc(sizeof(int) * n);
+	ctx->vs = comp_adj_list(matrix, n, 1);
+	if (!ctx->visited || !ctx->vs)
+		return (free_ctx(ctx, n), -2);
+	ctx->head = NULL;
+	if (need_double_edge(ctx->degree, n))
+	{
+		return (free_ctx(ctx, n), -1);
+	}
+	return (1);
+}
+
 int		make_eulerian(int **matrix, int n)
 {
 	Euler_ctx ctx;
 	Edge *edge;
-	// print_matrix(matrix, n, n);
-
-    ctx.degree = xmalloc(sizeof(int) * n);
-    ctx.visited = xcalloc(n, sizeof(int));
-    if (!ctx.degree)
-        return -1;
-    compute_degrees(matrix, n, ctx.degree);     // -> graph_analysis.c
-	if (need_double_edge(ctx.degree, n))
-	{
-		free_ctx(&ctx, n);
-		return 0;
-	}
-
-    ctx.vs = comp_adj_list(matrix, n, 1); // -> graph_conversions.c
-	if (!ctx.vs)
-	{
-		free_ctx(&ctx, n);
-		return -1;
-	}
     int i;
+	int init;
+	init = euler_ctx_init(&ctx, matrix, n);
+	if (init < 1)
+		return init;
     for (i = 0; i < n; i++)
     {
         if (ctx.degree[i] % 2 == 0) continue;
         edge = ctx.vs[i]->incidence;
 		if (!edge)
-		{
-			free_ctx(&ctx, n);
-			return -2;
-		}
+			return(free_ctx(&ctx, n), -2);
 		memset(ctx.visited, 0, sizeof(int) * n);
 		ctx.head = NULL;
 		ctx.start = edge->from;
 		ctx.visited[edge->from] = 1;
 		if (backtrack_euler(&ctx, edge->from))
-		{
 			add_path(matrix, &ctx);
-			// print_matrix(matrix, n, n);
-		}
 		compute_degrees(matrix, n, ctx.degree);
-		free_path(ctx.head);
+		free_path(&ctx.head);
     }
 	free_ctx(&ctx, n);
 	return 1;

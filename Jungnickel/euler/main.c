@@ -10,16 +10,12 @@ int main(void)
     setvbuf(stdout, NULL, _IONBF, 0);
     proc_start = clock();
 
-
     int **matrix;
-    int n;
+    int n = 30;
 
-    n = 12;
-    // create tree from prufer code
     matrix = generate_random_tree(n);
-    // make the tree eulerian
-
-    make_eulerian(matrix, n);
+    print_matrix(matrix, n, n);
+    printf("%d\n", make_eulerian(matrix, n));
 
     // free
     print_matrix(matrix, n, n);

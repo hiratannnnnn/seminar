@@ -51,7 +51,7 @@ int		topsort(Vertex **vs, int n, int *topnr)
 			node = create_pathnode(vs[i]);
 			if (!node)
 			{
-				free_path(head);
+				free_path(&head);
 				xfree(ind, sizeof(int) * n);
 				return -1;
 			}
@@ -74,7 +74,7 @@ int		topsort(Vertex **vs, int n, int *topnr)
 				{
 					xfree(node, sizeof(PathNode));
 					xfree(ind, sizeof(int) * n);
-					free_path(head);
+					free_path(&head);
 					return -1;
 				}
 				append_pathnode(&head, next);
@@ -84,7 +84,7 @@ int		topsort(Vertex **vs, int n, int *topnr)
 		xfree(node, sizeof(PathNode));
 	}
 
-	free_path(head);
+	free_path(&head);
 	xfree(ind, sizeof(int) * n);
 
 	return (N == n);

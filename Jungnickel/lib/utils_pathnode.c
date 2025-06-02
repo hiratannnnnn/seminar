@@ -89,14 +89,17 @@ int 	pathnode_length(PathNode *head)
 	return length;
 }
 
-void 	free_path(PathNode *path)
+void 	free_path(PathNode **head)
 {
-    PathNode *temp;
+	PathNode *cur;
+    PathNode *tmp;
 
-    while (path)
+	cur = *head;
+    while (cur)
     {
-        temp = path;
-        path = path->next;
-        xfree(temp, sizeof(PathNode));
+        tmp = cur;
+		cur = cur->next;
+        xfree(tmp, sizeof(PathNode));
     }
+	*head = NULL;
 }

@@ -119,6 +119,6 @@ int     solve	(Vertex **vs, int n)
     visited[0] = 1;
     int result = backtrack(vs, visited, 0, n, &list);
     xfree(visited, sizeof(int) * n);
-    free_path(list);
+    free_path(&list);
     return result;
 }

@@ -34,7 +34,6 @@ void	print_vertex(Vertex *v)
 		return ;
 	printf("vId: %d", v->id);
 	print_edge_list(v->incidence);
-	printf("\n");
 }
 
 void	print_vertices(Vertex **vs, int n)
@@ -62,6 +61,7 @@ void	print_edge_list(Edge *head)
 		printf("%d", cur->to);
 		cur = cur->next;
 	}
+	printf("\n");
 }
 
 void 	print_path_node(PathNode *head)

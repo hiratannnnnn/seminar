@@ -97,6 +97,7 @@ Vertex **comp_adj_list(int **matrix, int n, int undir)
     if (!comp)
         return NULL;
     comp_list = adj_matrix_to_vertices(comp, n, undir);
+
     free_matrix_int(comp, n, n);
     return comp_list;
 }

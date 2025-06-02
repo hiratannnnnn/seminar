@@ -90,6 +90,16 @@ int 		**read_list		(int *n, char const *filename);						// ok
 // algo_euler.c
 void		algo_euler		(Vertex **vs, int n, int s, Node **K);				// ok
 
+/* ========= Sorting =========*/
+// cmp.c
+int 	cmp_int_desc		(int a, int b);
+int 	cmp_int_asc			(int a, int b);
+
+// sort_edge_list.c
+void	sort_list			(Edge **head, int (*cmp)(int, int));
+void	sort_list_by_degree	(Edge **head, int *degree, int (*cmp)(int, int));
+
+
 /* ========= Utilities =========*/
 
 // utils_edges.c
@@ -147,7 +157,7 @@ PathNode	*get_last_pathnode	(PathNode *head);
 PathNode 	*pathnode_pop_first	(PathNode **head);
 void		pathnode_pop_last	(PathNode **head);
 int 		pathnode_length		(PathNode *head);
-void		free_path			(PathNode *path);
+void		free_path			(PathNode **head);
 
 // utils_math.c
 int			*random_perm		(int n);

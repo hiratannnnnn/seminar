@@ -32,7 +32,6 @@ int **read_adj(int *n, char const *filename)
 		return (NULL);
 	}
 	// set size n
-
 	// initialize matrix
 	matrix = generate_matrix(*n, *n);
 	if (!matrix)
@@ -41,7 +40,6 @@ int **read_adj(int *n, char const *filename)
 		return (NULL);
 	}
 	// initialize matrix *** has to be freed
-
 	// set matrix
 	for (i = 0; i < *n; i++)
 	{

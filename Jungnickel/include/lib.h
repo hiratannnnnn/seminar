@@ -2,6 +2,7 @@
 # define LIB_H
 
 # include <math.h>
+# include <limits.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
@@ -22,6 +23,7 @@ int			**copy_matrix			(int **matrix, int r, int c); 					// ok
 void		free_matrix_int			(int **arr, int const r, int const c);			// ok
 int			write_adjacent_matrix	(int **matrix, int n, char const *filename);	// ok
 int 		write_adjacent_list		(int **matrix, int n, char const *filename);	// ok
+int 	write_path_node(PathNode *head, char const *filename);
 void 		save_some_matrix		(int n, double edge_prob,						// ok
 									int **(*gen_some_mat)(int, double), char const *filename);
 
@@ -170,6 +172,11 @@ void		print_edge_list		(Edge *head);
 void 		print_path_node		(PathNode *head);
 void		print_array_char	(char **ss, int n);
 void		print_info			(	);
+
+// write_to_file.c
+int			write_adjacent_matrix	(int **matrix, int n, char const *filename);	// ok
+int 		write_adjacent_list		(int **matrix, int n, char const *filename);	// ok
+int 		write_path_node			(PathNode *head, char const *filename);
 
 // xmalloc.c
 void		*xmalloc			(size_t size);

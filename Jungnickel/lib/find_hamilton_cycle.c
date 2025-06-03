@@ -27,15 +27,18 @@ static int backtrack_hamilton(Hamilton_ctx *ctx, int cur, int n)
     Edge        *edge;
     PathNode    *node;
 
-    sort_list_by_degree(&ctx->vs[cur]->incidence, ctx->degree, cmp_int_asc);
+    // sort_list_by_degree(&ctx->vs[cur]->incidence, ctx->degree, cmp_int_asc);
     v 		= ctx->vs[cur];
     edge	= v->incidence;
     node	= create_pathnode(v);
     append_pathnode(&ctx->head, node);
     if (is_all_visited(ctx->visited, n))
     {
-        if (can_goto(edge, 0))
+        if (can_goto(edge, ctx->start))
+        {
+            append_pathnode(&ctx->head, create_pathnode(ctx->vs[ctx->start]));
             return (1);
+        }
         return (0);
     }
     while (edge)
@@ -86,13 +89,17 @@ static void free_ctx(Hamilton_ctx *ctx, int n)
 int find_hamilton_cycle(Vertex **vs, int n)
 {
     Hamilton_ctx ctx;
-    int init;
+    int init, i;
 	int result;
     init = hamilton_ctx_init(&ctx, vs, n);
     if (init < 1)
         return (init);
-    ctx.visited[0] 	= 1;
-    result 		= backtrack_hamilton(&ctx, 0, n);
+    ctx.start = 0;
+    ctx.visited[ctx.start] 	= 1;
+    for (i = 0; i < n; i++)
+        sort_list_by_degree(&ctx.vs[i]->incidence, ctx.degree, cmp_int_asc);
+    result 		= backtrack_hamilton(&ctx, ctx.start, n);
+    write_path_node(ctx.head, "path-6-8.txt");
     free_ctx(&ctx, n);
     return (result);
 }

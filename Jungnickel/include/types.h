@@ -41,4 +41,13 @@ typedef struct Euler_ctx
     PathNode    *head;
 }				Euler_ctx;
 
+typedef struct Hamilton_ctx
+{
+    Vertex		**vs;
+    int			*degree;
+    int			*visited;
+	int			start;
+	PathNode 	*head;
+}				Hamilton_ctx;
+
 #endif

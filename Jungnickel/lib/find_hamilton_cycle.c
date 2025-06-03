@@ -50,19 +50,35 @@ static int backtrack(Vertex **vs, int *visited, int s, int n, PathNode **head)
     return (0);
 }
 
+static int hamilton_ctx_init(Hamilton_ctx *ctx, Vertex **vs, int n)
+{
+    ctx->degree = xmalloc(sizeof(int) * n);
+    if (!ctx->degree)
+        return (-2);
+    compute_degrees_from_list(vs, n, ctx->degree);
+    ctx->visited = xmalloc(sizeof(int) * n);
+    ctx->vs = vs;
+    if (!ctx->visited || !ctx->vs)
+        return (free_ctx(ctx, n), -2);
+    ctx->head = NULL;
+    return (1);
+}
+
+static void free_ctx(Euler_ctx *ctx, int n)
+{
+    
+}
+
 int find_hamilton_cycle(Vertex **vs, int n)
 {
-    int         *visited;
-    PathNode    *list;
+    Hamilton_ctx ctx;
+    int init;
+    init = hamilton_ctx_init(&ctx, vs, n);
 	int         result;
 
-	visited     = (int *)xcalloc(n, sizeof(int));
-    if (!visited)
-		return -1;
-    list 		= NULL;
-    visited[0] 	= 1;
-    result 		= backtrack(vs, visited, 0, n, &list);
-    xfree(visited, sizeof(int) * n);
-    free_path(&list);
+    ctx.visited[0] 	= 1;
+    result 		= backtrack(ctx,  0, n);
+    xfree(, sizeof(int) * n);
+    free_path(&ctx.head);
     return (result);
 }

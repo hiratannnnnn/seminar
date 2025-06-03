@@ -84,3 +84,7 @@ just a recommendation for code coloring ;p
 }
 ```
 </details>
+
+---
+
+next -> matrix operations

@@ -20,7 +20,6 @@ int 	**generate_random_digraph(int n, double edge_prob)
 		return (NULL);
 	// initialization
 
-	srand((unsigned int)time(NULL));
 	for (i = 0; i < n; i++)
 		for (j = 0; j < n; j++)
 		{

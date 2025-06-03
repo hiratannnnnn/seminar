@@ -19,7 +19,6 @@ int 	**generate_random_undigraph(int n, double edge_prob)
 	// initialization
 
 	// generate random matrix
-	srand((unsigned int)time(NULL));
 	for (i = 0; i < n; i++)
 	{
 		for (j = i + 1; j < n; j++)

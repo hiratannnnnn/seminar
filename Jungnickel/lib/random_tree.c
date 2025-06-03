@@ -70,7 +70,6 @@ int **generate_random_tree(int n)
 	matrix = generate_matrix(n, n);
 	if (!matrix)
 		return (NULL);
-	srand((unsigned int)time(NULL));
 	prufer = generate_random_prufer(n);
 	if (!prufer)
 	{

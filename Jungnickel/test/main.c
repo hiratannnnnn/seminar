@@ -8,29 +8,21 @@ clock_t		proc_end;
 
 int main(void)
 {
+	setvbuf(stdout, NULL, _IONBF, 0);
+	srand((unsigned int)time(NULL));
 	proc_start = clock();
 
-	int **matrix;
-	Vertex **vs;
+	int *arr;
 	int n;
 
-	n = 24;
-
-	matrix = generate_random_undigraph(n, 0.35);
-	if (!matrix)
+	n = 12;
+	arr = random_perm(n);
+	if (!arr)
 		return (1);
-	vs = adj_matrix_to_vertices(matrix, n, 1);
-	if (!vs)
-	{
-		free_matrix_int(matrix, n, n);
-		return (1);
-	}
-	if (find_hamilton_cycle(vs, n))
-		printf("happy\n");
-	else
-		printf("sad\n");
-	free_matrix_int(matrix, n, n);
-	free_vertex_array(vs, n);
+	print_array_int(arr, n);
+	printf("max: %d\n", max_of_array(arr, n));
+	printf("min: %d\n", min_of_array(arr, n));
+	free_array_int(arr, n);
 	proc_end = clock();
 	print_info();
 	return (0);

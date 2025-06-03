@@ -1,5 +1,7 @@
 #include "lib.h"
 
+static void free_ctx(Hamilton_ctx *ctx, int n);
+
 static int can_goto(Edge *head, int target)
 {
     while (head)
@@ -19,17 +21,18 @@ static int is_all_visited(int *visited, int n)
     return (1);
 }
 
-static int backtrack(Vertex **vs, int *visited, int s, int n, PathNode **head)
+static int backtrack_hamilton(Hamilton_ctx *ctx, int cur, int n)
 {
     Vertex      *v;
     Edge        *edge;
     PathNode    *node;
 
-    v 		= vs[s];
+    sort_list_by_degree(&ctx->vs[cur]->incidence, ctx->degree, cmp_int_asc);
+    v 		= ctx->vs[cur];
     edge	= v->incidence;
     node	= create_pathnode(v);
-    append_pathnode(head, node);
-    if (is_all_visited(visited, n))
+    append_pathnode(&ctx->head, node);
+    if (is_all_visited(ctx->visited, n))
     {
         if (can_goto(edge, 0))
             return (1);
@@ -37,13 +40,13 @@ static int backtrack(Vertex **vs, int *visited, int s, int n, PathNode **head)
     }
     while (edge)
     {
-        if (visited[edge->to] == 0)
+        if (ctx->visited[edge->to] == 0)
         {
-            visited[edge->to] = 1;
-            if (backtrack(vs, visited, edge->to, n, head))
+            ctx->visited[edge->to] = 1;
+            if (backtrack_hamilton(ctx, edge->to, n))
                 return (1);
-            visited[edge->to] = 0;
-            pathnode_pop_last(head);
+            ctx->visited[edge->to] = 0;
+            pathnode_pop_last(&ctx->head);
         }
         edge = edge->next;
     }
@@ -64,21 +67,32 @@ static int hamilton_ctx_init(Hamilton_ctx *ctx, Vertex **vs, int n)
     return (1);
 }
 
-static void free_ctx(Euler_ctx *ctx, int n)
+static void free_ctx(Hamilton_ctx *ctx, int n)
 {
-    
+    if (ctx->degree)
+    {
+        free_array_int(ctx->degree, n);
+        ctx->degree = NULL;
+    }
+    if (ctx->visited)
+    {
+        free_array_int(ctx->visited, n);
+        ctx->visited = NULL;
+    }
+    if (ctx->head)
+        free_path(&ctx->head);
 }
 
 int find_hamilton_cycle(Vertex **vs, int n)
 {
     Hamilton_ctx ctx;
     int init;
+	int result;
     init = hamilton_ctx_init(&ctx, vs, n);
-	int         result;
-
+    if (init < 1)
+        return (init);
     ctx.visited[0] 	= 1;
-    result 		= backtrack(ctx,  0, n);
-    xfree(, sizeof(int) * n);
-    free_path(&ctx.head);
+    result 		= backtrack_hamilton(&ctx, 0, n);
+    free_ctx(&ctx, n);
     return (result);
 }

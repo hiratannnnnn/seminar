@@ -157,6 +157,10 @@ void		free_path			(PathNode **head);
 // utils_math.c
 int			*random_perm		(int n);
 
+// utils_array.c
+int			max_of_array		(int *arr, int n);
+int			min_of_array		(int *arr, int n);
+
 // utils_print.c
 void 		print_matrix		(int **matrix, int r, int c);
 void		print_array_int		(int *arr, int n);

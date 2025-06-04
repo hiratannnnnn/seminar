@@ -81,7 +81,7 @@ int		tsp_bruteforce(int **matrix, int n, int *best_path)
 
 // }
 
-int		tsp_greedy(int **matrix, int n, int *path)
+static int		tsp_greedy_each(int **matrix, int n, int *path, int offset)
 {
 	int *used;
 	int cost, last, min_w, min_j;
@@ -91,8 +91,8 @@ int		tsp_greedy(int **matrix, int n, int *path)
 	if (!used)
 		return (-1);
 	cost = 0;
-	path[0] = 0;
-	used[0] = 1;
+	path[0] = offset;
+	used[offset] = 1;
 	for (i = 1; i < n; i++)
 	{
 		last = path[i - 1];
@@ -113,8 +113,30 @@ int		tsp_greedy(int **matrix, int n, int *path)
 		used[min_j] = 1;
 		cost += min_w;
 	}
-	if (matrix[path[n-1]][0] < 0)
+	if (matrix[path[n-1]][offset] < 0)
 		return (free_array_int(used, n), INT_MAX);
-	cost += matrix[path[n-1]][0];
+	cost += matrix[path[n-1]][offset];
 	return (free_array_int(used, n), cost);
+}
+
+int tsp_greedy(int **matrix, int n, int *best_path)
+{
+	int min_cost, offset, cost;
+	int *tmp_path;
+
+	min_cost = INT_MAX;
+	tmp_path = (int *)xcalloc(n, sizeof(int));
+	if (!tmp_path)
+		return -2;
+	for (offset = 0; offset < n; offset++)
+	{
+		cost = tsp_greedy_each(matrix, n, tmp_path, offset);
+		if (cost < min_cost)
+		{
+			min_cost = cost;
+			memcpy(best_path, tmp_path, sizeof(int) * n);
+		}
+	}
+	free_array_int(tmp_path, n);
+	return min_cost;
 }

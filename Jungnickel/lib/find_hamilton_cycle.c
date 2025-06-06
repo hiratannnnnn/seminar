@@ -97,9 +97,9 @@ int find_hamilton_cycle(Vertex **vs, int n)
     ctx.start = 0;
     ctx.visited[ctx.start] 	= 1;
     for (i = 0; i < n; i++)
-        sort_list_by_degree(&ctx.vs[i]->incidence, ctx.degree, cmp_int_asc);
+        sort_list_by_degree(&ctx.vs[i]->incidence, ctx.degree, cmp_int_bogo);
     result 		= backtrack_hamilton(&ctx, ctx.start, n);
-    write_path_node(ctx.head, "path-6-8.txt");
+    // write_path_node(ctx.head, "path-6-8.txt");
     free_ctx(&ctx, n);
     return (result);
 }

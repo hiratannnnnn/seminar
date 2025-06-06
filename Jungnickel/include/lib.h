@@ -5,6 +5,7 @@
 # include <limits.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <ctype.h>
 # include <string.h>
 # include <time.h>
 # include <unistd.h>
@@ -99,6 +100,7 @@ void		algo_euler		(Vertex **vs, int n, int s, Node **K);				// ok
 // cmp.c
 int 	cmp_int_desc		(int a, int b);
 int 	cmp_int_asc			(int a, int b);
+int 	cmp_int_bogo		(int a, int b);
 
 // sort_edge_list.c
 void	sort_list			(Edge **head, int (*cmp)(int, int));
@@ -183,6 +185,16 @@ void		print_info			(	);
 int			write_adjacent_matrix	(int **matrix, int n, char const *filename);	// ok
 int 		write_adjacent_list		(int **matrix, int n, char const *filename);	// ok
 int 		write_path_node			(PathNode *head, char const *filename);
+
+
+/* ========= Strings ========= */
+
+// ft_split.c
+char 		**ft_split			(char const *str, char *sep);
+char		*ft_strchr			(const char *s, int c);
+char		*ft_strdup			(const char *s);
+char 		*ft_strtrim			(char const *str, char const *set);
+
 
 // xmalloc.c
 void		*xmalloc			(size_t size);

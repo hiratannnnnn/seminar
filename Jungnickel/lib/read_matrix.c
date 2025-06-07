@@ -126,3 +126,44 @@ int **read_list(int *n, char const *filename)
 	fclose(fp);
 	return matrix;
 }	// *** has to be freed
+
+double **read_double_matrix(int *r, int *c, char const *filename)
+{
+    FILE *fp;
+    double **matrix;
+    int i, j;
+
+    fp = fopen(filename, "r");
+    if (!fp)
+        return NULL;
+
+    // read size
+    if (fscanf(fp, "%d %d", r, c) != 2)
+    {
+        fclose(fp);
+        return NULL;
+    }
+
+    matrix = generate_matrix_double(*r, *c);
+    if (!matrix)
+    {
+        fclose(fp);
+        return NULL;
+    }
+
+    for (i = 0; i < *r; i++)
+    {
+        for (j = 0; j < *c; j++)
+        {
+            if (fscanf(fp, "%lf", &matrix[i][j]) != 1)
+            {
+                free_matrix_double(matrix, *r, *c);
+                fclose(fp);
+                return NULL;
+            }
+        }
+    }
+
+    fclose(fp);
+    return matrix;
+}

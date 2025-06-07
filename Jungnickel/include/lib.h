@@ -9,6 +9,7 @@
 # include <string.h>
 # include <time.h>
 # include <unistd.h>
+# include <float.h>
 # include "types.h"
 
 size_t		mem;
@@ -35,6 +36,22 @@ void		matrix_multiply			(int **A, int **B, int **C, int n);
 void		swap_vertex				(int **matrix, int n, int i, int j);
 
 /* ========= Graph Generation =========*/
+
+// random_bigraph_cost.c
+
+int		 	max_bipartite_matching		(int **adj, int a, int b, int *match_to);
+double 		**generate_matrix_double	(int r, int c);
+void		free_matrix_double			(double **matrix, int const r, int const c);
+double 		**generate_random_bigraph_cost(int a, int b);
+void		print_matrix_double			(double **matrix, int r, int c);
+void 		print_array_double			(double *arr, int c);
+
+void		free_array_double			(double *arr, int n);
+
+// random_bigraph.c
+
+int 		**generate_random_bigraph	(int a, int b, double edge_prob);
+
 
 // random_digraph.c
 int 		**generate_random_digraph	(int n, double edge_prob);					// ok
@@ -88,8 +105,9 @@ int			**line_graph_from_adj_list	(Vertex **vs, int n, char ***names, int *size, 
 /* ========= Input Processing =========*/
 
 // read_matrix.c
-int 		**read_adj		(int *n, char const *filename);						// ok
-int 		**read_list		(int *n, char const *filename);						// ok
+int 		**read_adj			(int *n, char const *filename);						// ok
+int 		**read_list			(int *n, char const *filename);
+double 		**read_double_matrix(int *r, int *c, char const *filename);			// ok
 
 /* ========= Algorithms =========*/
 
@@ -185,6 +203,7 @@ void		print_info			(	);
 int			write_adjacent_matrix	(int **matrix, int n, char const *filename);	// ok
 int 		write_adjacent_list		(int **matrix, int n, char const *filename);	// ok
 int 		write_path_node			(PathNode *head, char const *filename);
+int 		write_double_matrix		(double **matrix, int r, int c, char const *filename);
 
 
 /* ========= Strings ========= */

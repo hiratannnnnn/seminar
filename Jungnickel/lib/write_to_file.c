@@ -44,6 +44,34 @@ int write_adjacent_matrix(int **matrix, int n, char const *filename)
 	return (0);
 }
 
+int write_double_matrix(double **matrix, int r, int c, char const *filename)
+{
+    FILE *fp;
+    int i, j;
+
+    if (!matrix)
+        return -2;
+    fp = fopen(filename, "w");
+    if (!fp)
+    {
+        printf("Failed to open file %s\n", filename);
+        return -1;
+    }
+    fprintf(fp, "%d %d\n", r, c);
+    for (i = 0; i < r; i++)
+    {
+        if (!matrix[i])
+        {
+            fclose(fp);
+            return -2;
+        }
+        for (j = 0; j < c; j++)
+            fprintf(fp, "%.10f%c", matrix[i][j], (j == c - 1) ? '\n' : ' ');
+    }
+    fclose(fp);
+    return 0;
+}
+
 /**
  * @brief write adjacent list to file
  *

@@ -1,4 +1,4 @@
-DIRS = lib euler hamilton knight sorting test topsort tsp
+DIRS = bipartite lib euler hamilton knight sorting test topsort tsp
 
 all: $(DIRS)
 

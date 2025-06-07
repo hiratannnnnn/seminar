@@ -11,12 +11,13 @@ int main(void)
 	proc_start = clock();
 
 	// solve_knight(3, 10);
+	solve_knight(10, 3);
 	// solve_knight(3, 12);
 	// solve_knight(5, 6);
 	// solve_knight(5, 8);
 	// solve_knight(6, 6);
 	// solve_knight(6, 7);
-	solve_knight(6, 8); // insanely takes time... Idk why
+	// solve_knight(6, 8); // insanely takes time... Idk why
 	// solve_knight(7, 8);
 	// solve_knight(8, 8);
 

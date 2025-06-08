@@ -1,16 +1,5 @@
 #include "bipartite.h"
 
-typedef struct 	Hungarian_ctx
-{
-	int 	n;
-	double 	*u;
-	double 	*v;
-	int 	*p;
-	int 	*way;
-	double 	*minv;
-	int 	*used;
-}				Hungarian_ctx;
-
 static void free_hungarian_ctx(Hungarian_ctx *ctx)
 {
     if (ctx->u)
@@ -42,13 +31,6 @@ static int	init_hungarian_ctx(Hungarian_ctx *ctx, int n)
         return (0);
     }
     return (1);
-}
-
-void	free_array_double(double *arr, int n)
-{
-	if (!arr)
-		return ;
-	xfree(arr, sizeof(double) * n);
 }
 
 static void init_row(Hungarian_ctx *ctx)

@@ -10,3 +10,9 @@ result_*
 *_path.txt
 
 rainbow/
+
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.synctex.gz

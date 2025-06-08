@@ -1,28 +1,18 @@
 CC = gcc
-CFLAGS = -I../include
-LDFLAGS = -lm
-TARGET = bipartite
-SRCS = main.c random_bigraph.c kuhn.c hungarian.c random_bigraph_cost.c
-OBJS = $(SRCS:.c=.o)
-LIBDIR = ../lib
-LIB = $(LIBDIR)/lib.a
+CFLAGS = -Iinclude
+SRCS = $(wildcard srcs/*.c)
+TARGET = report2 report5
 
 all: $(TARGET)
 
-$(TARGET): $(OBJS) $(LIB)
-	$(CC) -o $@ $(OBJS) $(LIB) $(LDFLAGS)
+report2: main_2.c $(SRCS)
+	$(CC) $(CFLAGS) -o $@ main_2.c $(SRCS)
 
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(LIB):
-	$(MAKE) -C $(LIBDIR)
+report5: main_5.c $(SRCS)
+	$(CC) $(CFLAGS) -o $@ main_5.c $(SRCS)
 
 clean:
-	rm -f $(OBJS)
-
-fclean: clean
-	rm -f $(TARGET)
+	rm -f $(TARGETS) *.o
 
 re: fclean all
 

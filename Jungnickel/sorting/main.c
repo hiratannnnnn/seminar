@@ -18,7 +18,7 @@ int main(void)
 	n = 15;
 	matrix = generate_random_undigraph(n, 0.7);
 	vs = adj_matrix_to_vertices(matrix, n, 1);
-	print_matrix(matrix, n, n);
+	print_matrix_int(matrix, n, n);
 	print_vertices(vs, n);
 
 	degree = (int *)xmalloc(sizeof(int) * n);

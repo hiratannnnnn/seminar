@@ -20,7 +20,7 @@ int main(void)
 	matrix = generate_weighted_matrix(n, 3000);
 	if (!matrix)
 		return (1);
-	// print_matrix(matrix, n, n);
+	// print_matrix_int(matrix, n, n);
 	best_path = (int *)xcalloc(n, sizeof(int));
 	if (!best_path)
 	{

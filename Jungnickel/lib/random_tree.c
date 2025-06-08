@@ -67,7 +67,7 @@ int **generate_random_tree(int n)
 	int i, j;
 
 	// initialization
-	matrix = generate_matrix(n, n);
+	matrix = generate_matrix_int(n, n);
 	if (!matrix)
 		return (NULL);
 	prufer = generate_random_prufer(n);

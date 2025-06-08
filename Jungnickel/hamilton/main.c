@@ -39,7 +39,7 @@ int main(void)
 // 	}
 // 	int r = atoi(av[1]);
 // 	int c = atoi(av[2]);
-// 	int **matrix = generate_matrix(r, c); // r * c
+// 	int **matrix = generate_matrix_int(r, c); // r * c
 
 
 // 	print_info();

@@ -13,7 +13,7 @@
  * @return Pointer to the allocated 2D array, or NULL if allocation fails
  */
 
-int	**generate_matrix(int r, int c)
+int	**generate_matrix_int(int r, int c)
 {
 	int	**result;
 	int	i;
@@ -50,7 +50,7 @@ int		**copy_matrix(int **matrix, int r, int c)
 	int **dest;
 	int i, j;
 
-	dest = generate_matrix(r, c);
+	dest = generate_matrix_int(r, c);
 	if (!dest)
 		return (NULL);
 	for (i = 0; i < r; i++)

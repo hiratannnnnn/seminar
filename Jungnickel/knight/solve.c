@@ -7,7 +7,7 @@ void	solve_knight(int const r, int const c)	// <- main.c
 	int n;
 
 	n = r * c;
-	matrix = generate_matrix(n, n);
+	matrix = generate_matrix_int(n, n);
 	if (!matrix)
 		return ;
 	set_board_knight(matrix, r, c);		// -> board_init.c

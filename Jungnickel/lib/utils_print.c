@@ -1,6 +1,6 @@
 #include "lib.h"
 
-void print_matrix(int **matrix, int r, int c)
+void print_matrix_int(int **matrix, int r, int c)
 {
 	if (!matrix)
 	{

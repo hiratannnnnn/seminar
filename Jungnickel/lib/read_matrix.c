@@ -33,7 +33,7 @@ int **read_adj(int *n, char const *filename)
 	}
 	// set size n
 	// initialize matrix
-	matrix = generate_matrix(*n, *n);
+	matrix = generate_matrix_int(*n, *n);
 	if (!matrix)
 	{
 		fclose(fp);
@@ -96,7 +96,7 @@ int **read_list(int *n, char const *filename)
 	// set size n
 
 	// initialize matrix
-	matrix = generate_matrix(*n, *n);
+	matrix = generate_matrix_int(*n, *n);
 	if (!matrix)
 	{
 		fclose(fp);
@@ -126,6 +126,46 @@ int **read_list(int *n, char const *filename)
 	fclose(fp);
 	return matrix;
 }	// *** has to be freed
+
+
+int **read_matrix(int *a, int *b, char const *filename)
+{
+	FILE *fp;
+	int **matrix;
+	int i, j;
+
+	fp = fopen(filename, "r");
+	if (!fp)
+		return (NULL);
+	if (fscanf(fp, "%d %d", a, b) != 2)
+	{
+		fclose(fp);
+		return (NULL);
+	}
+	matrix = generate_matrix_int(*a, *b);
+	if (!matrix)
+	{
+		fclose(fp);
+		return (NULL);
+	}
+	for (i = 0; i < *a; i++)
+	{
+		for (j = 0; j < *b; j++)
+		{
+			if (fscanf(fp, "%d", &matrix[i][j]) != 1)
+			{
+				free_matrix_int(matrix, i, *b);
+				fclose(fp);
+				return (NULL);
+			}
+		}
+	}
+	// set matrix
+
+	fclose(fp);
+	return matrix;
+}
+
 
 double **read_double_matrix(int *r, int *c, char const *filename)
 {

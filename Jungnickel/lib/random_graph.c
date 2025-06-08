@@ -13,7 +13,7 @@ int 	**generate_random_undigraph(int n, double edge_prob)
 	int i, j;
 
 	// initialization
-	matrix = generate_matrix(n, n);
+	matrix = generate_matrix_int(n, n);
 	if (!matrix)
 		return (NULL);
 	// initialization

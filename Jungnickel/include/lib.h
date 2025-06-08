@@ -20,7 +20,7 @@ clock_t		proc_end;
 /* ========= Matrix Operations =========*/
 
 // matrix_operations.c
-int			**generate_matrix		(int r, int c);									// ok
+int			**generate_matrix_int	(int r, int c);									// ok
 int			**copy_matrix			(int **matrix, int r, int c); 					// ok
 void		free_matrix_int			(int **arr, int const r, int const c);			// ok
 int			write_adjacent_matrix	(int **matrix, int n, char const *filename);	// ok
@@ -107,6 +107,7 @@ int			**line_graph_from_adj_list	(Vertex **vs, int n, char ***names, int *size, 
 // read_matrix.c
 int 		**read_adj			(int *n, char const *filename);						// ok
 int 		**read_list			(int *n, char const *filename);
+int 		**read_matrix		(int *a, int *b, char const *filename);
 double 		**read_double_matrix(int *r, int *c, char const *filename);			// ok
 
 /* ========= Algorithms =========*/
@@ -190,7 +191,7 @@ int			max_of_array		(int *arr, int n);
 int			min_of_array		(int *arr, int n);
 
 // utils_print.c
-void 		print_matrix		(int **matrix, int r, int c);
+void 		print_matrix_int	(int **matrix, int r, int c);
 void		print_array_int		(int *arr, int n);
 void		print_vertex		(Vertex *v);
 void		print_vertices		(Vertex **vs, int n);

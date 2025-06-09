@@ -12,7 +12,7 @@ report5: main_5.c $(SRCS)
 	$(CC) $(CFLAGS) -o $@ main_5.c $(SRCS)
 
 clean:
-	rm -f $(TARGETS) *.o
+	rm -f $(TARGET)
 
 re: fclean all
 

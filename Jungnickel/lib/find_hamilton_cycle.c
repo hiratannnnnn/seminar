@@ -91,6 +91,7 @@ int find_hamilton_cycle(Vertex **vs, int n)
     Hamilton_ctx ctx;
     int init, i;
 	int result;
+    
     init = hamilton_ctx_init(&ctx, vs, n);
     if (init < 1)
         return (init);

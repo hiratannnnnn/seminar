@@ -211,7 +211,6 @@ int 		write_double_matrix		(double **matrix, int r, int c, char const *filename)
 
 // ft_split.c
 char 		**ft_split			(char const *str, char *sep);
-char		*ft_strchr			(const char *s, int c);
 char		*ft_strdup			(const char *s);
 char 		*ft_strtrim			(char const *str, char const *set);
 

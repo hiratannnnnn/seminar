@@ -211,9 +211,15 @@ int 		write_double_matrix		(double **matrix, int r, int c, char const *filename)
 
 // ft_split.c
 char 		**ft_split			(char const *str, char *sep);
+
+// ft_strdup.c
 char		*ft_strdup			(const char *s);
+
+// ft_strtrim.c
 char 		*ft_strtrim			(char const *str, char const *set);
 
+
+/* ========= Memory Allocation ========= */
 
 // xmalloc.c
 void		*xmalloc			(size_t size);

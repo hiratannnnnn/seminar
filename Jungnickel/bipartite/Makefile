@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Iinclude
-SRCS = $(wildcard srcs/*.c)
+SRCS = $(wildcard srcs/*.c) globals.c
 TARGET = report2 report5
 
 all: $(TARGET)

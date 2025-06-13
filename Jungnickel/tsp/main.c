@@ -1,11 +1,6 @@
 // filepath: /c/Users/PC_User/seminar/Jungnickel/tsp/main.c
 #include "tsp.h"
 
-size_t		mem = 0;
-size_t		mem_peak = 0;
-clock_t		proc_start;
-clock_t		proc_end;
-
 int main(void)
 {
     setvbuf(stdout, NULL, _IONBF, 0);

@@ -1,5 +1,7 @@
 #include "lib.h"
 
+static int backtrack_count = 0;
+
 static void free_ctx(Hamilton_ctx *ctx, int n);
 
 static int can_goto(Edge *head, int target)
@@ -27,6 +29,8 @@ static int backtrack_hamilton(Hamilton_ctx *ctx, int cur, int n)
     Edge        *edge;
     PathNode    *node;
 
+    backtrack_count++;
+    
     // sort_list_by_degree(&ctx->vs[cur]->incidence, ctx->degree, cmp_int_asc);
     v 		= ctx->vs[cur];
     edge	= v->incidence;
@@ -92,6 +96,8 @@ int find_hamilton_cycle(Vertex **vs, int n)
     int init, i;
 	int result;
     
+    backtrack_count = 0;  // Reset counter
+    
     init = hamilton_ctx_init(&ctx, vs, n);
     if (init < 1)
         return (init);
@@ -100,6 +106,9 @@ int find_hamilton_cycle(Vertex **vs, int n)
     for (i = 0; i < n; i++)
         sort_list_by_degree(&ctx.vs[i]->incidence, ctx.degree, cmp_int_bogo);
     result 		= backtrack_hamilton(&ctx, ctx.start, n);
+    
+    printf("Backtrack calls: %d\n", backtrack_count);
+    
     // write_path_node(ctx.head, "path-6-8.txt");
     free_ctx(&ctx, n);
     return (result);

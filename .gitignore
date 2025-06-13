@@ -10,6 +10,7 @@ result_*
 *_path.txt
 
 rainbow/
+latex/
 
 *.aux
 *.fdb_latexmk

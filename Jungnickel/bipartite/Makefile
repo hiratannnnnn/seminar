@@ -14,6 +14,8 @@ report5: main_5.c $(SRCS)
 clean:
 	rm -f $(TARGET)
 
+fclean:	clean
+
 re: fclean all
 
 .PHONY: all clean fclean re

@@ -12,10 +12,10 @@
 # include <float.h>
 # include "types.h"
 
-extern size_t		mem;
-extern size_t		mem_peak;
-extern clock_t 		proc_start;
-extern clock_t		proc_end;
+extern	size_t		mem;
+extern	size_t		mem_peak;
+extern	clock_t 	proc_start;
+extern	clock_t		proc_end;
 
 /* ========= Matrix Operations =========*/
 

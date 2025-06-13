@@ -11,10 +11,10 @@
 # include <unistd.h>
 # include <float.h>
 
-size_t		mem;
-size_t		mem_peak;
-clock_t 	proc_start;
-clock_t		proc_end;
+extern size_t		mem;
+extern size_t		mem_peak;
+extern clock_t 		proc_start;
+extern clock_t		proc_end;
 
 typedef struct 	Hungarian_ctx
 {

@@ -40,9 +40,11 @@ int		 	max_bipartite_matching		(int **adj, int a, int b, int *match_to);
 double 		**generate_random_bigraph_cost(int a, int b);
 
 // random_bigraph.c
-
 int 		**generate_random_bigraph	(int a, int b, double edge_prob);
 
+// random_digraph_cost.c
+double 		**generate_random_digraph_dbcost(int n, double max);
+int 		**generate_random_digraph_intcost(int n, int max);
 
 // random_digraph.c
 int 		**generate_random_digraph	(int n, double edge_prob);					// ok
@@ -52,6 +54,10 @@ int			**generate_random_DAG		(int n, double edge_prob);					// ok
 
 int 		**generate_random_euler		(int n, double edge_ratio);
 int			make_eulerian				(int **matrix, int n, double edge_ratio);
+
+// random_undigraph_cost.c
+double 		**generate_random_undigraph_dbcost(int n, double max);
+int			**generate_random_undigraph_intcost(int n, int max);
 
 // random_undigraph.c
 int 		**generate_random_undigraph		(int n, double edge_prob);					// ok, maybe name

@@ -14,12 +14,9 @@ int 	**generate_random_digraph(int n, double edge_prob)
 	int **matrix;
 	int i, j;
 
-	// initialization
 	matrix = generate_matrix_int(n, n);
 	if (!matrix)
 		return (NULL);
-	// initialization
-
 	for (i = 0; i < n; i++)
 		for (j = 0; j < n; j++)
 		{
@@ -39,7 +36,6 @@ int 	**generate_random_DAG(int n, double edge_prob)
 	matrix = generate_matrix_int(n, n);
 	if (!matrix)
 		return (NULL);
-
 	topnr = random_perm(n);
 	for (i = 0; i < n; i++)
 		for (j = 0; j < n; j++)
@@ -47,6 +43,6 @@ int 	**generate_random_DAG(int n, double edge_prob)
 				if (topnr[i] + 1 == topnr[j] ||
 					((double)rand() / (RAND_MAX + 1.0) < edge_prob))
 					matrix[i][j] = 1;
-	xfree(topnr, sizeof(int) * n);
+	free_array_int(topnr, n);
 	return (matrix);
 }

@@ -12,12 +12,16 @@ int main(void)
 	srand((unsigned int)time(NULL));
 	proc_start = clock();
 
-	int **matrix;
+	int **cost;
 	int n;
+	n = 12;
+
+	cost = generate_random_digraph_intcost(n, 50);
+	print_matrix_int(cost, n, n);
 
 
 	// free
-
+	free_matrix_int(cost, n, n);
 	proc_end = clock();
 	print_info();
 	return (0);

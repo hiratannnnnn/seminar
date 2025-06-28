@@ -101,3 +101,18 @@ Vertex **comp_adj_list(int **matrix, int n, int undir)
     free_matrix_int(comp, n, n);
     return comp_list;
 }
+
+int     **dbcost_to_adj(int **cost, int n)
+{
+    int **matrix;
+    int i, j;
+
+    matrix = generate_matrix_int(n, n);
+    if (!matrix)
+        return NULL;
+    for (i = 0; i < n; i++)
+        for (j = 0; j < n; j++)
+            if (cost[i][j] > 0)
+                matrix[i][j] = 1;
+    return matrix;
+}

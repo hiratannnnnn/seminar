@@ -90,6 +90,7 @@ Vertex		**adj_matrix_to_vertices	(int **matrix, int n, int undirected);	// ok
 int			**vertices_to_adj_matrix	(Vertex **vertices, int n);				// ok
 int 		**comp_adj_matrix			(int **matrix, int n);
 Vertex 		**comp_adj_list				(int **matrix, int n, int undir);
+int			**dbcost_to_adj				(int **cost, int n);
 
 // utils_edge_list.c
 Node		*edge_list_from_adj_list	(Vertex **vs, int n, int is_undir);		// ok?

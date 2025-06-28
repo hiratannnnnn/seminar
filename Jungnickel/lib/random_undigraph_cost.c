@@ -24,6 +24,6 @@ int **generate_random_undigraph_intcost(int n, int max)
         return NULL;
     for (i = 0; i < n; i++)
         for (j = i + 1; j < n; j++)
-            matrix[i][j] = matrix[j][i] = rand() % (max + 1);
+            matrix[i][j] = matrix[j][i] = rand() % max + 1;
     return matrix;
 }

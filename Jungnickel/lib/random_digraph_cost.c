@@ -31,7 +31,7 @@ int **generate_random_digraph_intcost(int n, int max)
         {
             if (i == j)
                 continue;
-            matrix[i][j] = rand() % (max + 1);  // 0からmaxまでの整数
+            matrix[i][j] = rand() % max + 1; // 1 ~ max
         }
     return matrix;
 }

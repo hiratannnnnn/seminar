@@ -1,4 +1,4 @@
-// filepath: /c/Users/PC_User/seminar/Jungnickel/test/main.c
+// filepath: /Users/tomoyahirata/Documents/seminar/Jungnickel/test/main.c
 #include "test.h"
 
 size_t		mem = 0;
@@ -8,21 +8,20 @@ clock_t		proc_end;
 
 int main(void)
 {
-	setvbuf(stdout, NULL, _IONBF, 0);
+    setvbuf(stdout, NULL, _IONBF, 0);
 	srand((unsigned int)time(NULL));
 	proc_start = clock();
 
-	int *arr;
+	double **matrix;
 	int n;
 
 	n = 12;
-	arr = random_perm(n);
-	if (!arr)
-		return (1);
-	print_array_int(arr, n);
-	printf("max: %d\n", max_of_array(arr, n));
-	printf("min: %d\n", min_of_array(arr, n));
-	free_array_int(arr, n);
+	matrix = generate_random_digraph_dbcost(n, 30);
+	print_matrix_double(matrix, n, n, 1);
+
+	// free
+
+	free_matrix_double(matrix, n, n);
 	proc_end = clock();
 	print_info();
 	return (0);

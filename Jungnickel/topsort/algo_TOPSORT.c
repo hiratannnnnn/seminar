@@ -40,7 +40,7 @@ int		topsort(Vertex **vs, int n, int *topnr)
 	N = 0;
 	compute_degrees_from_list(vs, n, ind);
 	printf("ind:");
-	print_array_int(ind, n);
+	print_array_int(ind, n, 2);
 
 	head = NULL;
 

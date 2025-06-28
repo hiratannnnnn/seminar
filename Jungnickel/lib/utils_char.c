@@ -13,11 +13,13 @@ void 	free_array_char(char **ss, int n)
 	xfree(ss, sizeof(char *) * n);
 }
 
-int 	count_digit(unsigned int number)
+int 	count_digit(int number)
 {
+	if (number == -2147483648)
+		return 11;
+	if (number < 0)
+		return (count_digit((-1) * number) + 1);
 	if (number < 10)
-	{
 		return (1);
-	}
 	return (count_digit(number / 10) + 1);
 }

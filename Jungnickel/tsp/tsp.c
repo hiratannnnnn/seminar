@@ -68,7 +68,7 @@ int		tsp_bruteforce(int **matrix, int n, int *best_path)
 		{
 			min_cost = cost;
 			printf("%d: ", min_cost);
-			print_array_int(perm, n);
+			print_array_int(perm, n, 2);
 			memcpy(best_path, perm, sizeof(int) * n);
 		}
 	} while (next_permutation(perm + 1, n - 1));

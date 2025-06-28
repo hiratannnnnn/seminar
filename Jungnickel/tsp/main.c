@@ -29,7 +29,7 @@ int main(void)
 	}
 	// printf("%d\n", tsp_bruteforce(matrix, n, best_path));
 	printf("%d\n", tsp_greedy(matrix, n, best_path));
-	print_array_int(best_path, n);
+	print_array_int(best_path, n, 2);
 	printf("%d\n", sum_array(matrix[0], n));
 	// free
 	free_matrix_int(matrix, n, n);

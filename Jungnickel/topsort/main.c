@@ -35,7 +35,7 @@ int		main(void)
 		return (1);
 	}
 	printf("%d\n", topsort(vs, n, topnr));
-	print_array_int(topnr, n);
+	print_array_int(topnr, n, 2);
 
 	// free
 	free_matrix_int(matrix, n, n);

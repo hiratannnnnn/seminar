@@ -23,7 +23,7 @@ int main(void)
 
 	degree = (int *)xmalloc(sizeof(int) * n);
 	compute_degrees(matrix, n, degree);
-	print_array_int(degree, n);
+	print_array_int(degree, n, 0);
 	for (i = 0; i < n; i++)
 	{
 		// sort_list(&vs[i]->incidence, cmp_smaller);

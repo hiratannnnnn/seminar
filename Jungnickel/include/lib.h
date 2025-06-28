@@ -144,11 +144,10 @@ int			sum_array		(int *arr, int n);									// ok
 
 // utils_char.c
 void	 	free_array_char				(char **ss, int n);						// ok
-int 		count_digit					(unsigned int number);					// ok
+int 		count_digit					(int number);					// ok
 
 // utils_edge_list.c
 Node		*edge_list_from_adj_list	(Vertex **vs, int n, int is_undir);		// fine
-
 
 // utils_free.c
 void		free_array_int		(int *ptr, int const n);
@@ -191,9 +190,9 @@ int			min_of_array		(int *arr, int n);
 
 // utils_print.c
 void 		print_matrix_int	(int **matrix, int r, int c);
-void		print_array_int		(int *arr, int n);
-void		print_matrix_double			(double **matrix, int r, int c);
-void 		print_array_double			(double *arr, int c);
+void		print_array_int		(int *arr, int n, int max_width);
+void		print_matrix_double			(double **matrix, int r, int c, int precision);
+void 		print_array_double			(double *arr, int c, int max_width, int precision);
 void		print_vertex		(Vertex *v);
 void		print_vertices		(Vertex **vs, int n);
 void		print_edge_list		(Edge *head);

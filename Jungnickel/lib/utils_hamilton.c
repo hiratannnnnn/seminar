@@ -16,7 +16,7 @@ int 	**closure_of(int **matrix, int n)
 	int done;
 	int i, j;
 
-	closure = copy_matrix(matrix, n, n);
+	closure = copy_matrix_int(matrix, n, n);
 	if (!closure)
 		return (NULL);
 	degree = (int *)xmalloc(sizeof(int) * n);

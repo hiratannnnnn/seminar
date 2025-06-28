@@ -45,7 +45,7 @@ int	**generate_matrix_int(int r, int c)
 	return (result);
 }
 
-int		**copy_matrix(int **matrix, int r, int c)
+int		**copy_matrix_int(int **matrix, int r, int c)
 {
 	int **dest;
 	int i, j;

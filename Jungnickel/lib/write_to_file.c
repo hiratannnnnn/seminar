@@ -135,3 +135,15 @@ int 	write_path_node(PathNode *head, char const *filename)
 	fclose(fp);
 	return (0);
 }
+
+void 	save_some_matrix(int n, double edge_prob,
+	int **(*gen_some_mat)(int, double), char const *filename)
+{
+	int **matrix;
+
+	matrix = gen_some_mat(n, edge_prob);
+	if (!matrix)
+		return ;
+	write_adjacent_matrix(matrix, n, filename);
+	free_matrix_int(matrix, n, n);
+}

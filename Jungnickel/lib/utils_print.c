@@ -27,6 +27,21 @@ void print_array_int(int *arr, int n)
 	}
 }
 
+void	print_matrix_double(double **matrix, int r, int c)
+{
+	int i;
+
+	for (i = 0; i < r; i++)
+		print_array_double(matrix[i], c);
+}
+
+void 	print_array_double(double *arr, int c)
+{
+	int j;
+
+	for (j = 0; j < c; j++)
+		printf("%.6f%c", arr[j], j == c - 1 ? '\n' : ' ');
+}
 
 void	print_vertex(Vertex *v)
 {

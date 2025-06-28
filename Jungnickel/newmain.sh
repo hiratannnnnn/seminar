@@ -1,21 +1,22 @@
 #!/bin/bash
 if [ $# -ne 1 ]; then
-	echo "Usage: $0 <dirname>"
-	exit 1
+    echo "Usage: $0 <dirname>"
+    exit 1
 fi
 
 DIR="$1"
+DIR_UPPER=$(echo "$DIR" | tr '[:lower:]' '[:upper:]')
 
 if [ -d "$DIR" ]; then
-	echo "Error: Directory $DIR already exists. Aborting to prevent overwrite."
-	exit 1
+    echo "Error: Directory $DIR already exists. Aborting to prevent overwrite."
+    exit 1
 fi
 
 mkdir "$DIR"
 
 cat > "include/${DIR}.h" << EOF
-#ifndef ${DIR^^}_H
-# define ${DIR^^}_H
+#ifndef ${DIR_UPPER}_H
+# define ${DIR_UPPER}_H
 
 # include "lib.h"
 

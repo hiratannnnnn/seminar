@@ -19,15 +19,12 @@ extern	clock_t		proc_end;
 
 /* ========= Matrix Operations =========*/
 
-// matrix_operations.c
+// generate_matrix_int.c
 int			**generate_matrix_int	(int r, int c);									// ok
-int			**copy_matrix			(int **matrix, int r, int c); 					// ok
-void		free_matrix_int			(int **arr, int const r, int const c);			// ok
-int			write_adjacent_matrix	(int **matrix, int n, char const *filename);	// ok
-int 		write_adjacent_list		(int **matrix, int n, char const *filename);	// ok
-int 		write_path_node			(PathNode *head, char const *filename);
-void 		save_some_matrix		(int n, double edge_prob,						// ok
-									int **(*gen_some_mat)(int, double), char const *filename);
+int			**copy_matrix_int			(int **matrix, int r, int c); 					// ok
+
+// generate_matrix_double.c
+double 		**generate_matrix_double	(int r, int c);
 
 // matrix_basic.c
 void		identity_matrix			(int **matrix, int n);
@@ -40,13 +37,7 @@ void		swap_vertex				(int **matrix, int n, int i, int j);
 // random_bigraph_cost.c
 
 int		 	max_bipartite_matching		(int **adj, int a, int b, int *match_to);
-double 		**generate_matrix_double	(int r, int c);
-void		free_matrix_double			(double **matrix, int const r, int const c);
 double 		**generate_random_bigraph_cost(int a, int b);
-void		print_matrix_double			(double **matrix, int r, int c);
-void 		print_array_double			(double *arr, int c);
-
-void		free_array_double			(double *arr, int n);
 
 // random_bigraph.c
 
@@ -62,9 +53,8 @@ int			**generate_random_DAG		(int n, double edge_prob);					// ok
 int 		**generate_random_euler		(int n, double edge_ratio);
 int			make_eulerian				(int **matrix, int n, double edge_ratio);
 
-// random_graph.c
+// random_undigraph.c
 int 		**generate_random_undigraph		(int n, double edge_prob);					// ok, maybe name
-void 		save_random_graph			(int n, double edge_prob, char const *filename); // deprecated
 
 // random_tree.c
 int			*generate_random_prufer	(int n);					// ok, but maybe still can be generalized
@@ -155,7 +145,10 @@ Node		*edge_list_from_adj_list	(Vertex **vs, int n, int is_undir);		// fine
 
 
 // utils_free.c
-void		free_array_int		(int *arr, int n);
+void		free_array_int		(int *ptr, int const n);
+void		free_matrix_int		(int **matrix, int const r, int const c);
+void		free_array_double	(double *ptr, int const c);
+void		free_matrix_double	(double **matrix, int const r, int const c);
 void		free_edge_list		(Edge *head);					// ok, but directory messy?
 void		free_node_list		(Node *head);					// ok
 void		free_vertex			(Vertex *vertex);				// ok
@@ -193,6 +186,8 @@ int			min_of_array		(int *arr, int n);
 // utils_print.c
 void 		print_matrix_int	(int **matrix, int r, int c);
 void		print_array_int		(int *arr, int n);
+void		print_matrix_double			(double **matrix, int r, int c);
+void 		print_array_double			(double *arr, int c);
 void		print_vertex		(Vertex *v);
 void		print_vertices		(Vertex **vs, int n);
 void		print_edge_list		(Edge *head);
@@ -205,7 +200,8 @@ int			write_adjacent_matrix	(int **matrix, int n, char const *filename);	// ok
 int 		write_adjacent_list		(int **matrix, int n, char const *filename);	// ok
 int 		write_path_node			(PathNode *head, char const *filename);
 int 		write_double_matrix		(double **matrix, int r, int c, char const *filename);
-
+void 		save_some_matrix		(int n, double edge_prob,						// ok
+	int **(*gen_some_mat)(int, double), char const *filename);
 
 /* ========= Strings ========= */
 

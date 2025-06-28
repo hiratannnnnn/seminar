@@ -58,28 +58,3 @@ int		**copy_matrix(int **matrix, int r, int c)
 			dest[i][j] = matrix[i][j];
 	return dest;
 }
-
-void	free_matrix_int(int **matrix, int const r, int const c)
-{
-	int i;
-
-	i = 0;
-	while (i < r)
-	{
-		xfree(matrix[i], sizeof(int) * c);
-		i++;
-	}
-	xfree(matrix, sizeof(int *) * r);
-}
-
-void 	save_some_matrix(int n, double edge_prob,
-	int **(*gen_some_mat)(int, double), char const *filename)
-{
-	int **matrix;
-
-	matrix = gen_some_mat(n, edge_prob);
-	if (!matrix)
-		return ;
-	write_adjacent_matrix(matrix, n, filename);
-	free_matrix_int(matrix, n, n);
-}

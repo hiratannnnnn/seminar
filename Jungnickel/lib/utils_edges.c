@@ -1,6 +1,6 @@
 #include "lib.h"
 
-Edge	*create_edge(int id, int from, int to)
+Edge	*create_edge(int id, int from, int to, int cost)
 {
 	Edge	*edge;
 
@@ -10,7 +10,7 @@ Edge	*create_edge(int id, int from, int to)
 	edge->id = id;
 	edge->from = from; // id of vertice;
 	edge->to = to;
-	edge->cost = 0;
+	edge->cost = cost;
 	edge->next = NULL;
 	return (edge);
 }
@@ -29,17 +29,17 @@ int 	len_edge_list(Edge *head)
 }
 
 
-void	add_directed_edge(Vertex **vs, int from, int to, int edge_id)
+void	add_directed_edge(Vertex **vs, int from, int to, int edge_id, int cost)
 {
-	Edge *edge = create_edge(edge_id, from, to);
+	Edge *edge = create_edge(edge_id, from, to, cost);
 	if (!edge)
 		return;
 	edge->next = vs[from]->incidence;
 	vs[from]->incidence = edge;
 }
 
-void	add_undirected_edge(Vertex **vs, int from, int to, int edge_id)
+void	add_undirected_edge(Vertex **vs, int from, int to, int edge_id, int cost)
 {
-	add_directed_edge(vs, from, to, edge_id);
-	add_directed_edge(vs, to, from, edge_id);
+	add_directed_edge(vs, from, to, edge_id, cost);
+	add_directed_edge(vs, to, from, edge_id, cost);
 }

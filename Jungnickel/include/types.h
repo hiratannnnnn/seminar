@@ -18,12 +18,12 @@ typedef struct 	Vertex
     Edge        *incidence;	// incidence list (edge list)
 }               Vertex;
 
-typedef struct 	Node
+typedef struct 	EdgeNode
 {
     Edge		*edge;
-    struct Node *prev;		// prev node
-    struct Node *next;		// next node
-}               Node;
+    struct EdgeNode *prev;		// prev node
+    struct EdgeNode *next;		// next node
+}               EdgeNode;
 
 typedef struct 	PathNode
 {

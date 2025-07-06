@@ -58,8 +58,8 @@ static char *name_v_of_LG(int from, int to, int is_undir)
  */
 int		**line_graph_from_adj_list(Vertex **vs, int n, char ***names, int *size, int is_undir)
 {
-	Node **node_array;
-	Node *head, *ni;
+	EdgeNode **node_array;
+	EdgeNode *head, *ni;
 	Edge *ei, *ej;
 	size_t len, i, j;
 	int **matrix;
@@ -80,7 +80,7 @@ int		**line_graph_from_adj_list(Vertex **vs, int n, char ***names, int *size, in
 		return (NULL);
 	}
 
-	node_array = xmalloc(sizeof(Node *) * len);
+	node_array = xmalloc(sizeof(EdgeNode *) * len);
 	if (!node_array)
 	{
 		free_array_char(*names, len);
@@ -124,7 +124,7 @@ int		**line_graph_from_adj_list(Vertex **vs, int n, char ***names, int *size, in
 			}
 		}
 	}
-	xfree(node_array, sizeof(Node *) * len);
+	xfree(node_array, sizeof(EdgeNode *) * len);
 	free_node_list(head);
 	return matrix;
 }

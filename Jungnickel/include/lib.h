@@ -94,8 +94,8 @@ Vertex 		**comp_adj_list				(int **matrix, int n, int undir);
 int			**dbcost_to_adj				(int **cost, int n);
 
 // utils_edge_list.c
-Node		*edge_list_from_adj_list	(Vertex **vs, int n, int is_undir);		// ok?
-size_t		count_nodes					(Node *head);							// ok, name?
+EdgeNode	*edge_list_from_adj_list	(Vertex **vs, int n, int is_undir);		// ok?
+size_t		count_nodes					(EdgeNode *head);							// ok, name?
 
 // line_graph.c
 int			**line_graph_from_adj_list	(Vertex **vs, int n, char ***names, int *size, int is_undir); // ok?
@@ -111,7 +111,7 @@ double 		**read_double_matrix(int *r, int *c, char const *filename);			// ok
 /* ========= Algorithms =========*/
 
 // algo_euler.c
-void		algo_euler		(Vertex **vs, int n, int s, Node **K);				// ok
+void		algo_euler		(Vertex **vs, int n, int s, EdgeNode **K);				// ok
 
 /* ========= Sorting =========*/
 // cmp.c
@@ -153,7 +153,7 @@ void	 	free_array_char				(char **ss, int n);						// ok
 int 		count_digit					(int number);					// ok
 
 // utils_edge_list.c
-Node		*edge_list_from_adj_list	(Vertex **vs, int n, int is_undir);		// fine
+EdgeNode		*edge_list_from_adj_list	(Vertex **vs, int n, int is_undir);		// fine
 
 // utils_free.c
 void		free_array_int		(int *ptr, int const n);
@@ -161,7 +161,7 @@ void		free_matrix_int		(int **matrix, int const r, int const c);
 void		free_array_double	(double *ptr, int const c);
 void		free_matrix_double	(double **matrix, int const r, int const c);
 void		free_edge_list		(Edge *head);					// ok, but directory messy?
-void		free_node_list		(Node *head);					// ok
+void		free_node_list		(EdgeNode *head);					// ok
 void		free_vertex			(Vertex *vertex);				// ok
 void		free_vertex_array	(Vertex **vs, int n);			// ok
 
@@ -170,11 +170,11 @@ int			**closure_of		(int **matrix, int n);			// ok
 
 
 // utils_node.c
-Node		*create_node		(Edge *edge);					// ok
-void		append_node			(Node **head, Node *new_node);
-void		insert_node_after	(Node *pos, Node *new_node);
-Node 		*get_last_node		(Node *head);
-Node	 	*node_pop_first		(Node **head);
+EdgeNode		*create_edgenode		(Edge *edge);					// ok
+void		append_node			(EdgeNode **head, EdgeNode *new_node);
+void		insert_node_after	(EdgeNode *pos, EdgeNode *new_node);
+EdgeNode 		*get_last_node		(EdgeNode *head);
+EdgeNode	 	*node_pop_first		(EdgeNode **head);
 
 
 // utils_pathnode.c

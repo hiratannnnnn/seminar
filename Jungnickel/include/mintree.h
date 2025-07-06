@@ -3,6 +3,6 @@
 
 # include "lib.h"
 
-void	solve(Vertex **vs, Node **head);
+void	solve(Vertex **vs, EdgeNode **head, int n);
 
 #endif

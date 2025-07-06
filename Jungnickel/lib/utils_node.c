@@ -1,10 +1,10 @@
 #include "lib.h"
 
-Node	*create_node(Edge *edge)
+EdgeNode	*create_edgenode(Edge *edge)
 {
-	Node	*node;
+	EdgeNode	*node;
 
-	node = (Node *)xmalloc(sizeof(Node));
+	node = (EdgeNode *)xmalloc(sizeof(EdgeNode));
 	if (!node)
 		return (NULL);
 	node->edge = edge;
@@ -13,9 +13,9 @@ Node	*create_node(Edge *edge)
 	return (node);
 }
 
-void	append_node(Node **head, Node *new_node)
+void	append_node(EdgeNode **head, EdgeNode *new_node)
 {
-	Node	*last;
+	EdgeNode	*last;
 
 	if (!head || !new_node)
 		return ;
@@ -29,7 +29,7 @@ void	append_node(Node **head, Node *new_node)
 	new_node->prev = last;
 }
 
-void	insert_node_after(Node *pos, Node *new_node)
+void	insert_node_after(EdgeNode *pos, EdgeNode *new_node)
 {
 	if (!pos || !new_node)
 		return ;
@@ -40,7 +40,7 @@ void	insert_node_after(Node *pos, Node *new_node)
 	pos->next = new_node;
 }
 
-Node 	*get_last_node(Node *head)
+EdgeNode 	*get_last_node(EdgeNode *head)
 {
 	if (!head)
 		return (NULL);
@@ -49,9 +49,9 @@ Node 	*get_last_node(Node *head)
 	return head;
 }
 
-Node	*node_pop_first(Node **head)
+EdgeNode	*node_pop_first(EdgeNode **head)
 {
-	Node *first;
+	EdgeNode *first;
 
 	if (!head || !*head)
 		return (NULL);
@@ -62,16 +62,16 @@ Node	*node_pop_first(Node **head)
 	return first;
 }
 
-void	free_node_list(Node *head)
+void	free_node_list(EdgeNode *head)
 {
-	Node	*cur;
-	Node	*next;
+	EdgeNode	*cur;
+	EdgeNode	*next;
 
 	cur = head;
 	while (cur)
 	{
 		next = cur->next;
-		xfree(cur, sizeof(Node));
+		xfree(cur, sizeof(EdgeNode));
 		cur = next;
 	}
 }

@@ -14,7 +14,7 @@ int main(void)
 
 	double **matrix;
 	Vertex **vs;
-	Node *head;
+	EdgeNode *head;
 	int n;
 
 	n = 12;
@@ -23,7 +23,7 @@ int main(void)
 	vs = cost_matrix_to_vertices(matrix, n, 0);
 	print_vertices(vs, n);
 
-	solve(vs, &head);
+	solve(vs, &head, n);
 
 	// free
 

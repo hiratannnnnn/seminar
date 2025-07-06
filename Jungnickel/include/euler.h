@@ -4,6 +4,6 @@
 # include "lib.h"
 
 // algo_euler.c
-void		algo_euler		(Vertex **vs, int n, int s, Node **K);
+void		algo_euler		(Vertex **vs, int n, int s, EdgeNode **K);
 
 #endif

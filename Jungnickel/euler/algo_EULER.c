@@ -38,10 +38,10 @@ typedef struct s_euler_ctx
  * @param C  Pointer to the pointer of the Node list representing the closed trail
  */
 
-static void	trace(t_euler_ctx *ctx, Vertex **vs, int v,  Node **C)
+static void	trace(t_euler_ctx *ctx, Vertex **vs, int v,  EdgeNode **C)
 {
 	Edge	*edge;
-	Node	*node;
+	EdgeNode	*node;
 
 	while (1)
 	{
@@ -51,7 +51,7 @@ static void	trace(t_euler_ctx *ctx, Vertex **vs, int v,  Node **C)
 		if (!edge) 								// all edges incident with v are used
 			return ;
 		ctx->new_edge[edge->id] = 0;
-		node = create_node(edge);
+		node = create_edgenode(edge);
 		append_node(C, node); 					// append the node to the last of C
 		if ((ctx->e_pos)[v] == -1)				// v is not in K yet ?
 			(ctx->e_pos)[v] = node->edge->id; 	// wherever is fine
@@ -72,11 +72,11 @@ static void	trace(t_euler_ctx *ctx, Vertex **vs, int v,  Node **C)
  * @param insert_edge_id The edge_id in K before which C should be inserted
  */
 
-static void	insert_C_in_K(Node **K, Node *C, int insert_edge_id)
+static void	insert_C_in_K(EdgeNode **K, EdgeNode *C, int insert_edge_id)
 {
-	Node	*cur;
-	Node	*prev;
-	Node	*last;
+	EdgeNode	*cur;
+	EdgeNode	*prev;
+	EdgeNode	*last;
 
 	if (!C)
 		return ;
@@ -108,13 +108,13 @@ static void	insert_C_in_K(Node **K, Node *C, int insert_edge_id)
  * @param K  Pointer to the pointer of the Node list representing the Euler tour
  */
 
-void	algo_euler(Vertex **vs, int n, int s, Node **K)
+void	algo_euler(Vertex **vs, int n, int s, EdgeNode **K)
 {
 	t_euler_ctx	ctx;
 	int			i;
 	Edge		*e;
 	int			u;
-	Node		*C;
+	EdgeNode		*C;
 
 	ctx.n = n;
     ctx.used = (int *)xcalloc(n, sizeof(int));

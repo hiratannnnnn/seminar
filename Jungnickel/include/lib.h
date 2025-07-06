@@ -126,10 +126,14 @@ void	sort_list_by_degree	(Edge **head, int *degree, int (*cmp)(int, int));
 /* ========= Utilities =========*/
 
 // utils_edges.c
-Edge		*create_edge			(int id, int from, int to);					// ok
+// Edge		*create_edge			(int id, int from, int to);					// ok
+// int 		len_edge_list			(Edge *head);								// ok, scattered functions
+// void		add_directed_edge		(Vertex **vs, int from, int to, int edge_id);	// edge_id?
+// void		add_undirected_edge		(Vertex **vs, int from, int to, int edge_id);	// edge_id?
+Edge		*create_edge			(int id, int from, int to, double cost);					// ok
 int 		len_edge_list			(Edge *head);								// ok, scattered functions
-void		add_directed_edge		(Vertex **vs, int from, int to, int edge_id);	// edge_id?
-void		add_undirected_edge		(Vertex **vs, int from, int to, int edge_id);	// edge_id?
+void		add_directed_edge		(Vertex **vs, int from, int to, int edge_id, double cost);	// edge_id?
+void		add_undirected_edge		(Vertex **vs, int from, int to, int edge_id, double cost);	// edge_id?
 
 // utils_vertex.c
 Vertex		*create_vertex			(int id);									// ok

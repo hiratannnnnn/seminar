@@ -28,12 +28,12 @@ Vertex      **adj_matrix_to_vertices(int **matrix, int n, int undirected)
         {
             for (j = i + 1; j < n; j++)
                 if (matrix[i][j])
-                    add_undirected_edge(vertices, i, j, edge_id++);
+                    add_undirected_edge(vertices, i, j, edge_id++, (double)matrix[i][j]);
         }
         else
             for (j = 0; j < n; j++)
                 if (matrix[i][j])
-                    add_directed_edge(vertices, i, j, edge_id++);
+                    add_directed_edge(vertices, i, j, edge_id++, (double)matrix[i][j]);
     }
     return vertices;
 }

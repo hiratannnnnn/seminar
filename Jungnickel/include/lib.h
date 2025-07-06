@@ -87,6 +87,7 @@ int 		find_hamilton_cycle			(Vertex **vs, int n);
 
 // graph_conversion.c
 Vertex		**adj_matrix_to_vertices	(int **matrix, int n, int undirected);	// ok
+Vertex      **cost_matrix_to_vertices	(double **matrix, int n, int undirected);
 int			**vertices_to_adj_matrix	(Vertex **vertices, int n);				// ok
 int 		**comp_adj_matrix			(int **matrix, int n);
 Vertex 		**comp_adj_list				(int **matrix, int n, int undir);

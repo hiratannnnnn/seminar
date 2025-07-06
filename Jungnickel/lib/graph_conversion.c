@@ -38,6 +38,32 @@ Vertex      **adj_matrix_to_vertices(int **matrix, int n, int undirected)
     return vertices;
 }
 
+Vertex      **cost_matrix_to_vertices(double **matrix, int n, int undirected)
+{
+    Vertex **vertices;
+    int edge_id;
+    int i, j;
+
+    vertices = create_vertex_array(n);
+    if (!vertices)
+        return (NULL);
+    edge_id = 0;
+    for (i = 0; i < n; i++)
+    {
+        if (undirected)
+        {
+            for (j = i + 1; j < n; j++)
+                if (matrix[i][j])
+                    add_undirected_edge(vertices, i, j, edge_id++, matrix[i][j]);
+        }
+        else
+            for (j = 0; j < n; j++)
+                if (matrix[i][j])
+                    add_directed_edge(vertices, i, j, edge_id++, matrix[i][j]);
+    }
+    return vertices;
+}
+
 /**
  * @brief Converts a vertex list representation to an adjacency matrix
  *

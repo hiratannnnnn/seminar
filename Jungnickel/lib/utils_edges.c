@@ -10,7 +10,7 @@ Edge	*create_edge(int id, int from, int to)
 	edge->id = id;
 	edge->from = from; // id of vertice;
 	edge->to = to;
-	edge->used = 0;
+	edge->cost = 0.0;
 	edge->next = NULL;
 	return (edge);
 }

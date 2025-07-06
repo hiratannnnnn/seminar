@@ -8,7 +8,7 @@ typedef struct 	Edge
     int         id;			// edge_id
     int         from;   	// vertex from
     int         to;     	// vertex to
-    int         used;		// for any extra uses
+    double		cost;		// for any extra uses
     struct Edge *next;		// for edge list
 }               Edge;
 

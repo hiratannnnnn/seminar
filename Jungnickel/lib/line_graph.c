@@ -70,13 +70,13 @@ int		**line_graph_from_adj_list(Vertex **vs, int n, char ***names, int *size, in
 	*names = (char **)xmalloc(sizeof(char *) * len);
 	if (!*names)
 	{
-		free_edgenode(head);
+		free_edgenode(&head);
 		return NULL;
 	}
 	if (!matrix)
 	{
 		free_array_char(*names, len);
-		free_edgenode(head);
+		free_edgenode(&head);
 		return (NULL);
 	}
 
@@ -85,7 +85,7 @@ int		**line_graph_from_adj_list(Vertex **vs, int n, char ***names, int *size, in
 	{
 		free_array_char(*names, len);
 		free_matrix_int(matrix, len, len);
-		free_edgenode(head);
+		free_edgenode(&head);
 		return NULL;
 	}
 	ni = head;
@@ -98,7 +98,7 @@ int		**line_graph_from_adj_list(Vertex **vs, int n, char ***names, int *size, in
 		{
 			free_array_char(*names, len);
 			free_matrix_int(matrix, len, len);
-			free_edgenode(head);
+			free_edgenode(&head);
 			return NULL;
 		}
 	}
@@ -125,6 +125,6 @@ int		**line_graph_from_adj_list(Vertex **vs, int n, char ***names, int *size, in
 		}
 	}
 	xfree(node_array, sizeof(EdgeNode *) * len);
-	free_edgenode(head);
+	free_edgenode(&head);
 	return matrix;
 }

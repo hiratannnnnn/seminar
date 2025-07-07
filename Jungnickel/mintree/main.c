@@ -12,20 +12,24 @@ int main(void)
 	srand((unsigned int)time(NULL));
 	proc_start = clock();
 
-	double **matrix;
+	// double **matrix;
+	int **matrix;
 	Vertex **vs;
 	int n;
 
-	n = 5;
-	matrix = generate_random_undigraph_dbcost(n, 30);
-	print_matrix_double(matrix, n, n, 1);
-	vs = cost_matrix_to_vertices(matrix, n, 0);
+	n = 15;
+	// matrix = generate_random_undigraph_dbcost(n, 30);
+	matrix = generate_random_undigraph_intcost(n, 30);
+	// print_matrix_double(matrix, n, n, 1);
+	print_matrix_int(matrix, n, n);
+	vs = adj_matrix_to_vertices(matrix, n, 0);
 	print_vertices(vs, n);
 
 	solve(vs, n);
 	// free
 
-	free_matrix_double(matrix, n, n);
+	// free_matrix_double(matrix, n, n);
+	free_matrix_int(matrix, n, n);
 	free_vertex_array(vs, n);
 	proc_end = clock();
 	print_info();

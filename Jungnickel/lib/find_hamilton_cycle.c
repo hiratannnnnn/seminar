@@ -83,7 +83,7 @@ static void free_ctx(Hamilton_ctx *ctx, int n)
         ctx->visited = NULL;
     }
     if (ctx->head)
-        free_path(&ctx->head);
+        free_pathnode(&ctx->head);
 }
 
 int find_hamilton_cycle(Vertex **vs, int n)
@@ -91,7 +91,7 @@ int find_hamilton_cycle(Vertex **vs, int n)
     Hamilton_ctx ctx;
     int init, i;
 	int result;
-    
+
     init = hamilton_ctx_init(&ctx, vs, n);
     if (init < 1)
         return (init);

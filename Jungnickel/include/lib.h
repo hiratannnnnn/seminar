@@ -121,6 +121,7 @@ int 	cmp_int_bogo		(int a, int b);
 
 // sort_edge_list.c
 void	sort_list			(Edge **head, int (*cmp)(int, int));
+void	sort_pathnode		(PathNode **head, int (*cmp)(int, int));
 void	sort_list_by_degree	(Edge **head, int *degree, int (*cmp)(int, int));
 
 
@@ -161,7 +162,7 @@ void		free_matrix_int		(int **matrix, int const r, int const c);
 void		free_array_double	(double *ptr, int const c);
 void		free_matrix_double	(double **matrix, int const r, int const c);
 void		free_edge_list		(Edge *head);					// ok, but directory messy?
-void		free_node_list		(EdgeNode *head);					// ok
+void		free_edgenode		(EdgeNode **head);					// ok
 void		free_vertex			(Vertex *vertex);				// ok
 void		free_vertex_array	(Vertex **vs, int n);			// ok
 
@@ -171,9 +172,9 @@ int			**closure_of		(int **matrix, int n);			// ok
 
 // utils_node.c
 EdgeNode		*create_edgenode		(Edge *edge);					// ok
-void		append_node			(EdgeNode **head, EdgeNode *new_node);
+void		append_edgenode			(EdgeNode **head, EdgeNode *new_node);
 void		insert_node_after	(EdgeNode *pos, EdgeNode *new_node);
-EdgeNode 		*get_last_node		(EdgeNode *head);
+EdgeNode 		*get_last_edgenode		(EdgeNode *head);
 EdgeNode	 	*node_pop_first		(EdgeNode **head);
 
 
@@ -185,7 +186,7 @@ PathNode	*get_last_pathnode	(PathNode *head);
 PathNode 	*pathnode_pop_first	(PathNode **head);
 void		pathnode_pop_last	(PathNode **head);
 int 		pathnode_length		(PathNode *head);
-void		free_path			(PathNode **head);
+void		free_pathnode			(PathNode **head);
 
 // utils_math.c
 int			*random_perm		(int n);
@@ -202,7 +203,8 @@ void 		print_array_double			(double *arr, int c, int max_width, int precision);
 void		print_vertex		(Vertex *v);
 void		print_vertices		(Vertex **vs, int n);
 void		print_edge_list		(Edge *head);
-void 		print_path_node		(PathNode *head);
+void 		print_pathnode		(PathNode *head);
+void 		print_edgenode		(EdgeNode *head);
 void		print_array_char	(char **ss, int n);
 void		print_info			(	);
 

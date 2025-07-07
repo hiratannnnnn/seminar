@@ -26,7 +26,7 @@ EdgeNode	*edge_list_from_adj_list(Vertex **vs, int n, int is_undir)
 			if (!is_undir || (edge->from < edge->to))
 			{
 				new_node = create_edgenode(edge);
-				append_node(&edge_list, new_node);
+				append_edgenode(&edge_list, new_node);
 			}
 			edge = edge->next;
 		}

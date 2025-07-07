@@ -89,7 +89,7 @@ int 	pathnode_length(PathNode *head)
 	return length;
 }
 
-void 	free_path(PathNode **head)
+void 	free_pathnode(PathNode **head)
 {
 	PathNode *cur;
     PathNode *tmp;

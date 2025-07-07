@@ -31,7 +31,7 @@ int		make_eulerian(int **matrix, int n, double edge_ratio)
 		if (backtrack_euler(&ctx, edge->from))
 			add_path(matrix, &ctx);
 		compute_degrees(matrix, n, ctx.degree);
-		free_path(&ctx.head);
+		free_pathnode(&ctx.head);
     }
 	add_cycles_until_ratio(matrix, &ctx, n, edge_ratio);
 	free_ctx(&ctx, n);
@@ -62,12 +62,12 @@ static int add_cycles_until_ratio(int **matrix, Euler_ctx *ctx, int n, double ed
 				{
 					add_path(matrix, ctx);
 					compute_degrees(matrix, n, ctx->degree);
-					free_path(&ctx->head);
+					free_pathnode(&ctx->head);
 					found = 1;
 				}
 				else
 				{
-					free_path(&ctx->head);
+					free_pathnode(&ctx->head);
 				}
 			}
 		}
@@ -95,7 +95,7 @@ static void free_ctx(Euler_ctx *ctx, int n)
 		ctx->vs = NULL;
 	}
 	if (ctx->head)
-		free_path(&ctx->head);
+		free_pathnode(&ctx->head);
 }
 
 static int	backtrack_euler_cycle(Euler_ctx *ctx, int cur)

@@ -14,17 +14,15 @@ int main(void)
 
 	double **matrix;
 	Vertex **vs;
-	EdgeNode *head;
 	int n;
 
-	n = 12;
-	matrix = generate_random_digraph_dbcost(n, 30);
+	n = 5;
+	matrix = generate_random_undigraph_dbcost(n, 30);
 	print_matrix_double(matrix, n, n, 1);
 	vs = cost_matrix_to_vertices(matrix, n, 0);
 	print_vertices(vs, n);
 
-	solve(vs, &head, n);
-
+	solve(vs, n);
 	// free
 
 	free_matrix_double(matrix, n, n);

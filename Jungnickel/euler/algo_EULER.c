@@ -52,7 +52,7 @@ static void	trace(t_euler_ctx *ctx, Vertex **vs, int v,  EdgeNode **C)
 			return ;
 		ctx->new_edge[edge->id] = 0;
 		node = create_edgenode(edge);
-		append_node(C, node); 					// append the node to the last of C
+		append_edgenode(C, node); 					// append the node to the last of C
 		if ((ctx->e_pos)[v] == -1)				// v is not in K yet ?
 			(ctx->e_pos)[v] = node->edge->id; 	// wherever is fine
 		v = edge->to;
@@ -85,14 +85,14 @@ static void	insert_C_in_K(EdgeNode **K, EdgeNode *C, int insert_edge_id)
 		cur = cur->next;
 	if (!cur)
 	{
-		append_node(K, C);
+		append_edgenode(K, C);
 		return ;
 	}
 	prev = cur->prev;
 	if (prev)
 		prev->next = C;
 	C->prev = prev;
-	last = get_last_node(C);
+	last = get_last_edgenode(C);
 	last->next = cur;
 	cur->prev = last;
 	if (cur == *K)

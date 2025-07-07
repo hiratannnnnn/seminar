@@ -62,7 +62,7 @@ static int count_max_double_width(double **matrix, int r, int c, int precision)
             if (value < 0)
             {
                 value = -value;
-                int_width = 1; 
+                int_width = 1;
             }
             else
                 int_width = 0;
@@ -91,7 +91,7 @@ void print_matrix_double(double **matrix, int r, int c, int precision)
         printf("matrix is NULL\n");
         return;
     }
-    
+
     if (precision <= 0)
         precision = 3;
     max_width = count_max_double_width(matrix, r, c, precision);
@@ -107,7 +107,7 @@ void print_array_double(double *arr, int n, int max_width, int precision)
 {
     int i;
     char format[20];
-    
+
     if (precision <= 0)
         precision = 3;
     if (max_width <= 0)
@@ -173,7 +173,7 @@ void	print_edge_list(Edge *head)
 	printf("\n");
 }
 
-void 	print_path_node(PathNode *head)
+void 	print_pathnode(PathNode *head)
 {
 	PathNode	*cur;
 
@@ -185,6 +185,21 @@ void 	print_path_node(PathNode *head)
 		cur = cur->next;
 	}
 	printf("\n");
+}
+
+void print_edgenode(EdgeNode *head)
+{
+	double cost;
+
+	cost = 0.0;
+	while (head)
+	{
+		printf("%d - %d\n", head->edge->from, head->edge->to);
+		cost += head->edge->cost;
+		head = head->next;
+	}
+	if (cost)
+		printf("cost was %f\n", cost);
 }
 
 void	print_array_char(char **ss, int n)

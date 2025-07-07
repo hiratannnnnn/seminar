@@ -47,7 +47,7 @@ static int	check_connection(Vertex **vs, int *visited, int n)
             break;
         }
     }
-    if (start == -1) 
+    if (start == -1)
     {
         xfree(queue, n * sizeof(int));
         xfree(seen, n * sizeof(int));
@@ -119,7 +119,7 @@ int     solve	(Vertex **vs, int n)
     PathNode *list;
     int *visited;
     int result;
-    
+
     visited = (int *)xcalloc(n, sizeof(int));
     if (!visited)
         return -1;
@@ -127,6 +127,6 @@ int     solve	(Vertex **vs, int n)
     visited[0] = 1;
     result = backtrack(vs, visited, 0, n, &list);
     free_array_int(visited, n);
-    free_path(&list);
+    free_pathnode(&list);
     return result;
 }

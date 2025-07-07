@@ -13,7 +13,7 @@ EdgeNode	*create_edgenode(Edge *edge)
 	return (node);
 }
 
-void	append_node(EdgeNode **head, EdgeNode *new_node)
+void	append_edgenode(EdgeNode **head, EdgeNode *new_node)
 {
 	EdgeNode	*last;
 
@@ -24,7 +24,7 @@ void	append_node(EdgeNode **head, EdgeNode *new_node)
 		*head = new_node;
 		return ;
 	}
-	last = get_last_node(*head);
+	last = get_last_edgenode(*head);
 	last->next = new_node;
 	new_node->prev = last;
 }
@@ -40,7 +40,7 @@ void	insert_node_after(EdgeNode *pos, EdgeNode *new_node)
 	pos->next = new_node;
 }
 
-EdgeNode 	*get_last_node(EdgeNode *head)
+EdgeNode 	*get_last_edgenode(EdgeNode *head)
 {
 	if (!head)
 		return (NULL);
@@ -62,16 +62,17 @@ EdgeNode	*node_pop_first(EdgeNode **head)
 	return first;
 }
 
-void	free_node_list(EdgeNode *head)
+void	free_edgenode(EdgeNode **head)
 {
 	EdgeNode	*cur;
 	EdgeNode	*next;
 
-	cur = head;
+	cur = *head;
 	while (cur)
 	{
 		next = cur->next;
 		xfree(cur, sizeof(EdgeNode));
 		cur = next;
 	}
+	*head = NULL;
 }

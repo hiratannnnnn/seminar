@@ -25,7 +25,7 @@ int main(void)
 	vs = adj_matrix_to_vertices(matrix, n, 0);
 	print_vertices(vs, n);
 
-	solve(vs, n);
+	solve_prim(vs, n);
 	// free
 
 	// free_matrix_double(matrix, n, n);

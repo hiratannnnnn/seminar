@@ -1,66 +1,5 @@
 #include "mintree.h"
 
-typedef struct Min
-{
-	double min_cost;
-	Edge *min_edge;
-}				Min;
-
-static int is_in_Vi(PathNode *node, int index)
-{
-	PathNode *cur;
-
-	cur = node;
-	while (cur)
-	{
-		// printf("[DEBUG] searching for %d\n", index);
-		if (cur->v->id == index)
-			return (1);
-		cur = cur->next;
-	}
-	return (0);
-}
-
-static void merge_pathnode(PathNode **ps, int i, Min *min)
-{
-	PathNode *i_last;
-	int v;
-	v = min->min_edge->to;
-
-	printf("merge %d and %d\n", i, v);
-	i_last = get_last_pathnode(ps[i]);
-	printf("%p\n", i_last);
-	ps[v]->prev = i_last;
-	i_last->next = ps[v];
-	ps[v] = NULL;
-	print_pathnode(ps[i]);
-}
-
-static void merge_edgenode(EdgeNode **es, int i, Min *min)
-{
-	EdgeNode *node;
-	EdgeNode *i_last;
-	EdgeNode *v_head;
-	int v;
-	v = min->min_edge->to;
-	Edge *edge;
-	edge = min->min_edge;
-
-	node = create_edgenode(edge);
-	i_last = get_last_edgenode(es[i]);
-	v_head = es[v];
-	if (i_last)
-	{
-		i_last->next = v_head;
-		if (v_head)
-			v_head->prev = i_last;
-	}
-	else
-		es[i] = v_head;
-	es[v] = NULL;
-	append_edgenode(&es[i], node);
-}
-
 void	solve(Vertex **vs, int n)
 {
 	PathNode **ps;
@@ -69,7 +8,8 @@ void	solve(Vertex **vs, int n)
 	int k;
 	int u, v;
 	Edge *edge;
-	Min min;
+	EdgeNode *node;
+	Min_E min;
 
 	ps = (PathNode **)xmalloc(sizeof(PathNode *) * n);
 	es = (EdgeNode **)xmalloc(sizeof(EdgeNode *) * n);
@@ -78,8 +18,6 @@ void	solve(Vertex **vs, int n)
 		ps[i] = create_pathnode(vs[i]);
 		es[i] = NULL;
 	}
-	// printf("ps[0]: %d\n", ps[0]->v->id);
-	// printf("ps[0]->next: %p\n", ps[0]->next);
 	for (k = 0; k < n - 1; k++)
 	{
 		min.min_cost = DBL_MAX;
@@ -123,8 +61,10 @@ void	solve(Vertex **vs, int n)
 			if (is_in_Vi(ps[v], min.min_edge->to))
 				break;
 		printf("[DEBUG] %d is in %d\n", min.min_edge->to, v);
-		merge_pathnode(ps, i, &min);
-		merge_edgenode(es, i, &min);
+		merge_pathnode(&ps[i], &ps[min.min_edge->to]);
+		merge_edgenode(&es[i], &es[min.min_edge->to]);
+		node = create_edgenode(min.min_edge);
+		append_edgenode(&es[i], node);
 	}
 	print_edgenode(es[i]);
 	free_edgenode(&es[i]);

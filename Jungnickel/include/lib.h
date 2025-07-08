@@ -95,7 +95,6 @@ int			**dbcost_to_adj				(int **cost, int n);
 
 // utils_edge_list.c
 EdgeNode	*edge_list_from_adj_list	(Vertex **vs, int n, int is_undir);		// ok?
-size_t		count_nodes					(EdgeNode *head);							// ok, name?
 
 // line_graph.c
 int			**line_graph_from_adj_list	(Vertex **vs, int n, char ***names, int *size, int is_undir); // ok?
@@ -170,22 +169,25 @@ void		free_vertex_array	(Vertex **vs, int n);			// ok
 int			**closure_of		(int **matrix, int n);			// ok
 
 
-// utils_node.c
-EdgeNode		*create_edgenode		(Edge *edge);					// ok
+// utils_edgenode.c
+EdgeNode	*create_edgenode		(Edge *edge);					// ok
 void		append_edgenode			(EdgeNode **head, EdgeNode *new_node);
-void		insert_node_after	(EdgeNode *pos, EdgeNode *new_node);
-EdgeNode 		*get_last_edgenode		(EdgeNode *head);
-EdgeNode	 	*node_pop_first		(EdgeNode **head);
+void		insert_node_after		(EdgeNode *pos, EdgeNode *new_node);
+EdgeNode 	*get_last_edgenode		(EdgeNode *head);
+int			count_edgenodes			(EdgeNode *head);
+void		merge_edgenode			(EdgeNode **a, EdgeNode **b);
+EdgeNode	*node_pop_first			(EdgeNode **head);
 
 
 // utils_pathnode.c
-PathNode	*create_pathnode	(Vertex *vertex);
-void		append_pathnode		(PathNode **head, PathNode *new_pathnode);
-void		insert_pathnode_after(PathNode *pos, PathNode *new_pathnode);
-PathNode	*get_last_pathnode	(PathNode *head);
-PathNode 	*pathnode_pop_first	(PathNode **head);
-void		pathnode_pop_last	(PathNode **head);
-int 		pathnode_length		(PathNode *head);
+PathNode	*create_pathnode		(Vertex *vertex);
+void		append_pathnode			(PathNode **head, PathNode *new_pathnode);
+void		insert_pathnode_after	(PathNode *pos, PathNode *new_pathnode);
+PathNode	*get_last_pathnode		(PathNode *head);
+PathNode 	*pathnode_pop_first		(PathNode **head);
+void		pathnode_pop_last		(PathNode **head);
+int			count_pathnodes			(PathNode *head);
+void		merge_pathnode			(PathNode **a, PathNode **b);
 void		free_pathnode			(PathNode **head);
 
 // utils_math.c

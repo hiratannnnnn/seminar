@@ -49,6 +49,43 @@ EdgeNode 	*get_last_edgenode(EdgeNode *head)
 	return head;
 }
 
+int	count_edgenodes(EdgeNode *head)
+{
+	int len;
+
+	len = 0;
+	while (head)
+	{
+		len++;
+		head = head->next;
+	}
+	return len;
+}
+
+void	merge_edgenode(EdgeNode **a, EdgeNode **b)
+{
+	EdgeNode *a_last;
+	EdgeNode *b_head;
+
+	if (*a != NULL && *a == *b)
+	{
+		printf("Do not pass the same pointers.\n");
+		return ;
+	}
+	a_last = get_last_edgenode(*a);
+	b_head = *b;
+	if (a_last)
+	{
+		a_last->next = b_head;
+		if (b_head)
+			b_head->prev = a_last;
+	}
+	else
+		*a = b_head;
+	*b = NULL;
+}
+
+
 EdgeNode	*node_pop_first(EdgeNode **head)
 {
 	EdgeNode *first;

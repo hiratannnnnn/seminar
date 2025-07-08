@@ -76,17 +76,41 @@ void		pathnode_pop_last(PathNode **head)
 	xfree(last, sizeof(PathNode));
 }
 
-int 	pathnode_length(PathNode *head)
+int	count_pathnodes(PathNode *head)
 {
-	int length;
+	int len;
 
-	length = 0;
+	len = 0;
 	while (head)
 	{
-		length++;
+		len++;
 		head = head->next;
 	}
-	return length;
+	return len;
+}
+
+void merge_pathnode(PathNode **a, PathNode **b)
+{
+	if (*a != NULL && *a == *b)
+	{
+		printf("Do not pass the same pointers\n");
+		return ;
+	}
+
+	PathNode *a_last;
+
+	a_last = get_last_pathnode(*a);
+	if (a_last)
+	{
+		if (*b)
+		{
+			(*b)->prev = a_last;
+			a_last->next = (*b);
+		}
+	}
+	else
+		*a = *b;
+	*b = NULL;
 }
 
 void 	free_pathnode(PathNode **head)

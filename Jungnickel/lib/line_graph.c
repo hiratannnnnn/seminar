@@ -61,11 +61,11 @@ int		**line_graph_from_adj_list(Vertex **vs, int n, char ***names, int *size, in
 	EdgeNode **node_array;
 	EdgeNode *head, *ni;
 	Edge *ei, *ej;
-	size_t len, i, j;
+	int len, i, j;
 	int **matrix;
 
 	head = edge_list_from_adj_list(vs, n, is_undir);
-	len = count_nodes(head);	*size = len;
+	len = count_edgenodes(head);	*size = len;
 	matrix = generate_matrix_int(len, len);
 	*names = (char **)xmalloc(sizeof(char *) * len);
 	if (!*names)

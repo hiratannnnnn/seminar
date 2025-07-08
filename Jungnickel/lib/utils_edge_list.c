@@ -33,16 +33,3 @@ EdgeNode	*edge_list_from_adj_list(Vertex **vs, int n, int is_undir)
 	}
 	return (edge_list);
 }
-
-size_t	count_nodes(EdgeNode *head)
-{
-	size_t len;
-
-	len = 0;
-	while (head)
-	{
-		len++;
-		head = head->next;
-	}
-	return len;
-}

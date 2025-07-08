@@ -114,7 +114,7 @@ static int	backtrack_euler_cycle(Euler_ctx *ctx, int cur)
 	v		= ctx->vs[cur];
 	edge	= v->incidence;
 	append_pathnode(&ctx->head, create_pathnode(v));
-	length	= pathnode_length(ctx->head);
+	length	= count_pathnodes(ctx->head);
 	if (length > 3 && cur == ctx->start)
 		return (1);
 	while (edge)
@@ -149,7 +149,7 @@ static int	backtrack_euler(Euler_ctx *ctx, int cur)
     v       = ctx->vs[cur];
     edge    = v->incidence;
     append_pathnode(&ctx->head, create_pathnode(v));
-    length  = pathnode_length(ctx->head);
+    length  = count_pathnodes(ctx->head);
 	if (length > 1 && ctx->degree[cur] % 2 == 1)
 		return 1;
     while (edge)

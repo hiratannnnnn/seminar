@@ -9,6 +9,7 @@ Vertex	*create_vertex(int id)
 	if (!vertex)
 		return (NULL);
 	vertex->id = id;
+	vertex->label = id;
 	vertex->incidence = NULL;
 	return (vertex);
 }

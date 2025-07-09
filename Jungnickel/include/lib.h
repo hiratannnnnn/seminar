@@ -117,10 +117,14 @@ void		algo_euler		(Vertex **vs, int n, int s, EdgeNode **K);				// ok
 int 	cmp_int_desc		(int a, int b);
 int 	cmp_int_asc			(int a, int b);
 int 	cmp_int_bogo		(int a, int b);
+int 	cmp_double_desc		(double a, double b);
+int 	cmp_double_asc		(double a, double b);
+int 	cmp_double_bogo		(double a, double b);
 
 // sort_edge_list.c
 void	sort_list			(Edge **head, int (*cmp)(int, int));
 void	sort_pathnode		(PathNode **head, int (*cmp)(int, int));
+void 	sort_edgenode_cost	(EdgeNode **head, int (*cmp)(double, double));
 void	sort_list_by_degree	(Edge **head, int *degree, int (*cmp)(int, int));
 
 
@@ -176,7 +180,7 @@ void		insert_node_after		(EdgeNode *pos, EdgeNode *new_node);
 EdgeNode 	*get_last_edgenode		(EdgeNode *head);
 int			count_edgenodes			(EdgeNode *head);
 void		merge_edgenode			(EdgeNode **a, EdgeNode **b);
-EdgeNode	*node_pop_first			(EdgeNode **head);
+EdgeNode	*edgenode_pop_first			(EdgeNode **head);
 
 
 // utils_pathnode.c

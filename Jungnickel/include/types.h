@@ -15,6 +15,7 @@ typedef struct 	Edge
 typedef struct 	Vertex
 {
     int         id;			// vertex id
+    int         label;
     Edge        *incidence;	// incidence list (edge list)
 }               Vertex;
 

@@ -18,11 +18,65 @@ void	sort_pathnode(PathNode **head, int (*cmp)(int, int))
 			{
 				tmp = ptr1->next;
 				ptr1->next = tmp->next;
+				if (tmp->next)
+					tmp->next->prev = ptr1;
 				tmp->next = ptr1;
+				ptr1->prev = tmp;
 				if (prev)
+				{
 					prev->next = tmp;
+					tmp->prev = prev;
+				}
 				else
+				{
 					*head = tmp;
+					tmp->prev = NULL;
+				}
+				swapped = 1;
+				prev = tmp;
+			}
+			else
+			{
+				prev = ptr1;
+				ptr1 = ptr1->next;
+			}
+		}
+		lptr = ptr1;
+	} while (swapped);
+}
+
+void sort_edgenode_cost(EdgeNode **head, int (*cmp)(double, double))
+{
+	EdgeNode *ptr1, *lptr, *prev, *tmp;
+	int swapped;
+
+	if (!head || !*head)
+		return ;
+	lptr = NULL;
+	do {
+		swapped = 0;
+		ptr1 = *head;
+		prev = NULL;
+		while (ptr1->next != lptr)
+		{
+			if (cmp(ptr1->edge->cost, ptr1->next->edge->cost) > 0)
+			{
+				tmp = ptr1->next;
+				ptr1->next = tmp->next;
+				if (tmp->next)
+					tmp->next->prev = ptr1;
+				tmp->next = ptr1;
+				ptr1->prev = tmp;
+				if (prev)
+				{
+					prev->next = tmp;
+					tmp->prev = prev;
+				}
+				else
+				{
+					*head = tmp;
+					tmp->prev = NULL;
+				}
 				swapped = 1;
 				prev = tmp;
 			}

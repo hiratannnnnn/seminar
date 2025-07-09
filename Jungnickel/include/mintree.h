@@ -24,4 +24,6 @@ void		solve			(Vertex **vs, int n);
 // solve_prim.c
 void		solve_prim		(Vertex **vs, int n);
 
+void		solve_kruskal	(Vertex **vs, int n);
+
 #endif

@@ -27,7 +27,7 @@ void	solve(Vertex **vs, int n)
 			if (ps[i])
 				break;
 		}
-		printf("[DEBUG] i = %d\n", i);
+		// printf("[DEBUG] i = %d\n", i);
 		if (i == n)
 		{
 			printf("something wrong ;;\n");
@@ -39,7 +39,7 @@ void	solve(Vertex **vs, int n)
 			// printf("koko\n");
 			if (!is_in_Vi(ps[i], u))
 				continue;
-			printf("[DEBUG] u = %d\n", u);
+			// printf("[DEBUG] u = %d\n", u);
 			edge = vs[u]->incidence;
 			while (edge)
 			{
@@ -47,8 +47,8 @@ void	solve(Vertex **vs, int n)
 				{
 					if (edge->cost < min.min_cost)
 					{
-						printf("[DEBUG] updated min_cost: %f\n", edge->cost);
-						printf("[DEBUG] which is %d -> %d\n", edge->from, edge->to);
+						// printf("[DEBUG] updated min_cost: %f\n", edge->cost);
+						// printf("[DEBUG] which is %d -> %d\n", edge->from, edge->to);
 						min.min_cost = edge->cost;
 						min.min_edge = edge;
 					}
@@ -56,7 +56,8 @@ void	solve(Vertex **vs, int n)
 				edge = edge->next;
 			}
 		}
-		printf("[DEBUG] search for Vj which includes %d\n", min.min_edge->to);
+		printf("[DEBUG] min_cost: %f, edge: %d -> %d\n", 
+				min.min_cost, min.min_edge->from, min.min_edge->to);
 		for (v = 0; v < n; v++)
 			if (is_in_Vi(ps[v], min.min_edge->to))
 				break;

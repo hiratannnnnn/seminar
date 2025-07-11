@@ -56,18 +56,18 @@ void	solve(Vertex **vs, int n)
 				edge = edge->next;
 			}
 		}
-		printf("[DEBUG] min_cost: %f, edge: %d -> %d\n", 
-				min.min_cost, min.min_edge->from, min.min_edge->to);
+		// printf("[DEBUG] min_cost: %f, edge: %d -> %d\n",
+				// min.min_cost, min.min_edge->from, min.min_edge->to);
 		for (v = 0; v < n; v++)
 			if (is_in_Vi(ps[v], min.min_edge->to))
 				break;
-		printf("[DEBUG] %d is in %d\n", min.min_edge->to, v);
+		// printf("[DEBUG] %d is in %d\n", min.min_edge->to, v);
 		merge_pathnode(&ps[i], &ps[min.min_edge->to]);
 		merge_edgenode(&es[i], &es[min.min_edge->to]);
 		node = create_edgenode(min.min_edge);
 		append_edgenode(&es[i], node);
 	}
-	print_edgenode(es[i]);
+	// print_edgenode(es[i]);
 	free_edgenode(&es[i]);
 	free_pathnode(&ps[i]);
 	xfree(ps, sizeof(PathNode *) * n);

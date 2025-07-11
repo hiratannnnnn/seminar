@@ -47,7 +47,7 @@ void	solve_kruskal(Vertex **vs, int n)
 				// cur->edge->from, u, cur->edge->to, v);
 		if (u != v)
 		{
-			printf("merging %d and %d\n", u, v);
+			// printf("merging %d and %d\n", u, v);
 			merge_pathnode(&ps[u], &ps[v]);
 			// printf("successfully merged.\n");
 			node = ps[u];
@@ -65,7 +65,7 @@ void	solve_kruskal(Vertex **vs, int n)
 		if (count_edgenodes(T) == n - 1)
 		{
 			free_edgenode(&queue);
-			print_edgenode(T);
+			// print_edgenode(T);
 			free_edgenode(&T);
 			free_pathnode_array(ps, n);
 			xfree(ps, sizeof(PathNode *) * n);
@@ -73,7 +73,7 @@ void	solve_kruskal(Vertex **vs, int n)
 		}
 		cur = edgenode_pop_first(&queue);
 	}
-	print_edgenode(T);
+	// print_edgenode(T);
 	// for (i = 0; i < n; i++)
 	// 	free_pathnode(&ps[i]);
 	// xfree(ps, sizeof(PathNode *) * n);

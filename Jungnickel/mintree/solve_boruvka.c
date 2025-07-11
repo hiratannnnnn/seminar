@@ -76,7 +76,7 @@ static void	merge_node_queue(Node **queue, Vertex **vs, Boruvka_ctx *ctx)
 	Edge *edge;
 	int u, v;
 
-	printf("[merge_node_queue] node length: %d\n", get_node_length(*queue));
+	// printf("[merge_node_queue] node length: %d\n", get_node_length(*queue));
 	node = dequeue_node(queue);
 	while (node)
 	{
@@ -109,11 +109,11 @@ void	solve_boruvka(Vertex **vs, int n)
 	if (!boruvka_init(vs, n, &ctx))
 		return ;
 
-	printf("[DEBUG] finished initialization.\n");
+	// printf("[DEBUG] finished initialization.\n");
 	queue = NULL;
 	while (ctx.m_count > 1)
 	{
-		print_array_int(ctx.M, n, 2);
+		// print_array_int(ctx.M, n, 2);
 		for (i = 0; i < n; i++)
 		{
 			if (!ctx.M[i])
@@ -145,9 +145,9 @@ void	solve_boruvka(Vertex **vs, int n)
 			append_node(&queue, node);
 		}
 		merge_node_queue(&queue, vs, &ctx);
-		printf("[DEBUG] merged successfully.\n");
+		// printf("[DEBUG] merged successfully.\n");
 	}
-	print_edgenode(ctx.T);
+	// print_edgenode(ctx.T);
 	free_pathnode_array(ctx.ps, n);
 	boruvka_free(n, &ctx);
 }

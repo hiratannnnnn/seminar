@@ -39,14 +39,14 @@ void	solve_prim(Vertex **vs, int n)
 				min.v = vs[i];
 			}
 		}
-		printf("[DEBUG] merge S and %d\n", min.v->id);
+		// printf("[DEBUG] merge S and %d\n", min.v->id);
 		node = create_pathnode(vs[min.v->id]);
 		append_pathnode(&S, node);
 		// print_pathnode(S);
 		if (node->v->id != 0)
 		{
-			printf("[DEBUG] adding edge %d -> %d\n", 
-					g[min.v->id].edge->from, g[min.v->id].edge->to);
+			// printf("[DEBUG] adding edge %d -> %d\n",
+					// g[min.v->id].edge->from, g[min.v->id].edge->to);
 			append_edgenode(&T, create_edgenode(g[min.v->id].edge));
 		}
 
@@ -61,7 +61,7 @@ void	solve_prim(Vertex **vs, int n)
 			edge = edge->next;
 		}
 	}
-	print_edgenode(T);
+	// print_edgenode(T);
 	xfree(g, sizeof(PrimInfo) * n);
 	free_pathnode(&S);
 	free_edgenode(&T);

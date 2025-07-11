@@ -17,27 +17,30 @@ int main(void)
 	Vertex **vs;
 	int n;
 
-	n = 8;
+	n = 100;
 	// matrix = generate_random_undigraph_dbcost(n, 1);
 	matrix = generate_random_undigraph_intcost(n, 30);
 
 	// print_matrix_double(matrix, n, n, 1);
-	print_matrix_int(matrix, n, n);
+	// print_matrix_int(matrix, n, n);
 
 	// vs = cost_matrix_to_vertices(matrix, n, 0);
 	vs = adj_matrix_to_vertices(matrix, n, 0);
 
 	// print_vertices(vs, n);
-
+	proc_start = clock();
 	solve(vs, n);
-	reset_labels(vs, n);	print_info();
+	reset_labels(vs, n);	print_info();	sleep(3);
 
+	proc_start = clock();
 	solve_prim(vs, n);
-	reset_labels(vs, n);	print_info();
+	reset_labels(vs, n);	print_info();	sleep(3);
 
+	proc_start = clock();
 	solve_kruskal(vs, n);
-	reset_labels(vs, n);	print_info();
+	reset_labels(vs, n);	print_info();	sleep(3);
 
+	proc_start = clock();
 	solve_boruvka(vs, n);
 	reset_labels(vs, n);	print_info();
 

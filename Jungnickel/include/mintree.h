@@ -16,14 +16,21 @@ typedef struct Min_E
 }				Min_E;
 
 // utils.c
-int 		is_in_Vi		(PathNode *node, int index);
+int 		is_in_Vi			(PathNode *node, int index);
+int 		is_in_Vi_label		(PathNode *node, int index);
+void 		free_pathnode_array	(PathNode **ps, int n);
+
 
 // solve.c
-void		solve			(Vertex **vs, int n);
+void		solve				(Vertex **vs, int n);
 
 // solve_prim.c
-void		solve_prim		(Vertex **vs, int n);
+void		solve_prim			(Vertex **vs, int n);
 
-void		solve_kruskal	(Vertex **vs, int n);
+// solve_kruskal.c
+void		solve_kruskal		(Vertex **vs, int n);
+
+// solve_boruvka.c
+void		solve_boruvka		(Vertex **vs, int n);
 
 #endif

@@ -29,9 +29,11 @@ int main(void)
 
 	// print_vertices(vs, n);
 
-	solve(vs, n);
-	solve_prim(vs, n);
+	// solve(vs, n);
+	// solve_prim(vs, n);
 	solve_kruskal(vs, n);
+	// solve_boruvka(vs, n);
+
 	// free
 
 	// free_matrix_double(matrix, n, n);

@@ -37,10 +37,8 @@ void	solve_kruskal(Vertex **vs, int n)
 
 	print_edgenode(queue);
 
-	printf("adsf\n");
 	cur = edgenode_pop_first(&queue);
 	printf("cur: %d -> %d\n", cur->edge->from, cur->edge->to);
-	print_edgenode(queue);
 	while (cur)
 	{
 		u = vs[cur->edge->from]->label;
@@ -51,7 +49,7 @@ void	solve_kruskal(Vertex **vs, int n)
 		{
 			printf("merging %d and %d\n", u, v);
 			merge_pathnode(&ps[u], &ps[v]);
-			printf("adsf\n");
+			printf("successfully merged.\n");
 			node = ps[u];
 			while (node)
 			{
@@ -59,12 +57,21 @@ void	solve_kruskal(Vertex **vs, int n)
 				node->v->label = u;
 				node = node->next;
 			}
-			append_edgenode(&T, cur);
-			printf("adsfasdfa\n");
+			append_edgenode(&T, create_edgenode(cur->edge));
+			print_edgenode(T);
+			printf("added to T\n");
+		}
+		xfree(cur, sizeof(EdgeNode));
+		if (count_edgenodes(T) == n - 1)
+		{
+			free_edgenode(&queue);
+			print_edgenode(T);
+			free_edgenode(&T);
+			free_pathnode_array(ps, n);
+			xfree(ps, sizeof(PathNode *) * n);
+			return ;
 		}
 		cur = edgenode_pop_first(&queue);
-		printf("cur: %d -> %d\n", cur->edge->from, cur->edge->to);
-		// print_edgenode(queue);
 	}
 	print_edgenode(T);
 	// for (i = 0; i < n; i++)
@@ -72,3 +79,5 @@ void	solve_kruskal(Vertex **vs, int n)
 	// xfree(ps, sizeof(PathNode *) * n);
 	// free_edgenode(&T);
 }
+
+// tidy up

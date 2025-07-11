@@ -34,7 +34,6 @@ int main(void)
 	// free
 	free_matrix_int(matrix, n, n);
 	free_array_int(best_path, n);
-	proc_end = clock();
 	print_info();
 	return (0);
 }

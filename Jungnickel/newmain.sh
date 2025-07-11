@@ -77,7 +77,6 @@ int main(void)
 
 	// free
 
-	proc_end = clock();
 	print_info();
 	return (0);
 }

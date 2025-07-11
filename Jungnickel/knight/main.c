@@ -21,7 +21,6 @@ int main(void)
 	// solve_knight(7, 8);
 	// solve_knight(8, 8);
 
-	proc_end = clock();
 	print_info();
 	return (0);
 }

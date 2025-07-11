@@ -29,10 +29,17 @@ int main(void)
 
 	// print_vertices(vs, n);
 
-	// solve(vs, n);
-	// solve_prim(vs, n);
+	solve(vs, n);
+	reset_labels(vs, n);	print_info();
+
+	solve_prim(vs, n);
+	reset_labels(vs, n);	print_info();
+
 	solve_kruskal(vs, n);
-	// solve_boruvka(vs, n);
+	reset_labels(vs, n);	print_info();
+
+	solve_boruvka(vs, n);
+	reset_labels(vs, n);	print_info();
 
 	// free
 
@@ -40,7 +47,6 @@ int main(void)
 	free_matrix_int(matrix, n, n);
 
 	free_vertex_array(vs, n);
-	proc_end = clock();
 	print_info();
 	return (0);
 }

@@ -25,7 +25,6 @@ int main(void)
 
 	free_matrix_int(matrix, n, n);
 	free_vertex_array(vs, n);
-	proc_end = clock();
 	print_info();
 	return (0);
 }

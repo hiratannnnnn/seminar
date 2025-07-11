@@ -93,7 +93,7 @@ EdgeNode	*edgenode_pop_first(EdgeNode **head)
 	if (!head || !*head)
 		return (NULL);
 	first = *head;
-	printf("[edgenode_pop_first] first: %d -> %d\n", first->edge->from, first->edge->to);
+	// printf("[edgenode_pop_first] first: %d -> %d\n", first->edge->from, first->edge->to);
 	*head = first->next;
 	if (*head)
 		(*head)->prev = NULL;

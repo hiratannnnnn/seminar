@@ -131,10 +131,6 @@ void	sort_list_by_degree	(Edge **head, int *degree, int (*cmp)(int, int));
 /* ========= Utilities =========*/
 
 // utils_edges.c
-// Edge		*create_edge			(int id, int from, int to);					// ok
-// int 		len_edge_list			(Edge *head);								// ok, scattered functions
-// void		add_directed_edge		(Vertex **vs, int from, int to, int edge_id);	// edge_id?
-// void		add_undirected_edge		(Vertex **vs, int from, int to, int edge_id);	// edge_id?
 Edge		*create_edge			(int id, int from, int to, double cost);					// ok
 int 		len_edge_list			(Edge *head);								// ok, scattered functions
 void		add_directed_edge		(Vertex **vs, int from, int to, int edge_id, double cost);	// edge_id?
@@ -143,6 +139,8 @@ void		add_undirected_edge		(Vertex **vs, int from, int to, int edge_id, double c
 // utils_vertex.c
 Vertex		*create_vertex			(int id);									// ok
 Vertex		**create_vertex_array	(int n);									// ok
+void 		reset_labels			(Vertex **vs, int n);
+void		update_labels			(PathNode *node, int label);
 
 /* ========= Euler Tour Utilities =========*/
 
@@ -193,6 +191,16 @@ void		pathnode_pop_last		(PathNode **head);
 int			count_pathnodes			(PathNode *head);
 void		merge_pathnode			(PathNode **a, PathNode **b);
 void		free_pathnode			(PathNode **head);
+
+// utils_node.c
+Node 		*create_node		(void *ptr, NodeType type);
+int 		get_node_length		(Node *node);
+Node 		*get_last_node		(Node *node);
+void		append_node			(Node **queue, Node *node);
+Node		*pop_first_node		(Node **queue);
+void		enqueue_node		(Node **queue, Node *node);
+Node		*dequeue_node		(Node **queue);
+Edge		*node_get_edge		(Node *node);
 
 // utils_math.c
 int			*random_perm		(int n);

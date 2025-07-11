@@ -42,7 +42,6 @@ int		main(void)
 	free_vertex_array(vs, n);
 	xfree(topnr, sizeof(int) * n);
 
-	proc_end = clock();
     print_info();
 
 	return (0);

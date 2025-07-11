@@ -35,31 +35,31 @@ void	solve_kruskal(Vertex **vs, int n)
 	make_queue_from_edges(vs, n, &queue);
 	sort_edgenode_cost(&queue, cmp_double_asc);
 
-	print_edgenode(queue);
+	// print_edgenode(queue);
 
 	cur = edgenode_pop_first(&queue);
-	printf("cur: %d -> %d\n", cur->edge->from, cur->edge->to);
+	// printf("cur: %d -> %d\n", cur->edge->from, cur->edge->to);
 	while (cur)
 	{
 		u = vs[cur->edge->from]->label;
 		v = vs[cur->edge->to]->label;
-		printf("%d is in %d and %d is in %d\n",
-				cur->edge->from, u, cur->edge->to, v);
+		// printf("%d is in %d and %d is in %d\n",
+				// cur->edge->from, u, cur->edge->to, v);
 		if (u != v)
 		{
 			printf("merging %d and %d\n", u, v);
 			merge_pathnode(&ps[u], &ps[v]);
-			printf("successfully merged.\n");
+			// printf("successfully merged.\n");
 			node = ps[u];
 			while (node)
 			{
-				printf("node: v: %d\n", node->v->id);
+				// printf("node: v: %d\n", node->v->id);
 				node->v->label = u;
 				node = node->next;
 			}
 			append_edgenode(&T, create_edgenode(cur->edge));
-			print_edgenode(T);
-			printf("added to T\n");
+			// print_edgenode(T);
+			// printf("added to T\n");
 		}
 		xfree(cur, sizeof(EdgeNode));
 		if (count_edgenodes(T) == n - 1)

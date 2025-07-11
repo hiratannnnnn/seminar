@@ -215,6 +215,7 @@ void	print_info()
 {
 	double used_time;
 
+	proc_end = clock();
 	used_time = ((double) (proc_end - proc_start)) / CLOCKS_PER_SEC;
 	printf("mem_peak: %d\n", (int)mem_peak);
 	printf("remaining mem: %d\n", (int)mem);

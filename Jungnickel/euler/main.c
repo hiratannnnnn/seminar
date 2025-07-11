@@ -20,7 +20,6 @@ int main(void)
     // free
     print_matrix_int(matrix, n, n);
     free_matrix_int(matrix, n, n);
-    proc_end = clock();
     print_info();
     return (0);
 }

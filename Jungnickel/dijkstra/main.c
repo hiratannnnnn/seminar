@@ -21,12 +21,11 @@ int main(void)
 	print_matrix_int(cost, n, n);
 	vs = adj_matrix_to_vertices(cost, n, 0);
 	print_vertices(vs, n);
-	
+
 
 	// free
 	free_matrix_int(cost, n, n);
 	free_vertex_array(vs, n);
-	proc_end = clock();
 	print_info();
 	return (0);
 }

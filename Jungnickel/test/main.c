@@ -22,7 +22,6 @@ int main(void)
 	// free
 
 	free_matrix_double(matrix, n, n);
-	proc_end = clock();
 	print_info();
 	return (0);
 }

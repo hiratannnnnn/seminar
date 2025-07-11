@@ -33,6 +33,19 @@ typedef struct 	PathNode
     struct PathNode *next;	// next node
 }				PathNode;
 
+typedef enum
+{
+	NODE_TYPE_EDGE
+}			NodeType;
+
+typedef struct Node
+{
+	void *ptr;
+	NodeType type;
+	struct Node *prev;
+	struct Node *next;
+}				Node;
+
 typedef struct Euler_ctx
 {
     Vertex      **vs;

@@ -1,8 +1,8 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -I../include
 LDFLAGS = -lm
-TARGET = dijkstra
-SRCS = main.c
+TARGET = path
+SRCS = $(wildcard *.c)
 OBJS = $(SRCS:.c=.o)
 LIBDIR = ../lib
 LIB = $(LIBDIR)/lib.a

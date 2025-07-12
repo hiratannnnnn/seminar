@@ -1,5 +1,5 @@
 DIRS = bipartite dijkstra lib euler hamilton\
-knight sorting mintree test topsort tsp
+knight sorting mintree path test topsort tsp
 
 all: $(DIRS)
 

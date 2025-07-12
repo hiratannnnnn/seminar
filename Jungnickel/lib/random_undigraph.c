@@ -35,6 +35,12 @@ int 	**gen_rand_conn_undigraph(int n, double edge_prob)
 	int i, j;
 
 	matrix = gen_rand_tree(n);
+	if (!matrix)
+		return NULL;
+
+	if (edge_prob <= 0.0)
+		return matrix;
+
 	for (i = 0; i < n; i++)
 	{
 		for (j = i + 1; j < n; j++)

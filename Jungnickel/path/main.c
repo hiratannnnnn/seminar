@@ -17,9 +17,12 @@ int main(void)
 	int n;
 
 	n = 30;
-	matrix = gen_rand_conn_undigraph(n, 0.0);
+	matrix = gen_rand_conn_undigraph(n, 0.6);
+	// matrix = read_adj(&n, "bfs_graph.txt");
 	// write_adjacent_matrix(matrix, n, "bfs_graph.txt");
 	vs = adj_matrix_to_vertices(matrix, n, 1);
+
+	print_info();
 
 	solve_bfs(vs, 0, n);
 	solve_bipart(vs, 0, n);

@@ -220,4 +220,5 @@ void	print_info()
 	printf("mem_peak: %d\n", (int)mem_peak);
 	printf("remaining mem: %d\n", (int)mem);
 	printf("proccess time: %f\n", used_time);
+	proc_start = clock();
 }

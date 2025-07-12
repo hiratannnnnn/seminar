@@ -1,6 +1,6 @@
 #include "lib.h"
 
-double **generate_matrix_double(int r, int c)
+double **gen_matrix_double(int r, int c)
 {
 	int i;
 	double **matrix;

@@ -11,7 +11,7 @@ int **read_matrix(int *a, int *b, char const *filename)
 		return (NULL);
 	if (fscanf(fp, "%d %d", a, b) != 2)
 		return (fclose(fp), NULL);
-	matrix = generate_matrix_int(*a, *b);
+	matrix = gen_matrix_int(*a, *b);
 	if (!matrix)
 		return (fclose(fp), NULL);
 	for (i = 0; i < *a; i++)
@@ -42,7 +42,7 @@ double **read_double_matrix(int *r, int *c, char const *filename)
         return NULL;
     if (fscanf(fp, "%d %d", r, c) != 2)
         return (fclose(fp), NULL);
-    matrix = generate_matrix_double(*r, *c);
+    matrix = gen_matrix_double(*r, *c);
     if (!matrix)
         return (fclose(fp), NULL);
     for (i = 0; i < *r; i++)

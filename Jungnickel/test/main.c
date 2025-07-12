@@ -16,7 +16,7 @@ int main(void)
 	int n;
 
 	n = 12;
-	matrix = generate_random_digraph_dbcost(n, 30);
+	matrix = gen_rand_digraph_dbcost(n, 30);
 	print_matrix_double(matrix, n, n, 1);
 
 	// free

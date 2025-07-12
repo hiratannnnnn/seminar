@@ -1,16 +1,16 @@
 #include "lib.h"
 
 /**
- * @brief Generates a random Prufer code for a tree with n vertices.
+ * @brief Generates a rand Prufer code for a tree with n vertices.
  *
  * HAS TO BE FREED
  *
  * @param n Number of vertices
- * @return Pointer to the generated Prufer code (length n-2),
+ * @return Pointer to the gend Prufer code (length n-2),
  * 			or NULL on failure.
  */
 
-int	*generate_random_prufer(int n)
+int	*gen_rand_prufer(int n)
 {
 	int i;
 
@@ -50,27 +50,27 @@ int *count_degrees_from(const int *prufer, int n)
 }
 
 /**
- * @brief Generates a random undirected adjacency matrix of TREE
+ * @brief Generates a rand undirected adjacency matrix of TREE
  * and writes it to a file.
  *
  * HAS TO BE FREED
  *
  * @param n Number of vertices
- * @return Pointer to the generated adjacency matrix (n, n),
+ * @return Pointer to the gend adjacency matrix (n, n),
  * 			or NULL on failure.
  */
 
-int **generate_random_tree(int n)
+int **gen_rand_tree(int n)
 {
 	int **matrix;
 	int *prufer, *degree;
 	int i, j;
 
 	// initialization
-	matrix = generate_matrix_int(n, n);
+	matrix = gen_matrix_int(n, n);
 	if (!matrix)
 		return (NULL);
-	prufer = generate_random_prufer(n);
+	prufer = gen_rand_prufer(n);
 	if (!prufer)
 	{
 		free_matrix_int(matrix, n, n);

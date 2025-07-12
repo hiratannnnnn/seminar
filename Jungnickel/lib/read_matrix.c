@@ -33,7 +33,7 @@ int **read_adj(int *n, char const *filename)
 	}
 	// set size n
 	// initialize matrix
-	matrix = generate_matrix_int(*n, *n);
+	matrix = gen_matrix_int(*n, *n);
 	if (!matrix)
 	{
 		fclose(fp);
@@ -96,7 +96,7 @@ int **read_list(int *n, char const *filename)
 	// set size n
 
 	// initialize matrix
-	matrix = generate_matrix_int(*n, *n);
+	matrix = gen_matrix_int(*n, *n);
 	if (!matrix)
 	{
 		fclose(fp);
@@ -142,7 +142,7 @@ int **read_matrix(int *a, int *b, char const *filename)
 		fclose(fp);
 		return (NULL);
 	}
-	matrix = generate_matrix_int(*a, *b);
+	matrix = gen_matrix_int(*a, *b);
 	if (!matrix)
 	{
 		fclose(fp);
@@ -184,7 +184,7 @@ double **read_double_matrix(int *r, int *c, char const *filename)
         return NULL;
     }
 
-    matrix = generate_matrix_double(*r, *c);
+    matrix = gen_matrix_double(*r, *c);
     if (!matrix)
     {
         fclose(fp);

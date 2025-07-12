@@ -1,6 +1,6 @@
 #include "bipartite.h"
 
-int	**generate_matrix_int(int r, int c)
+int	**gen_matrix_int(int r, int c)
 {
 	int	**result;
 	int	i;
@@ -32,7 +32,7 @@ int	**generate_matrix_int(int r, int c)
 	return (result);
 }
 
-double **generate_matrix_double(int r, int c)
+double **gen_matrix_double(int r, int c)
 {
 	int i;
 	double **matrix;

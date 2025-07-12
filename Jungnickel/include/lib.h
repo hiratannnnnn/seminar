@@ -19,54 +19,56 @@ extern	clock_t		proc_end;
 
 /* ========= Matrix Operations =========*/
 
-// generate_matrix_int.c
-int			**generate_matrix_int	(int r, int c);									// ok
+// gen_matrix_int.c
+int			**gen_matrix_int			(int r, int c);									// ok
 int			**copy_matrix_int			(int **matrix, int r, int c); 					// ok
 
-// generate_matrix_double.c
-double 		**generate_matrix_double	(int r, int c);
+// gen_matrix_double.c
+double 		**gen_matrix_double			(int r, int c);
 
 // matrix_basic.c
-void		identity_matrix			(int **matrix, int n);
-void		permutation_matrix		(int **matrix, int n, int i, int j);
-void		matrix_multiply			(int **A, int **B, int **C, int n);
-void		swap_vertex				(int **matrix, int n, int i, int j);
+void		identity_matrix				(int **matrix, int n);
+void		permutation_matrix			(int **matrix, int n, int i, int j);
+void		matrix_multiply				(int **A, int **B, int **C, int n);
+void		swap_vertex					(int **matrix, int n, int i, int j);
 
 /* ========= Graph Generation =========*/
 
-// random_bigraph_cost.c
+// rand_bigraph_cost.c
 
 int		 	max_bipartite_matching		(int **adj, int a, int b, int *match_to);
-double 		**generate_random_bigraph_cost(int a, int b);
+double 		**gen_rand_bigraph_cost		(int a, int b);
 
-// random_bigraph.c
-int 		**generate_random_bigraph	(int a, int b, double edge_prob);
+// rand_bigraph.c
+int 		**gen_rand_bigraph			(int a, int b, double edge_prob);
 
-// random_digraph_cost.c
-double 		**generate_random_digraph_dbcost(int n, double max);
-int 		**generate_random_digraph_intcost(int n, int max);
+// rand_digraph_cost.c
+double 		**gen_rand_digraph_dbcost	(int n, double max);
+int 		**gen_rand_digraph_intcost	(int n, int max);
 
-// random_digraph.c
-int 		**generate_random_digraph	(int n, double edge_prob);					// ok
-int			**generate_random_DAG		(int n, double edge_prob);					// ok
+// rand_digraph.c
+int 		**gen_rand_digraph			(int n, double edge_prob);					// ok
+int			**gen_rand_DAG				(int n, double edge_prob);					// ok
 
-// random_euler.c
+// rand_euler.c
 
-int 		**generate_random_euler		(int n, double edge_ratio);
+int 		**gen_rand_euler			(int n, double edge_ratio);
 int			make_eulerian				(int **matrix, int n, double edge_ratio);
 
-// random_undigraph_cost.c
-double 		**generate_random_undigraph_dbcost(int n, double max);
-int			**generate_random_undigraph_intcost(int n, int max);
+// rand_undigraph_cost.c
+double 		**gen_rand_undigraph_dbcost(int n, double max);
+int			**gen_rand_undigraph_intcost(int n, int max);
 
-// random_undigraph.c
-int 		**generate_random_undigraph		(int n, double edge_prob);					// ok, maybe name
+// rand_undigraph.c
+int 		**gen_rand_undigraph		(int n, double edge_prob);					// ok, maybe name
+int 		**gen_rand_conn_undigraph	(int n, double edge_prob);
 
-// random_tree.c
-int			*generate_random_prufer	(int n);					// ok, but maybe still can be generalized
-int 		*count_degrees_from		(const int *prufer, int n);				// can be static
-int 		**generate_random_tree	(int n);										// ok
-void		build_tree_from			(int **matrix, int *prufer, int *degree, int n);// ok
+
+// rand_tree.c
+int			*gen_rand_prufer			(int n);					// ok, but maybe still can be generalized
+int 		*count_degrees_from			(const int *prufer, int n);				// can be static
+int 		**gen_rand_tree				(int n);										// ok
+void		build_tree_from				(int **matrix, int *prufer, int *degree, int n);// ok
 
 /* ========= Graph Analysis =========*/
 
@@ -201,9 +203,12 @@ Node		*pop_first_node		(Node **queue);
 void		enqueue_node		(Node **queue, Node *node);
 Node		*dequeue_node		(Node **queue);
 Edge		*node_get_edge		(Node *node);
+Vertex 		*node_get_vertex	(Node *node);
+void		free_node			(Node *node);
+void		free_nodes			(Node **node);
 
 // utils_math.c
-int			*random_perm		(int n);
+int			*rand_perm		(int n);
 
 // utils_array.c
 int			max_of_array		(int *arr, int n);

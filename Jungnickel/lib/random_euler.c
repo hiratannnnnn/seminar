@@ -37,11 +37,11 @@ int		make_eulerian(int **matrix, int n, double edge_ratio)
 	return 1;
 }
 
-int 	**generate_random_euler(int n, double edge_ratio)
+int 	**gen_rand_euler(int n, double edge_ratio)
 {
 	int **matrix;
 
-	matrix = generate_random_tree(n);
+	matrix = gen_rand_tree(n);
 	if (make_eulerian(matrix, n, edge_ratio) < 0)
 		return (NULL);
 	return matrix;

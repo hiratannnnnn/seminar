@@ -1,7 +1,7 @@
 #include "lib.h"
 
 /**
- * @brief Generates a random directed adjacency matrix and writes it to a file.
+ * @brief Generates a rand directed adjacency matrix and writes it to a file.
  *
  * HAS TO BE FREED
  *
@@ -9,12 +9,12 @@
  * @param edge_prob 0.0～1.0, edge probability between any two vertices
  */
 
-int 	**generate_random_digraph(int n, double edge_prob)
+int 	**gen_rand_digraph(int n, double edge_prob)
 {
 	int **matrix;
 	int i, j;
 
-	matrix = generate_matrix_int(n, n);
+	matrix = gen_matrix_int(n, n);
 	if (!matrix)
 		return (NULL);
 	for (i = 0; i < n; i++)
@@ -27,16 +27,16 @@ int 	**generate_random_digraph(int n, double edge_prob)
 	return (matrix);
 }
 
-int 	**generate_random_DAG(int n, double edge_prob)
+int 	**gen_rand_DAG(int n, double edge_prob)
 {
 	int **matrix;
 	int i, j;
 	int *topnr;
 
-	matrix = generate_matrix_int(n, n);
+	matrix = gen_matrix_int(n, n);
 	if (!matrix)
 		return (NULL);
-	topnr = random_perm(n);
+	topnr = rand_perm(n);
 	for (i = 0; i < n; i++)
 		for (j = 0; j < n; j++)
 			if (topnr[i] < topnr[j])

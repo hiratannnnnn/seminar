@@ -1,12 +1,12 @@
 #include "lib.h"
 
 /**
- * @brief generates n length permutation randomly
+ * @brief gens n length permutation randly
  * 0, 1, ..., n - 1
  * @param n size of array
  */
 
-int		*random_perm(int n)
+int		*rand_perm(int n)
 {
 	int *perm;
 	int i, j, tmp;

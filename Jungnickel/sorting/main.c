@@ -16,7 +16,7 @@ int main(void)
 	int *degree;
 
 	n = 15;
-	matrix = generate_random_undigraph(n, 0.7);
+	matrix = gen_rand_undigraph(n, 0.7);
 	vs = adj_matrix_to_vertices(matrix, n, 1);
 	print_matrix_int(matrix, n, n);
 	print_vertices(vs, n);

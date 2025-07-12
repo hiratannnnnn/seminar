@@ -17,7 +17,7 @@ int main(void)
 	int n;
 
 	n = 24;
-	matrix = generate_random_undigraph(n, 0.3);
+	matrix = gen_rand_undigraph(n, 0.3);
 	write_adjacent_matrix(matrix, n, "a_graph.txt");
 	vs = adj_matrix_to_vertices(matrix, n, 1);
 	print_vertices(vs, n);
@@ -38,7 +38,7 @@ int main(void)
 // 	}
 // 	int r = atoi(av[1]);
 // 	int c = atoi(av[2]);
-// 	int **matrix = generate_matrix_int(r, c); // r * c
+// 	int **matrix = gen_matrix_int(r, c); // r * c
 
 
 // 	print_info();

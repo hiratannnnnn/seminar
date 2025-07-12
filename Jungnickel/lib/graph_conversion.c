@@ -77,7 +77,7 @@ int **vertices_to_adj_matrix(Vertex **vertices, int n)
     Edge *edge;
     int i;
 
-    matrix = generate_matrix_int(n, n);
+    matrix = gen_matrix_int(n, n);
     if (!matrix)
         return (NULL);
     for (i = 0; i < n; i++)
@@ -100,7 +100,7 @@ int **comp_adj_matrix(int **matrix, int n)
     int **comp;
     int i, j;
 
-    comp = generate_matrix_int(n, n);
+    comp = gen_matrix_int(n, n);
     if (!comp)
         return NULL;
     for (i = 0; i < n; i++)
@@ -133,7 +133,7 @@ int     **dbcost_to_adj(int **cost, int n)
     int **matrix;
     int i, j;
 
-    matrix = generate_matrix_int(n, n);
+    matrix = gen_matrix_int(n, n);
     if (!matrix)
         return NULL;
     for (i = 0; i < n; i++)

@@ -91,3 +91,36 @@ Edge	*node_get_edge(Node *node)
 	}
 	return (Edge *)(node->ptr);
 }
+
+Vertex 	*node_get_vertex(Node *node)
+{
+	if (!node || node->type != NODE_TYPE_VERTEX)
+	{
+		printf("Expected Vertex, got type %d\n",
+				node ? (int)node->type : -1);
+		return NULL;
+	}
+	return (Vertex *)node->ptr;
+}
+
+void	free_node(Node *node)
+{
+	if (!node)
+		return ;
+
+	xfree(node, sizeof(Node));
+}
+
+void	free_nodes(Node **node)
+{
+	Node *head, *next;
+
+	head = *node;
+	while (head)
+	{
+		next = head->next;
+		free_node(head);
+		head = next;
+	}
+	*node = NULL;
+}

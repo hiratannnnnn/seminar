@@ -3,4 +3,6 @@
 
 # include "lib.h"
 
+void 	solve_bfs	(Vertex **vs, int s, int n);
+
 #endif

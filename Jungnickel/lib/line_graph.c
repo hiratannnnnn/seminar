@@ -66,7 +66,7 @@ int		**line_graph_from_adj_list(Vertex **vs, int n, char ***names, int *size, in
 
 	head = edge_list_from_adj_list(vs, n, is_undir);
 	len = count_edgenodes(head);	*size = len;
-	matrix = generate_matrix_int(len, len);
+	matrix = gen_matrix_int(len, len);
 	*names = (char **)xmalloc(sizeof(char *) * len);
 	if (!*names)
 	{

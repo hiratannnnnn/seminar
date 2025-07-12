@@ -35,7 +35,8 @@ typedef struct 	PathNode
 
 typedef enum
 {
-	NODE_TYPE_EDGE
+	NODE_TYPE_EDGE,
+    NODE_TYPE_VERTEX
 }			NodeType;
 
 typedef struct Node

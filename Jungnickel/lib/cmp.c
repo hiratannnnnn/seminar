@@ -13,7 +13,7 @@ int cmp_int_asc(int a, int b)
 	return (a - b);
 }
 
-// sort randomly
+// sort randly
 int cmp_int_bogo(int a, int b)
 {
 	return (1 - 2 * ((rand() * (a + b)) % 2));

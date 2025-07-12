@@ -27,15 +27,15 @@ typedef struct 	Hungarian_ctx
 	int 	*used;
 }				Hungarian_ctx;
 
-// generate_matrix.c
-int		**generate_matrix_int			(int r, int c);
-double 	**generate_matrix_double		(int r, int c);
+// gen_matrix.c
+int		**gen_matrix_int			(int r, int c);
+double 	**gen_matrix_double		(int r, int c);
 
-// random_bigraph.c
-int 	**generate_random_bigraph		(int a, int b, double edge_prob);
+// rand_bigraph.c
+int 	**gen_rand_bigraph		(int a, int b, double edge_prob);
 
-// random_bigraph_cost.c
-double 	**generate_random_bigraph_cost	(int a, int b);
+// rand_bigraph_cost.c
+double 	**gen_rand_bigraph_cost	(int a, int b);
 
 // kuhn.c
 int 	max_bipartite_matching			(int **adj, int a, int b, int *match_to);

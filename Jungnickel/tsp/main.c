@@ -17,7 +17,7 @@ int main(void)
 	int n;
 
 	n = 50;
-	matrix = generate_weighted_matrix(n, 3000);
+	matrix = gen_weighted_matrix(n, 3000);
 	if (!matrix)
 		return (1);
 	// print_matrix_int(matrix, n, n);

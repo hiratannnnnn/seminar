@@ -21,7 +21,7 @@ int		main(void)
 
 	n = 30;
 	srand(time(NULL) + clock());
-	save_some_matrix(n, 0.1, generate_random_DAG, "test_graph.txt");
+	save_some_matrix(n, 0.1, gen_rand_DAG, "test_graph.txt");
 
 	matrix = read_adj(&n, "test_graph.txt");
 	vs = adj_matrix_to_vertices(matrix, n, 0); // directed = 0

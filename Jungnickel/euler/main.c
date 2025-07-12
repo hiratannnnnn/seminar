@@ -13,7 +13,7 @@ int main(void)
     int **matrix;
     int n = 12;
 
-    matrix = generate_random_tree(n);
+    matrix = gen_rand_tree(n);
     print_matrix_int(matrix, n, n);
     make_eulerian(matrix, n, 1.0);
 

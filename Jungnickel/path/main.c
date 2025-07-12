@@ -13,10 +13,20 @@ int main(void)
 	proc_start = clock();
 
 	int **matrix;
+	Vertex **vs;
 	int n;
 
+	n = 30;
+	matrix = gen_rand_conn_undigraph(n, 0.0);
+	// write_adjacent_matrix(matrix, n, "bfs_graph.txt");
+	vs = adj_matrix_to_vertices(matrix, n, 1);
+
+	solve_bfs(vs, 0, n);
+	solve_bipart(vs, 0, n);
 
 	// free
+	free_matrix_int(matrix, n, n);
+	free_vertex_array(vs, n);
 
 	print_info();
 	return (0);

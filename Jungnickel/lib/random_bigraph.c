@@ -1,11 +1,11 @@
 #include "lib.h"
 
-int **generate_random_bigraph(int a, int b, double edge_prob)
+int **gen_rand_bigraph(int a, int b, double edge_prob)
 {
 	int **matrix;
 	int i, j;
 
-	matrix = generate_matrix_int(a, b);
+	matrix = gen_matrix_int(a, b);
 	if (!matrix)
 		return NULL;
 	for (i = 0; i < a; i++)

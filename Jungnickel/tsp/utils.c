@@ -1,11 +1,11 @@
 #include "tsp.h"
 
-int **generate_weighted_matrix(int n, int upper)
+int **gen_weighted_matrix(int n, int upper)
 {
 	int **matrix;
 	int i, j;
 
-	matrix = generate_matrix_int(n, n);
+	matrix = gen_matrix_int(n, n);
 	if (!matrix)
 		return NULL;
 	for (i = 0; i < n; i++)

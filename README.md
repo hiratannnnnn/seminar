@@ -86,3 +86,5 @@ just a recommendation for code coloring ;p
 </details>
 
 ---
+
+RANK...ズレそうなので飛ばす

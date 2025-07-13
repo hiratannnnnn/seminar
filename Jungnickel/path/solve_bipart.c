@@ -46,8 +46,6 @@ void	solve_bipart(Vertex **vs, int s, int n)
 	Bipart_ctx ctx;
 	Node *node;
 	Edge *edge;
-	printf("sizeof(Node) %d\n", sizeof(Node));
-	// why does it uses so much memory?
 
 	if (!bipart_init(&ctx, s, n))
 		return ;

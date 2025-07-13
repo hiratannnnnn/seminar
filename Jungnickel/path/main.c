@@ -29,6 +29,7 @@ int main(void)
 	solve_bfs(vs, 0, n);
 	solve_bipart(vs, 0, n);
 	solve_dijkstra(vs, 0, n);
+	solve_dijkstra(vs, 0, n);
 
 	// free
 	free_matrix_int(matrix, n, n);

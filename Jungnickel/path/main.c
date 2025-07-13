@@ -16,16 +16,19 @@ int main(void)
 	Vertex **vs;
 	int n;
 
-	n = 30;
-	matrix = gen_rand_conn_undigraph(n, 0.6);
+	n = 15;
+	// matrix = gen_rand_conn_undigraph(n, 0.6);
+	matrix = gen_rand_undigraph_intcost(n, 30);
 	// matrix = read_adj(&n, "bfs_graph.txt");
 	// write_adjacent_matrix(matrix, n, "bfs_graph.txt");
 	vs = adj_matrix_to_vertices(matrix, n, 1);
+	print_matrix_int(matrix, n, n);
 
 	print_info();
 
 	solve_bfs(vs, 0, n);
 	solve_bipart(vs, 0, n);
+	solve_dijkstra(vs, 0, n);
 
 	// free
 	free_matrix_int(matrix, n, n);

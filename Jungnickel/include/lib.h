@@ -151,6 +151,8 @@ void		ft_putnbr		(long n);											// deprecated
 void		ft_putstr		(char const *str);									// deprecated
 int			sum_matrix		(int **matrix, int r, int c);						// ok
 int			sum_array		(int *arr, int n);									// ok
+int			min_int			(int a, int b);
+int 		max_int			(int a, int b);
 
 // utils_char.c
 void	 	free_array_char				(char **ss, int n);						// ok
@@ -213,6 +215,7 @@ int			*rand_perm		(int n);
 // utils_array.c
 int			max_of_array		(int *arr, int n);
 int			min_of_array		(int *arr, int n);
+int			min_of_array_index	(int *arr, int n);
 
 // utils_print.c
 void 		print_matrix_int	(int **matrix, int r, int c);

@@ -44,3 +44,17 @@ int 	sum_array(int *arr, int n)
 		sum += arr[j];
 	return sum;
 }
+
+int		min_int(int a, int b)
+{
+	if (a < b)
+		return a;
+	return b;
+}
+
+int 	max_int(int a, int b)
+{
+	if (a < b)
+		return b;
+	return a;
+}

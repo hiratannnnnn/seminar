@@ -24,12 +24,11 @@ int main(void)
 	vs = adj_matrix_to_vertices(matrix, n, 1);
 	print_matrix_int(matrix, n, n);
 
-	print_info();
-
-	solve_bfs(vs, 0, n);
-	solve_bipart(vs, 0, n);
-	solve_dijkstra(vs, 0, n);
-	solve_dijkstra(vs, 0, n);
+	// solve_bfs(vs, 0, n);
+	// solve_bipart(vs, 0, n);
+	// solve_dijkstra(vs, 0, n);
+	// solve_dijkstraPQ(vs, 0, n);
+	solve_bellford(vs, 0, n);
 
 	// free
 	free_matrix_int(matrix, n, n);

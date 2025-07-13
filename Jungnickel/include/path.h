@@ -9,7 +9,10 @@ void	solve_bipart(Vertex **vs, int s, int n);
 
 void    solve_dijkstra(Vertex **vs, int s, int n);
 
-void solve_dijkstra(Vertex **vs, int s, int n);
+void solve_dijkstraPQ(Vertex **vs, int s, int n);
+
+void	solve_bellford(Vertex **vs, int s, int n);
+
 
 #include "path.h"
 

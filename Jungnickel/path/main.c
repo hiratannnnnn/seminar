@@ -28,7 +28,8 @@ int main(void)
 	// solve_bipart(vs, 0, n);
 	// solve_dijkstra(vs, 0, n);
 	// solve_dijkstraPQ(vs, 0, n);
-	solve_bellford(vs, 0, n);
+	// solve_bellford(vs, 0, n);
+	solve_floyd(matrix, n);
 
 	// free
 	free_matrix_int(matrix, n, n);

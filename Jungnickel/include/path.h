@@ -13,6 +13,8 @@ void solve_dijkstraPQ(Vertex **vs, int s, int n);
 
 void	solve_bellford(Vertex **vs, int s, int n);
 
+void	solve_floyd(int **cost, int n);
+
 
 #include "path.h"
 

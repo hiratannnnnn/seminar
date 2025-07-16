@@ -14,7 +14,8 @@ void	free_matrix_int(int **matrix, int const r, int const c)
 	if (!matrix)
 		return ;
 	for (i = 0;  i < r; i++)
-		free_array_int(matrix[i], c);
+		if (matrix[i])
+			free_array_int(matrix[i], c);
 	xfree(matrix, sizeof(int *) * r);
 }
 

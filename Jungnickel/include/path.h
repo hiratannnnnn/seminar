@@ -15,6 +15,8 @@ void	solve_bellford(Vertex **vs, int s, int n);
 
 void	solve_floyd(int **cost, int n);
 
+void	solve_negacycle(int **cost, int n);
+
 
 #include "path.h"
 

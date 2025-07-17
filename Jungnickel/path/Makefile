@@ -11,12 +11,13 @@ LIB_OBJS = $(LIB_SRCS:.c=.o)
 
 DISTDIR = ../dist
 BASE_LIB = $(DISTDIR)/lib.a
-OTHER_LIBS = $(filter-out $(BASE_LIB), $(wildcard $(DISTDIR)/*.a))
+THIS_LIB = $(DISTDIR)/lib$(TARGET).a
+OTHER_LIBS = $(filter-out $(BASE_LIB) $(THIS_LIB), $(wildcard $(DISTDIR)/*.a))
 
 all: $(TARGET)
 
 $(TARGET): $(MAIN_OBJ)
-	$(CC) -o $@ $(MAIN_OBJ) $(OTHER_LIBS) $(BASE_LIB) $(LDFLAGS)
+	$(CC) -o $@ $(MAIN_OBJ) $(THIS_LIB) $(OTHER_LIBS) $(BASE_LIB) $(LDFLAGS)
 
 $(MAIN_OBJ): $(MAIN_SRC)
 	$(CC) $(CFLAGS) -c $< -o $@

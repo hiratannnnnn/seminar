@@ -14,16 +14,21 @@ double **gen_rand_undigraph_dbcost(int n, double max)
 	return matrix;
 }
 
-int **gen_rand_undigraph_intcost(int n, int max)
+int **gen_rand_undigraph_intcost(int n, int min, int max)
 {
     int **matrix;
     int i, j;
+    unsigned int size;
+
+    size = max - min + 1;
+    printf("min: %d, max: %d\n", min, max);
+    printf("size: %u\n", size);
 
     matrix = gen_matrix_int(n, n);
     if (!matrix)
         return NULL;
     for (i = 0; i < n; i++)
         for (j = i + 1; j < n; j++)
-            matrix[i][j] = matrix[j][i] = rand() % max + 1;
+            matrix[i][j] = matrix[j][i] = rand() % size + min;
     return matrix;
 }

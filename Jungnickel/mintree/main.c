@@ -19,7 +19,7 @@ int main(void)
 
 	n = 100;
 	// matrix = gen_rand_undigraph_dbcost(n, 1);
-	matrix = gen_rand_undigraph_intcost(n, 30);
+	matrix = gen_rand_undigraph_intcost(n, 1, 30);
 
 	// print_matrix_double(matrix, n, n, 1);
 	// print_matrix_int(matrix, n, n);

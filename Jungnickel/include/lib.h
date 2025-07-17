@@ -57,7 +57,7 @@ int			make_eulerian				(int **matrix, int n, double edge_ratio);
 
 // rand_undigraph_cost.c
 double 		**gen_rand_undigraph_dbcost(int n, double max);
-int			**gen_rand_undigraph_intcost(int n, int max);
+int			**gen_rand_undigraph_intcost(int n, int min, int max);
 
 // rand_undigraph.c
 int 		**gen_rand_undigraph		(int n, double edge_prob);					// ok, maybe name

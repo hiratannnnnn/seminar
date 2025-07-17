@@ -2,28 +2,40 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror -I../include
 LDFLAGS = -lm
 TARGET = knight
-SRCS = main.c board_init.c solve.c
-OBJS = $(SRCS:.c=.o)
-LIBDIR = ../lib
-LIB = $(LIBDIR)/lib.a
+
+MAIN_SRC = main.c
+MAIN_OBJ = main.o
+
+LIB_SRCS = $(filter-out $(MAIN_SRC), $(wildcard *.c))
+LIB_OBJS = $(LIB_SRCS:.c=.o)
+
+DISTDIR = ../dist
+BASE_LIB = $(DISTDIR)/lib.a
+OTHER_LIBS = $(filter-out $(BASE_LIB), $(wildcard $(DISTDIR)/*.a))
 
 all: $(TARGET)
 
-$(TARGET): $(OBJS) $(LIB)
-	$(CC) -o $@ $(OBJS) $(LIB) $(LDFLAGS)
+$(TARGET): $(MAIN_OBJ)
+	$(CC) -o $@ $(MAIN_OBJ) $(OTHER_LIBS) $(BASE_LIB) $(LDFLAGS)
+
+$(MAIN_OBJ): $(MAIN_SRC)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+archive: $(LIB_OBJS)
+	@mkdir -p $(DISTDIR)
+	@if [ -n "$(LIB_OBJS)" ]; then \
+		ar rcs $(DISTDIR)/lib$(TARGET).a $(LIB_OBJS); \
+	fi
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(LIB):
-	$(MAKE) -C $(LIBDIR)
-
 clean:
-	rm -f $(OBJS)
+	rm -f $(MAIN_OBJ) $(LIB_OBJS)
 
 fclean: clean
 	rm -f $(TARGET)
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all archive clean fclean re

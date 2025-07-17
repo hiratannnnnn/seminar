@@ -1,25 +1,30 @@
-DIRS = bipartite dijkstra lib euler hamilton\
-knight sorting mintree path test topsort tsp
+DIRS = lib path
 
-all: $(DIRS)
+all: archives
 
-$(DIRS):
-	$(MAKE) -C $@
+archives:
+	@for dir in $(DIRS); do \
+		$(MAKE) -C $$dir archive; \
+	done
+	@ls -la dist/
 
 clean:
-	for dir in $(DIRS); do $(MAKE) -C $$dir clean; done
+	@for dir in $(DIRS); do $(MAKE) -C $$dir clean; done
 
-fclean:	delres
-	for dir in $(DIRS); do $(MAKE) -C $$dir fclean; done
+distclean:
+	@rm -rf dist
+
+fclean:	delres distclean
+	@for dir in $(DIRS); do $(MAKE) -C $$dir fclean; done
 
 delres:
-	find . -name "result_*" -exec rm -rf {} +
-	find . -name "results_*" -exec rm -rf {} +
-	find . -name "*.out" -exec rm -f {} +
-	find . -name "*.exe" -exec rm -f {} +
-	find . -name "*_graph.txt" -exec rm -f {} +
-	find . -name "*_list.txt" -exec rm -f {} +
-	find . -name "*_path.txt" -exec rm -f {} +
+	@find . -name "result_*" -exec rm -rf {} +
+	@find . -name "results_*" -exec rm -rf {} +
+	@find . -name "*.out" -exec rm -f {} +
+	@find . -name "*.exe" -exec rm -f {} +
+	@find . -name "*_graph.txt" -exec rm -f {} +
+	@find . -name "*_list.txt" -exec rm -f {} +
+	@find . -name "*_path.txt" -exec rm -f {} +
 
 re: fclean all
 

@@ -1,15 +1,15 @@
 #!/bin/bash
 if [ $# -ne 1 ]; then
-    echo "Usage: $0 <dirname>"
-    exit 1
+	echo "Usage: $0 <dirname>"
+	exit 1
 fi
 
 DIR="$1"
 DIR_UPPER=$(echo "$DIR" | tr '[:lower:]' '[:upper:]')
 
 if [ -d "$DIR" ]; then
-    echo "Error: Directory $DIR already exists. Aborting to prevent overwrite."
-    exit 1
+	echo "Error: Directory $DIR already exists. Aborting to prevent overwrite."
+	exit 1
 fi
 
 mkdir "$DIR"
@@ -28,31 +28,42 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror -I../include
 LDFLAGS = -lm
 TARGET = $DIR
-SRCS = \$(wildcard *.c)
-OBJS = \$(SRCS:.c=.o)
-LIBDIR = ../lib
-LIB = \$(LIBDIR)/lib.a
 
-all: \$(TARGET)
+MAIN_SRC = main.c
+MAIN_OBJ = main.o
 
-\$(TARGET): \$(OBJS) \$(LIB)
-	\$(CC) -o \$@ \$(OBJS) \$(LIB) \$(LDFLAGS)
+LIB_SRCS = \$(filter-out \$(MAIN_SRC), \$(wildcard *.c))
+LIB_OBJS = \$(LIB_SRCS:.c=.o)
+
+DISTDIR = ../dist
+ALL_LIBS = \$(wildcard \$(DISTDIR)/*.a)
+
+all: archive \$(TARGET)
+
+\$(TARGET): \$(MAIN_OBJ)
+	\$(CC) -o \$@ \$(MAIN_OBJ) \$(ALL_LIBS) \$(LDFLAGS)
+
+\$(MAIN_OBJ): \$(MAIN_SRC)
+	\$(CC) \$(CFLAGS) -c \$< -o \$@
+
+archive: \$(LIB_OBJS)
+	@mkdir -p \$(DISTDIR)
+	@if [ -n "\$(LIB_OBJS)" ]; then \\
+		ar rcs \$(DISTDIR)/lib\$(TARGET).a \$(LIB_OBJS); \\
+	fi
 
 %.o: %.c
 	\$(CC) \$(CFLAGS) -c \$< -o \$@
 
-\$(LIB):
-	\$(MAKE) -C \$(LIBDIR)
-
 clean:
-	rm -f \$(OBJS)
+	rm -f \$(MAIN_OBJ) \$(LIB_OBJS)
 
 fclean: clean
 	rm -f \$(TARGET)
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all archive clean fclean re
 EOF
 
 
@@ -67,7 +78,7 @@ clock_t		proc_end;
 
 int main(void)
 {
-    setvbuf(stdout, NULL, _IONBF, 0);
+	setvbuf(stdout, NULL, _IONBF, 0);
 	srand((unsigned int)time(NULL));
 	proc_start = clock();
 

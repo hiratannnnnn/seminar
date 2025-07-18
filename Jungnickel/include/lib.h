@@ -43,8 +43,8 @@ double 		**gen_rand_bigraph_cost		(int a, int b);
 int 		**gen_rand_bigraph			(int a, int b, double edge_prob);
 
 // rand_digraph_cost.c
-double 		**gen_rand_digraph_dbcost	(int n, double max);
-int 		**gen_rand_digraph_intcost	(int n, int max);
+double 		**gen_rand_digraph_dbcost	(int n, double min, double max, double edge_prob);
+int 		**gen_rand_digraph_intcost	(int n, int min, int max, double edge_prob);
 
 // rand_digraph.c
 int 		**gen_rand_digraph			(int n, double edge_prob);					// ok
@@ -56,8 +56,8 @@ int 		**gen_rand_euler			(int n, double edge_ratio);
 int			make_eulerian				(int **matrix, int n, double edge_ratio);
 
 // rand_undigraph_cost.c
-double 		**gen_rand_undigraph_dbcost(int n, double max);
-int			**gen_rand_undigraph_intcost(int n, int min, int max);
+double 		**gen_rand_undigraph_dbcost(int n, double min, double max, double edge_prob);
+int			**gen_rand_undigraph_intcost(int n, int min, int max, double edge_prob);
 
 // rand_undigraph.c
 int 		**gen_rand_undigraph		(int n, double edge_prob);					// ok, maybe name

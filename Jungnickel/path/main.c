@@ -18,12 +18,15 @@ int main(void)
 
 	n = 5;
 	// matrix = gen_rand_conn_undigraph(n, 0.6);
-	matrix = gen_rand_undigraph_intcost(n, -3, 3);
+	// matrix = gen_rand_undigraph_intcost(n, 1, 50, 0.8);
+	matrix = gen_rand_digraph_intcost(n, -1, 30, 0.7);
 	// matrix = read_adj(&n, "bfs_graph.txt");
 	// write_adjacent_matrix(matrix, n, "bfs_graph.txt");
 	vs = adj_matrix_to_vertices(matrix, n, 1);
-	print_matrix_int(matrix, n, n);
 	// matrix[0][1] = matrix[1][0] = -50;
+	// matrix[0][1] = matrix[1][0] = -1;
+	// matrix[0][2] = matrix[2][0] = 1;
+	print_matrix_int(matrix, n, n);
 
 	// solve_bfs(vs, 0, n);
 	// solve_bipart(vs, 0, n);

@@ -17,7 +17,7 @@ int main(void)
 	Vertex **vs;
 	int n;
 
-	n = 100;
+	n = 10;
 	// matrix = gen_rand_undigraph_dbcost(n, 0.0, 1.0, 0.8);
 	matrix = gen_rand_undigraph_intcost(n, 1, 30, 0.8);
 
@@ -29,17 +29,21 @@ int main(void)
 
 	// print_vertices(vs, n);
 	proc_start = clock();
+	printf("\nConducting MINTREE\n\n");
 	solve(vs, n);
 	reset_labels(vs, n);	print_info();	sleep(3);
 
+	printf("\nConducting PRIM\n\n");
 	proc_start = clock();
 	solve_prim(vs, n);
 	reset_labels(vs, n);	print_info();	sleep(3);
 
+	printf("\nConducting KRUSKAL\n\n");
 	proc_start = clock();
 	solve_kruskal(vs, n);
 	reset_labels(vs, n);	print_info();	sleep(3);
 
+	printf("\nConducting BORUVKA\n\n");
 	proc_start = clock();
 	solve_boruvka(vs, n);
 	reset_labels(vs, n);	print_info();

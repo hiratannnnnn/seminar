@@ -27,7 +27,7 @@ void	solve_prim(Vertex **vs, int n)
 	}
 	while (count_pathnodes(S) < n)
 	{
-		// printf("[DEBUG] current S is %d length\n", (int)count_pathnodes(S));
+		printf("[DEBUG] current S is %d length\n", (int)count_pathnodes(S));
 		min.min_cost = DBL_MAX;
 		min.v = NULL;
 		for (i = 0; i < n; i++)
@@ -39,10 +39,10 @@ void	solve_prim(Vertex **vs, int n)
 				min.v = vs[i];
 			}
 		}
-		// printf("[DEBUG] merge S and %d\n", min.v->id);
+		printf("[DEBUG] merge S and %d\n", min.v->id);
 		node = create_pathnode(vs[min.v->id]);
 		append_pathnode(&S, node);
-		// print_pathnode(S);
+		print_pathnode(S);
 		if (node->v->id != 0)
 		{
 			// printf("[DEBUG] adding edge %d -> %d\n",

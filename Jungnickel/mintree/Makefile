@@ -14,7 +14,7 @@ BASE_LIB = $(DISTDIR)/lib.a
 THIS_LIB = $(DISTDIR)/lib$(TARGET).a
 OTHER_LIBS = $(filter-out $(BASE_LIB) $(THIS_LIB), $(wildcard $(DISTDIR)/*.a))
 
-all: $(TARGET)
+all: ar $(TARGET)
 
 $(TARGET): $(MAIN_OBJ)
 	$(CC) -o $@ $(MAIN_OBJ) $(THIS_LIB) $(OTHER_LIBS) $(BASE_LIB) $(LDFLAGS)
@@ -22,7 +22,7 @@ $(TARGET): $(MAIN_OBJ)
 $(MAIN_OBJ): $(MAIN_SRC)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-archive: $(LIB_OBJS)
+ar: $(LIB_OBJS)
 	@mkdir -p $(DISTDIR)
 	@if [ -n "$(LIB_OBJS)" ]; then \
 		ar rcs $(DISTDIR)/lib$(TARGET).a $(LIB_OBJS); \

@@ -110,6 +110,8 @@ void	solve_boruvka(Vertex **vs, int n)
 		return ;
 
 	// printf("[DEBUG] finished initialization.\n");
+	print_array_pathnode(ctx.ps, n);
+	printf("\n");
 	queue = NULL;
 	while (ctx.m_count > 1)
 	{
@@ -146,6 +148,8 @@ void	solve_boruvka(Vertex **vs, int n)
 		}
 		merge_node_queue(&queue, vs, &ctx);
 		// printf("[DEBUG] merged successfully.\n");
+		print_array_pathnode(ctx.ps, n);
+		printf("\n");
 	}
 	// print_edgenode(ctx.T);
 	free_pathnode_array(ctx.ps, n);

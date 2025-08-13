@@ -187,6 +187,18 @@ void 	print_pathnode(PathNode *head)
 	printf("\n");
 }
 
+void		print_array_pathnode(PathNode **ps, int n)
+{
+	int i;
+
+	for (i = 0; i < n; i++)
+	{
+		printf("%d :", i);
+		print_pathnode(ps[i]);
+	}
+}
+
+
 void print_edgenode(EdgeNode *head)
 {
 	double cost;

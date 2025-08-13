@@ -226,6 +226,7 @@ void		print_vertex		(Vertex *v);
 void		print_vertices		(Vertex **vs, int n);
 void		print_edge_list		(Edge *head);
 void 		print_pathnode		(PathNode *head);
+void		print_array_pathnode(PathNode **ps, int n);
 void 		print_edgenode		(EdgeNode *head);
 void		print_array_char	(char **ss, int n);
 void		print_info			(	);

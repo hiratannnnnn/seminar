@@ -28,27 +28,11 @@ int main(void)
 	vs = adj_matrix_to_vertices(matrix, n, 0);
 
 	// print_vertices(vs, n);
+	printf("\nConducting KRUSKAL\n\n");
 	proc_start = clock();
-	printf("\nConducting MINTREE\n\n");
-	solve(vs, n);
-	reset_labels(vs, n);	print_info();	sleep(3);
+	solve_kruskal(vs, n);
+	reset_labels(vs, n);
 
-	printf("\nConducting PRIM\n\n");
-	proc_start = clock();
-	solve_prim(vs, n);
-	reset_labels(vs, n);	print_info();	sleep(3);
-
-	// printf("\nConducting KRUSKAL\n\n");
-	// proc_start = clock();
-	// solve_kruskal(vs, n);
-	// reset_labels(vs, n);	print_info();	sleep(3);
-
-	printf("\nConducting BORUVKA\n\n");
-	proc_start = clock();
-	solve_boruvka(vs, n);
-	reset_labels(vs, n);	print_info();
-
-	// free
 
 	// free_matrix_double(matrix, n, n);
 	free_matrix_int(matrix, n, n);

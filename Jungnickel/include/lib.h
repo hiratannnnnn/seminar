@@ -204,8 +204,8 @@ void		append_node			(Node **queue, Node *node);
 Node		*pop_first_node		(Node **queue);
 void		enqueue_node		(Node **queue, Node *node);
 Node		*dequeue_node		(Node **queue);
-Edge		*node_get_edge		(Node *node);
-Vertex 		*node_get_vertex	(Node *node);
+Edge		*node_get_edge		(const Node *node);
+Vertex 		*node_get_vertex	(const Node *node);
 void		free_node			(Node *node);
 void		free_nodes			(Node **node);
 

@@ -47,6 +47,16 @@ typedef struct Node
 	struct Node *next;
 }				Node;
 
+typedef int (*HeapCmp)(const void *a, const void *b);
+
+typedef struct
+{
+    void **array;
+    int size;
+    int capacity;
+    HeapCmp cmp;
+}       Heap;
+
 typedef struct Euler_ctx
 {
     Vertex      **vs;

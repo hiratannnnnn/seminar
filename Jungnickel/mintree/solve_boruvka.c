@@ -12,7 +12,7 @@ typedef struct Boruvka_ctx
 static void boruvka_free(int n, Boruvka_ctx *ctx)
 {
 	if (ctx->ps)
-		xfree(ctx->ps, sizeof(PathNode *) * n);
+		free_pathnode_array(ctx->ps, n);
 	if (ctx->T)
 		free_edgenode(&(ctx->T));
 	if (ctx->M)
@@ -40,7 +40,7 @@ static int boruvka_init(Vertex **vs, int n, Boruvka_ctx *ctx)
 		ctx->ps[i] = create_pathnode(vs[i]);
 		if (!(ctx->ps[i]))
 		{
-			free_pathnode_array(ctx->ps, i);
+			// free_pathnode_array(ctx->ps, i);
 			boruvka_free(n, ctx);
 			return (0);
 		}
@@ -140,7 +140,7 @@ void	solve_boruvka(Vertex **vs, int n)
 			node = create_node(ctx.min.min_edge, NODE_TYPE_EDGE);
 			if (!node)
 			{
-				free_pathnode_array(ctx.ps, n);
+				// free_pathnode_array(ctx.ps, n);
 				boruvka_free(n, &ctx);
 				return ;
 			}
@@ -152,6 +152,6 @@ void	solve_boruvka(Vertex **vs, int n)
 		printf("\n");
 	}
 	// print_edgenode(ctx.T);
-	free_pathnode_array(ctx.ps, n);
+	// free_pathnode_array(ctx.ps, n);
 	boruvka_free(n, &ctx);
 }

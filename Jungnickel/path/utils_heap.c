@@ -2,8 +2,14 @@
 
 Heap *heap_create(int capacity, HeapCmp cmp)
 {
-    Heap *h = xmalloc(sizeof(Heap));
+    Heap *h;
+
+    h = xmalloc(sizeof(Heap));
+    if (!h)
+        return NULL;
     h->array = xmalloc(sizeof(void *) * capacity);
+    if (!h->array)
+        return (free_heap_node(h, capacity), NULL);
     h->size = 0;
     h->capacity = capacity;
     h->cmp = cmp;
@@ -54,8 +60,62 @@ void *heap_pop(Heap *h)
     return min;
 }
 
-void    heap_free(Heap *h, int capacity)
+void    free_heap_node(Heap *h, int capacity)
 {
-    xfree(h->array, sizeof(void *) * capacity);
+    int i;
+    Node *node;
+
+    if (h->array)
+    {
+        for (i = 0; i < h->size; i++)
+        {
+            node = (Node *)h->array[i];
+            if (node)
+                free_node(node);
+        }
+        xfree(h->array, sizeof(void *) * capacity);
+    }
     xfree(h, sizeof(Heap));
+}
+
+void *heap_peek(Heap *h)
+{
+    if (h->size == 0)
+    {
+        return NULL;
+    }
+    return h->array[0];
+}
+
+void heap_clear(Heap *h)
+{
+    int i;
+    Node *node;
+
+    for (i = 0; i < h->size; i++)
+    {
+        node = (Node *)h->array[i];
+        if (node)
+            free_node(node);
+    }
+    h->size = 0;
+}
+
+int heap_cmp_edgecost(const void *a, const void *b)
+{
+    const Node *n_a = (const Node *)a;
+    const Node *n_b = (const Node *)b;
+    Edge *e_a, *e_b;
+
+    e_a = node_get_edge(n_a);
+    e_b = node_get_edge(n_b);
+
+    if (!e_a || !e_b)
+        return (0);
+    if (e_a->cost < e_b->cost)
+        return (-1);
+    else if (e_a->cost > e_b->cost)
+        return (1);
+    else
+        return (0);
 }

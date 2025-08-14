@@ -21,7 +21,7 @@ static void dijkstraPQ_free(DijkstraPQ_ctx *ctx, int n)
 {
     if (ctx->dist) free_array_int(ctx->dist, n);
     if (ctx->T) free_array_int(ctx->T, n);
-    if (ctx->queue) heap_free(ctx->queue, 3);
+    if (ctx->queue) free_heap_node(ctx->queue, 3);
 }
 
 static int dijkstraPQ_init(DijkstraPQ_ctx *ctx, int n)

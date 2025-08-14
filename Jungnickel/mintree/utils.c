@@ -36,5 +36,5 @@ void free_pathnode_array(PathNode **ps, int n)
 	for (i = 0; i < n; i++)
 		if (ps[i])
 			free_pathnode(&ps[i]);
-	// xfree(ps, sizeof(PathNode *) * n);
+	xfree(ps, sizeof(PathNode *) * n);
 }

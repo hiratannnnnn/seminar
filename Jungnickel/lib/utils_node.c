@@ -81,7 +81,7 @@ Node	*dequeue_node(Node **queue)
 	return pop_first_node(queue);
 }
 
-Edge	*node_get_edge(Node *node)
+Edge	*node_get_edge(const Node *node)
 {
 	if (!node || node->type != NODE_TYPE_EDGE)
 	{
@@ -92,7 +92,7 @@ Edge	*node_get_edge(Node *node)
 	return (Edge *)(node->ptr);
 }
 
-Vertex 	*node_get_vertex(Node *node)
+Vertex 	*node_get_vertex(const Node *node)
 {
 	if (!node || node->type != NODE_TYPE_VERTEX)
 	{

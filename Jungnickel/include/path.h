@@ -20,20 +20,12 @@ void	solve_negacycle(int **cost, int n);
 
 #include "path.h"
 
-typedef int (*HeapCmp)(const void *a, const void *b);
-
-typedef struct
-{
-    void **array;
-    int size;
-    int capacity;
-    HeapCmp cmp;
-}       Heap;
-
 Heap *heap_create(int capacity, HeapCmp cmp);
 void heap_push(Heap *h, void *item);
 void *heap_pop(Heap *h);
-void    heap_free(Heap *h, int capacity);
-
+void    free_heap_node(Heap *h, int capacity);
+void *heap_peek(Heap *h);
+void heap_clear(Heap *h);
+int heap_cmp_edgecost(const void *a, const void *b);
 
 #endif

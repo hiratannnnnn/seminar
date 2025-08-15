@@ -29,7 +29,7 @@ int main(void)
 
 	// print_vertices(vs, n);
 	printf("\nConducting KRUSKAL\n\n");
-	proc_start = clock();
+	reset_labels(vs, n);
 	solve_kruskal(vs, n);
 	reset_labels(vs, n);
 

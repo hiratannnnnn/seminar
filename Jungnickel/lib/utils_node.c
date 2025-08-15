@@ -12,7 +12,6 @@ Node 	*create_node(void *ptr, NodeType type)
 	node = (Node *)xmalloc(sizeof(Node));
 	if (!node)
 		return NULL;
-
 	node->ptr = ptr;
 	node->type = type;
 	node->prev = NULL;

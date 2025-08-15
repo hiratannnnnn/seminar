@@ -64,11 +64,6 @@ void	solve_kruskal(Vertex **vs, int n)
 	while (ctx.h->size > 0)
 	{
 		cur = heap_pop(ctx.h);
-		if (!cur)
-		{
-			printf("[ERROR] NULL unexpected.\n");
-			break;
-		}
 		edge = node_get_edge(cur);
 		u = vs[edge->from]->label;
 		v = vs[edge->to]->label;

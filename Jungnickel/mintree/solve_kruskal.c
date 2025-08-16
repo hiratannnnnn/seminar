@@ -38,16 +38,16 @@ static int kruskal_init(Vertex **vs, int n, Kruskal_ctx *ctx)
 		if (!ctx->ps[i])
 			return (kruskal_free(n, ctx), 0);
 		edge = vs[i]->incidence;
-		while (edge)
+		while (edge)										// Alg (2)
 		{
 			node = create_node(edge, NODE_TYPE_EDGE);
 			if (!node)
 				return (kruskal_free(n, ctx), 0);
-			heap_push(ctx->h, node);
+			heap_push(ctx->h, node);						// Alg (3)
 			edge = edge->next;
 		}
 	}
-	ctx->T = NULL;
+	ctx->T = NULL;											// Alg (1)
 	return (1);
 }
 
@@ -61,28 +61,31 @@ void	solve_kruskal(Vertex **vs, int n)
 
 	if (!kruskal_init(vs, n, &ctx))
 		return ;
-	while (ctx.h->size > 0)
+	while (ctx.h->size > 0)									// Alg (4)
 	{
-		cur = heap_pop(ctx.h);
+		cur = heap_pop(ctx.h);								// Alg (5)
 		edge = node_get_edge(cur);
-		u = vs[edge->from]->label;
-		v = vs[edge->to]->label;
-		if (u != v)
+		printf("edge %d -> %d, cost = %f\n", edge->from, edge->to, edge->cost);
+		u = vs[edge->from]->label;							// Alg (6)
+		v = vs[edge->to]->label;							// Alg (7)
+		if (u != v)											// Alg (8)
 		{
 			printf("[DEBUG] merging %d and %d\n", u, v);
-			merge_pathnode(&ctx.ps[u], &ctx.ps[v]);
+			merge_pathnode(&ctx.ps[u], &ctx.ps[v]);			// Alg (8-1)
 			node = ctx.ps[u];
 			while (node)
 			{
 				node->v->label = u;
 				node = node->next;
 			}
-			append_edgenode(&ctx.T, create_edgenode(edge));
+			append_edgenode(&ctx.T, create_edgenode(edge));	// Alg (8-2)
 			print_array_pathnode(ctx.ps, n);
 		}
 		free_node(cur);
 		if (count_edgenodes(ctx.T) == n - 1)
 		{
+			printf("\n[Final] chosen edges are:\n");
+			print_edgenode(ctx.T);
 			kruskal_free(n, &ctx);
 			return ;
 		}

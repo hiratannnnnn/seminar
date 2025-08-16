@@ -109,7 +109,6 @@ int heap_cmp_edgecost(const void *a, const void *b)
 
     e_a = node_get_edge(n_a);
     e_b = node_get_edge(n_b);
-
     if (!e_a || !e_b)
         return (printf("got null \n"), 0);
     if (e_a->cost < e_b->cost)
@@ -117,5 +116,5 @@ int heap_cmp_edgecost(const void *a, const void *b)
     else if (e_a->cost > e_b->cost)
         return (1);
     else
-        return (0);
+        return (e_a->id - e_a->id);
 }

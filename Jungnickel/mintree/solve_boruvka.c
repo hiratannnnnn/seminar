@@ -31,20 +31,16 @@ static int boruvka_init(Vertex **vs, int n, Boruvka_ctx *ctx)
 	ctx->M = (int *)xmalloc(sizeof(int) * n);
 	if (!ctx->ps || !ctx->M)
 		return (boruvka_free(n, ctx), 0);
-	ctx->T = NULL;
+	ctx->T = NULL;											// Alg (2-1)
 	ctx->m_count = n;
 	ctx->min.min_cost = DBL_MAX;
 	ctx->min.min_edge = NULL;
-	for (i = 0; i < n; i++)
+	for (i = 0; i < n; i++)									// Alg (1)
 	{
 		ctx->ps[i] = create_pathnode(vs[i]);
 		if (!(ctx->ps[i]))
-		{
-			// free_pathnode_array(ctx->ps, i);
-			boruvka_free(n, ctx);
-			return (0);
-		}
-		ctx->M[i] = 1;
+			return (boruvka_free(n, ctx), 0);
+		ctx->M[i] = 1;										// Alg (2-2)
 	}
 	return (1);
 }
@@ -76,19 +72,18 @@ static void	merge_node_queue(Node **queue, Vertex **vs, Boruvka_ctx *ctx)
 	Edge *edge;
 	int u, v;
 
-	// printf("[merge_node_queue] node length: %d\n", get_node_length(*queue));
 	node = dequeue_node(queue);
-	while (node)
+	while (node)		// supposed to be conducted while all vertices
 	{
 		edge = node_get_edge(node);
 		u = vs[edge->from]->label;
-		v = vs[edge->to]->label;
+		v = vs[edge->to]->label;							// Alg (6)
 		if (u != v)
 		{
 			if (partner_check(edge, ctx->T))
 			{
-				append_edgenode(&ctx->T, create_edgenode(edge));
-				merge_pathnode(&ctx->ps[u], &ctx->ps[v]);
+				append_edgenode(&ctx->T, create_edgenode(edge));	// Alg(7)
+				merge_pathnode(&ctx->ps[u], &ctx->ps[v]);	// Alg (9)
 				update_labels(ctx->ps[u], u);
 				ctx->M[v] = 0;
 				ctx->m_count--;
@@ -108,17 +103,15 @@ void	solve_boruvka(Vertex **vs, int n)
 
 	if (!boruvka_init(vs, n, &ctx))
 		return ;
-
-	// printf("[DEBUG] finished initialization.\n");
 	print_array_pathnode(ctx.ps, n);
 	printf("\n");
 	queue = NULL;
-	while (ctx.m_count > 1)
+	while (ctx.m_count > 1)									// Alg (3)
 	{
 		// print_array_int(ctx.M, n, 2);
 		for (i = 0; i < n; i++)
 		{
-			if (!ctx.M[i])
+			if (!ctx.M[i])									// Alg (4)
 				continue;
 			ctx.min.min_cost = DBL_MAX;
 			ctx.min.min_edge = NULL;
@@ -126,11 +119,11 @@ void	solve_boruvka(Vertex **vs, int n)
 			{
 				if (!is_in_Vi(ctx.ps[i], j))
 					continue;
-				edge = vs[j]->incidence;
+				edge = vs[j]->incidence;					// all j in con. comp. U
 				while (edge)
 				{
 					if (!is_in_Vi(ctx.ps[i], edge->to) && ctx.min.min_cost > edge->cost)
-					{
+					{										// Alg (5)
 						ctx.min.min_cost = edge->cost;
 						ctx.min.min_edge = edge;
 					}
@@ -140,18 +133,14 @@ void	solve_boruvka(Vertex **vs, int n)
 			node = create_node(ctx.min.min_edge, NODE_TYPE_EDGE);
 			if (!node)
 			{
-				// free_pathnode_array(ctx.ps, n);
 				boruvka_free(n, &ctx);
 				return ;
 			}
 			append_node(&queue, node);
 		}
-		merge_node_queue(&queue, vs, &ctx);
-		// printf("[DEBUG] merged successfully.\n");
+		merge_node_queue(&queue, vs, &ctx);					// Alg (9)
 		print_array_pathnode(ctx.ps, n);
-		printf("\n");
 	}
-	// print_edgenode(ctx.T);
-	// free_pathnode_array(ctx.ps, n);
+	print_edgenode(ctx.T);
 	boruvka_free(n, &ctx);
 }

@@ -6,63 +6,84 @@ typedef struct	PrimInfo
 	Edge 	*edge;
 }				PrimInfo;
 
-void	solve_prim(Vertex **vs, int n)
+typedef struct	Prim_ctx
 {
-	PrimInfo *g;
-	PathNode *S, *node;
+	PrimInfo *cost_to_S;
+	PathNode *S;
 	EdgeNode *T;
+}				Prim_ctx;
+
+void	prim_free(Prim_ctx *ctx, int n)
+{
+	if (ctx->cost_to_S)
+		xfree(ctx->cost_to_S, sizeof(PrimInfo) * n);
+	if (ctx->S)
+		free_pathnode(&ctx->S);
+	if (ctx->T)
+		free_edgenode(&ctx->T);
+}
+
+
+/**
+ * @return 0 memory allocation error
+ * @return 1 successful
+ */
+int		prim_init(Prim_ctx *ctx, int s, int n)
+{
+	ctx->cost_to_S = (PrimInfo *)xmalloc(sizeof(PrimInfo) * n);
+	if (!ctx->cost_to_S)
+		return (0);
+	for (int i = 0; i < n; i++)
+	{
+		if (i == s)
+			ctx->cost_to_S[s].min_cost = 0.0;
+		else
+			ctx->cost_to_S[i].min_cost = DBL_MAX;
+		ctx->cost_to_S[i].edge = NULL;
+	}
+	ctx->S = NULL;
+	ctx->T = NULL;
+	return (1);
+}
+
+void	solve_prim(Vertex **vs, int s, int n)
+{
+	Prim_ctx ctx;
+	PathNode *node;
 	Edge *edge;
-	int i;
 	Min_V min;
 
-	g = (PrimInfo *)xmalloc(sizeof(PrimInfo) * n);
-	S = NULL;
-	T = NULL;
-	g[0].min_cost = 0.0;
-	g[0].edge = NULL;
-	for (i = 1; i < n; i++)
+	if (!prim_init(&ctx, s, n))
+		return ;
+	while (count_pathnodes(ctx.S) < n)
 	{
-		g[i].min_cost = DBL_MAX;
-		g[i].edge = NULL;
-	}
-	while (count_pathnodes(S) < n)
-	{
-		printf("[DEBUG] current S is %d length\n", (int)count_pathnodes(S));
 		min.min_cost = DBL_MAX;
 		min.v = NULL;
-		for (i = 0; i < n; i++)
+		for (int i = 0; i < n; i++)
 		{
-			if (!is_in_Vi(S, i) && g[i].min_cost < min.min_cost)
+			if (!is_in_Vi(ctx.S, i) && ctx.cost_to_S[i].min_cost < min.min_cost)
 			{
-				// printf("[DEBUG] update min to %d which g[i] is %f\n", i, g[i].min_cost);
-				min.min_cost = g[i].min_cost;
+				min.min_cost = ctx.cost_to_S[i].min_cost;
 				min.v = vs[i];
 			}
 		}
 		printf("[DEBUG] merge S and %d\n", min.v->id);
 		node = create_pathnode(vs[min.v->id]);
-		append_pathnode(&S, node);
-		print_pathnode(S);
+		append_pathnode(&ctx.S, node);
+		print_pathnode(ctx.S);
 		if (node->v->id != 0)
-		{
-			// printf("[DEBUG] adding edge %d -> %d\n",
-					// g[min.v->id].edge->from, g[min.v->id].edge->to);
-			append_edgenode(&T, create_edgenode(g[min.v->id].edge));
-		}
-
+			append_edgenode(&ctx.T, create_edgenode(ctx.cost_to_S[min.v->id].edge));
 		edge = min.v->incidence;
 		while (edge)
 		{
-			if (!is_in_Vi(S, edge->to) && g[edge->to].min_cost > edge->cost)
+			if (!is_in_Vi(ctx.S, edge->to) && ctx.cost_to_S[edge->to].min_cost > edge->cost)
 			{
-				g[edge->to].min_cost = edge->cost;
-				g[edge->to].edge = edge;
+				ctx.cost_to_S[edge->to].min_cost = edge->cost;
+				ctx.cost_to_S[edge->to].edge = edge;
 			}
 			edge = edge->next;
 		}
 	}
-	// print_edgenode(T);
-	xfree(g, sizeof(PrimInfo) * n);
-	free_pathnode(&S);
-	free_edgenode(&T);
+	print_edgenode(ctx.T);
+	prim_free(&ctx, n);
 }

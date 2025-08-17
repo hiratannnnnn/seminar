@@ -12,30 +12,22 @@ int main(void)
 	srand((unsigned int)time(NULL));
 	proc_start = clock();
 
-	// double **matrix;
 	int **matrix;
 	Vertex **vs;
 	int n;
 
-	n = 20;
-	// matrix = gen_rand_undigraph_dbcost(n, 0.0, 1.0, 0.8);
+	n = 10;
 	matrix = gen_rand_undigraph_intcost(n, 1, 30, 0.8);
 
-	// print_matrix_double(matrix, n, n, 1);
-	// print_matrix_int(matrix, n, n);
+	print_matrix_int(matrix, n, n);
 
-	// vs = cost_matrix_to_vertices(matrix, n, 0);
 	vs = adj_matrix_to_vertices(matrix, n, 0);
 
-	// print_vertices(vs, n);
-	proc_start = clock();
-	printf("\nConducting MINTREE\n\n");
-	solve(vs, n);
-	reset_labels(vs, n);	print_info();	sleep(3);
+	print_vertices(vs, n);
 
 	printf("\nConducting PRIM\n\n");
 	proc_start = clock();
-	solve_prim(vs, n);
+	solve_prim(vs, 0, n);
 	reset_labels(vs, n);	print_info();	sleep(3);
 
 	printf("\nConducting KRUSKAL\n\n");
@@ -48,11 +40,7 @@ int main(void)
 	solve_boruvka(vs, n);
 	reset_labels(vs, n);	print_info();
 
-	// free
-
-	// free_matrix_double(matrix, n, n);
 	free_matrix_int(matrix, n, n);
-
 	free_vertex_array(vs, n);
 	print_info();
 	return (0);

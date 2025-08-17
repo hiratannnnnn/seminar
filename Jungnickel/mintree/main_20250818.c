@@ -20,7 +20,9 @@ int main(void)
 	n = 10;
 	// matrix = gen_rand_undigraph_dbcost(n, 0.0, 1.0, 0.8);
 	matrix = gen_rand_undigraph_intcost(n, 1, 30, 0.8);
-	matrix2 = read_adj(&n2, "ex.txt");
+	// matrix2 = read_adj(&n2, "ex_same.txt");
+	n2 = 5;
+	matrix2 = gen_rand_undigraph_intcost(n2, 1, 2, 1.0);
 
 	// print_matrix_double(matrix, n, n, 1);
 	// print_matrix_int(matrix, n, n);
@@ -29,13 +31,20 @@ int main(void)
 	vs = adj_matrix_to_vertices(matrix, n, 0);
 	vs2 =  adj_matrix_to_vertices(matrix2, n2, 0);
 
+	for (int i = 0; i < n2; i++)
+		sort_list(&vs2[i]->incidence, cmp_int_asc);
+	// sort_list_cyclic(vs2, n2, 1);
+
 	printf("\nConducting KRUSKAL\n\n");
 	print_matrix_int(matrix, n, n);
 	reset_labels(vs, n);
 	solve_boruvka(vs, n);
+
+	printf("\nConducting KRUSKAL\n\n");
+	print_vertices(vs2, n2);
 	print_matrix_int(matrix2, n2, n2);
+	solve_boruvka(vs2, n2);
 	reset_labels(vs2, n2);
-	solve_kruskal(vs2, n2);
 
 	// free_matrix_double(matrix, n, n);
 	free_matrix_int(matrix, n, n);

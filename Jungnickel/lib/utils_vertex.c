@@ -52,3 +52,41 @@ void	update_labels(PathNode *node, int label)
 		node = node->next;
 	}
 }
+
+/**
+ * @param asc for asc, 1. for desc, 0.
+ */
+void sort_list_cyclic(Vertex **vs, int n, int asc)
+{
+	Edge *list, *last, *target, *t_prev;
+	int i, t, t_p;
+
+	if (asc != 0 && asc != 1)
+		return ;
+	for (i = 0; i < n; i++)
+	{
+		list = vs[i]->incidence;
+		if (asc)
+		{
+			sort_list(&list, cmp_int_asc);
+			t = (i + 1) % n;
+		}
+		else
+		{
+			sort_list(&list, cmp_int_desc);
+			t = (i + n - 1) % n;
+		}
+		t_p = (i + n - 2 + asc) % n;
+		t = (t_p + 1 + asc) % n;
+
+		// swap list (first) and target
+		last = get_last_edge(list);
+		if (!last)
+			continue;
+		target = get_target_edge(list, t);
+		t_prev = get_target_edge(list, t_p);
+		last->next = list;
+		t_prev->next = NULL;
+		vs[i]->incidence = target;
+	}
+}

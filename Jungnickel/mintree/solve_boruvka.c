@@ -78,7 +78,8 @@ static void	merge_node_queue(Node **queue, Vertex **vs, Boruvka_ctx *ctx)
 		edge = node_get_edge(node);
 		u = vs[edge->from]->label;
 		v = vs[edge->to]->label;							// Alg (6)
-		if (u != v)
+		// if (u != v)
+		if (1 == 1)
 		{
 			if (partner_check(edge, ctx->T))
 			{
@@ -92,6 +93,7 @@ static void	merge_node_queue(Node **queue, Vertex **vs, Boruvka_ctx *ctx)
 		xfree(node, sizeof(Node));
 		node = dequeue_node(queue);
 	}
+	print_edgenode(ctx->T);
 }
 
 void	solve_boruvka(Vertex **vs, int n)
@@ -103,8 +105,6 @@ void	solve_boruvka(Vertex **vs, int n)
 
 	if (!boruvka_init(vs, n, &ctx))
 		return ;
-	print_array_pathnode(ctx.ps, n);
-	printf("\n");
 	queue = NULL;
 	while (ctx.m_count > 1)									// Alg (3)
 	{
@@ -119,6 +119,7 @@ void	solve_boruvka(Vertex **vs, int n)
 			{
 				if (!is_in_Vi(ctx.ps[i], j))
 					continue;
+				printf("[DEBUG] search an edge for i: %d, j: %d\n", i, j);
 				edge = vs[j]->incidence;					// all j in con. comp. U
 				while (edge)
 				{
@@ -129,6 +130,7 @@ void	solve_boruvka(Vertex **vs, int n)
 					}
 					edge = edge->next;
 				}
+				printf("[DEBUG] chose %d -> %d\n", ctx.min.min_edge->from, ctx.min.min_edge->to);
 			}
 			node = create_node(ctx.min.min_edge, NODE_TYPE_EDGE);
 			if (!node)
@@ -138,9 +140,16 @@ void	solve_boruvka(Vertex **vs, int n)
 			}
 			append_node(&queue, node);
 		}
+		// node = queue;
+		// while (node)
+		// {
+		// 	printf("%d\n", ((Edge *)node->ptr)->to);
+		// 	node = node->next;
+		// }
 		merge_node_queue(&queue, vs, &ctx);					// Alg (9)
 		print_array_pathnode(ctx.ps, n);
 	}
 	print_edgenode(ctx.T);
+	printf("is_spanning_tree: %d\n", is_spanning_tree(ctx.T, n));
 	boruvka_free(n, &ctx);
 }

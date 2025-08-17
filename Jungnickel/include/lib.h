@@ -137,12 +137,15 @@ Edge		*create_edge			(int id, int from, int to, double cost);					// ok
 int 		len_edge_list			(Edge *head);								// ok, scattered functions
 void		add_directed_edge		(Vertex **vs, int from, int to, int edge_id, double cost);	// edge_id?
 void		add_undirected_edge		(Vertex **vs, int from, int to, int edge_id, double cost);	// edge_id?
+Edge 		*get_last_edge			(Edge *head);
+Edge 		*get_target_edge		(Edge *head, int t);
 
 // utils_vertex.c
 Vertex		*create_vertex			(int id);									// ok
 Vertex		**create_vertex_array	(int n);									// ok
 void 		reset_labels			(Vertex **vs, int n);
 void		update_labels			(PathNode *node, int label);
+void 		sort_list_cyclic		(Vertex **vs, int n, int asc);
 
 /* ========= Euler Tour Utilities =========*/
 

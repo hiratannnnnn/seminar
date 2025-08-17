@@ -116,5 +116,6 @@ int heap_cmp_edgecost(const void *a, const void *b)
     else if (e_a->cost > e_b->cost)
         return (1);
     else
-        return (e_a->id - e_a->id);
+        // return (e_a->id - e_a->id);
+        return (0);
 }

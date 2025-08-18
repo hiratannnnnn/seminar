@@ -16,28 +16,30 @@ int main(void)
 	Vertex **vs;
 	int n;
 
-	n = 10;
-	matrix = gen_rand_undigraph_intcost(n, 1, 30, 0.8);
-
+	matrix = read_adj(&n, "ex4410.txt");
+	// shuffle_vertices(matrix, n);
 	print_matrix_int(matrix, n, n);
 
 	vs = adj_matrix_to_vertices(matrix, n, 0);
-
 	print_vertices(vs, n, 0);
+	for (int i = 0; i < n; i++)
+		sort_list(&vs[i]->incidence, cmp_int_asc);
 
 	printf("\n---------------------------\nConducting PRIM\n\n");
 	proc_start = clock();
 	solve_prim(vs, 0, n, 0);
-	reset_labels(vs, n);	print_info();	sleep(3);
+	reset_labels(vs, n);	print_info();
 
 	printf("\n---------------------------\nConducting KRUSKAL\n\n");
 	proc_start = clock();
 	solve_kruskal(vs, n, 0);
-	reset_labels(vs, n);	print_info();	sleep(3);
+	reset_labels(vs, n);	print_info();
 
-	printf("\n---------------------------\nConducting BORUVKA\n\n");
+	printf("\n---------------------------\nConducting PRIM\n\n");
 	proc_start = clock();
-	solve_boruvka(vs, n, 0);
+	solve_prim(vs, 1, n, 0);
+	solve_prim(vs, 2, n, 0);
+	solve_prim(vs, 3, n, 0);
 	reset_labels(vs, n);	print_info();
 
 	free_matrix_int(matrix, n, n);

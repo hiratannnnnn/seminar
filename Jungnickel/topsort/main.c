@@ -25,7 +25,7 @@ int		main(void)
 
 	matrix = read_adj(&n, "test_graph.txt");
 	vs = adj_matrix_to_vertices(matrix, n, 0); // directed = 0
-	print_vertices(vs, n);
+	print_vertices(vs, n, 0);
 
 	topnr = xcalloc(n, sizeof(int));
 	if (!topnr)

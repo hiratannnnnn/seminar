@@ -1,0 +1,70 @@
+
+---------------------------
+Conducting Boruvka Error-case for graphs having some same weights.
+
+0 2 1 2 1
+2 0 2 1 1
+1 2 0 1 2
+2 1 1 0 2
+1 1 2 2 0
+vId: 0 -> 1 -> 2 -> 3 -> 4
+vId: 1 -> 0 -> 2 -> 3 -> 4
+vId: 2 -> 0 -> 1 -> 3 -> 4
+vId: 3 -> 0 -> 1 -> 2 -> 4
+vId: 4 -> 0 -> 1 -> 2 -> 3
+[DEBUG] search an edge for i: 0, j: 0
+[DEBUG] chose 0 -> 2
+[DEBUG] search an edge for i: 1, j: 1
+[DEBUG] chose 1 -> 3
+[DEBUG] search an edge for i: 2, j: 2
+[DEBUG] chose 2 -> 0
+[DEBUG] search an edge for i: 3, j: 3
+[DEBUG] chose 3 -> 1
+[DEBUG] search an edge for i: 4, j: 4
+[DEBUG] chose 4 -> 0
+0 - 2
+1 - 3
+4 - 0
+cost was 3.000000
+
+0 :
+1 : -> 1 -> 3
+2 :
+3 :
+4 : -> 4 -> 0 -> 2
+
+[DEBUG] search an edge for i: 1, j: 1
+[DEBUG] chose 1 -> 4
+[DEBUG] search an edge for i: 1, j: 3
+[DEBUG] chose 1 -> 4
+[DEBUG] search an edge for i: 4, j: 0
+[DEBUG] chose 0 -> 1
+[DEBUG] search an edge for i: 4, j: 2
+[DEBUG] chose 2 -> 3
+[DEBUG] search an edge for i: 4, j: 4
+[DEBUG] chose 2 -> 3
+Do not pass the same pointers
+0 - 2
+1 - 3
+4 - 0
+1 - 4
+2 - 3
+cost was 5.000000
+
+0 :
+1 : -> 1 -> 3 -> 4 -> 0 -> 2
+2 :
+3 :
+4 :
+
+0 - 2
+1 - 3
+4 - 0
+1 - 4
+2 - 3
+cost was 5.000000
+
+is_spanning_tree: 0
+mem_peak: 1120
+remaining mem: 0
+proccess time: 0.005000

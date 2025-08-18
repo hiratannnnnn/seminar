@@ -19,7 +19,7 @@ int main(void)
 	matrix = gen_rand_undigraph(n, 0.7);
 	vs = adj_matrix_to_vertices(matrix, n, 1);
 	print_matrix_int(matrix, n, n);
-	print_vertices(vs, n);
+	print_vertices(vs, n, 0);
 
 	degree = (int *)xmalloc(sizeof(int) * n);
 	compute_degrees(matrix, n, degree);
@@ -30,7 +30,7 @@ int main(void)
 		sort_list_by_degree(&vs[i]->incidence, degree, cmp_smaller);
 	}
 
-	print_vertices(vs,n);
+	print_vertices(vs, n, 0);
 
 	free_matrix_int(matrix, n, n);
 	free_vertex_array(vs, n);

@@ -16,28 +16,25 @@ int main(void)
 	Vertex **vs;
 	int n;
 
-	n = 10;
-	matrix = gen_rand_undigraph_intcost(n, 1, 30, 0.8);
-
+	matrix = read_adj(&n, "ex445.txt");
 	print_matrix_int(matrix, n, n);
-
 	vs = adj_matrix_to_vertices(matrix, n, 0);
+	// print_vertices(vs, n, 0);
+	printf("is_undigraph: %d\n", is_undigraph(matrix, n));
 
-	print_vertices(vs, n, 0);
-
-	printf("\n---------------------------\nConducting PRIM\n\n");
+	printf("\n---------------------------\nConducting PRIM for Ex. 4.4.5\n\n");
 	proc_start = clock();
-	solve_prim(vs, 0, n, 0);
-	reset_labels(vs, n);	print_info();	sleep(3);
+	solve_prim(vs, 0, n, 1);
+	reset_labels(vs, n);	print_info();//	sleep(3);
 
-	printf("\n---------------------------\nConducting KRUSKAL\n\n");
+	printf("\n---------------------------\nConducting KRUSKAL for Ex. 4.4.5\n\n");
 	proc_start = clock();
-	solve_kruskal(vs, n, 0);
-	reset_labels(vs, n);	print_info();	sleep(3);
+	solve_kruskal(vs, n, 1);
+	reset_labels(vs, n);	print_info();//	sleep(3);
 
-	printf("\n---------------------------\nConducting BORUVKA\n\n");
+	printf("\n---------------------------\nConducting BORUVKA for Ex. 4.4.5\n\n");
 	proc_start = clock();
-	solve_boruvka(vs, n, 0);
+	solve_boruvka(vs, n, 1);
 	reset_labels(vs, n);	print_info();
 
 	free_matrix_int(matrix, n, n);

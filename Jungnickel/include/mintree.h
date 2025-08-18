@@ -26,12 +26,12 @@ int 		is_spanning_tree	(EdgeNode *list, int n);
 void		solve				(Vertex **vs, int n);
 
 // solve_prim.c
-void		solve_prim			(Vertex **vs, int s, int n);
+void		solve_prim			(Vertex **vs, int s, int n, int one_based);
 
 // solve_kruskal.c
-void		solve_kruskal		(Vertex **vs, int n);
+void		solve_kruskal		(Vertex **vs, int n, int one_based);
 
 // solve_boruvka.c
-void		solve_boruvka		(Vertex **vs, int n);
+void		solve_boruvka		(Vertex **vs, int n, int one_based);
 
 #endif

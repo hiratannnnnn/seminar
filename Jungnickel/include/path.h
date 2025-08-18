@@ -9,7 +9,7 @@ void	solve_bipart(Vertex **vs, int s, int n);
 
 void    solve_dijkstra(Vertex **vs, int s, int n);
 
-void solve_dijkstraPQ(Vertex **vs, int s, int n);
+void 	solve_dijkstraPQ(Vertex **vs, int s, int n);
 
 void	solve_bellford(Vertex **vs, int s, int n);
 
@@ -20,12 +20,13 @@ void	solve_negacycle(int **cost, int n);
 
 #include "path.h"
 
-Heap *heap_create(int capacity, HeapCmp cmp);
-void heap_push(Heap *h, void *item);
-void *heap_pop(Heap *h);
+Heap 	*heap_create(int capacity, HeapCmp cmp);
+void 	heap_push(Heap *h, void *item);
+void 	*heap_pop(Heap *h);
 void    free_heap_node(Heap *h, int capacity);
-void *heap_peek(Heap *h);
-void heap_clear(Heap *h);
-int heap_cmp_edgecost(const void *a, const void *b);
+void 	*heap_peek(Heap *h);
+void 	heap_clear(Heap *h);
+int 	heap_cmp_edgecost(const void *a, const void *b);
+int 	heap_cmp_edgecost_id(const void *a, const void *b);
 
 #endif

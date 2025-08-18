@@ -10,7 +10,7 @@ void	sort_list(Edge **head, int (*cmp)(int, int))
 	lptr = NULL;
 	do
 	{
-		// print_edge_list(*head);
+		// print_edge_list(*head, 0);
 		swapped = 0;
 		ptr1 = *head;
 		prev = NULL;

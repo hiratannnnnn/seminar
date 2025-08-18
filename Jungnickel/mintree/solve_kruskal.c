@@ -6,6 +6,7 @@ typedef struct Kruskal_ctx
 	Heap 		*h;
 	PathNode 	**ps;
 	EdgeNode 	*T;
+	int			one_based;
 }				Kruskal_ctx;
 
 static void kruskal_free(int n, Kruskal_ctx *ctx)
@@ -22,11 +23,13 @@ static void kruskal_free(int n, Kruskal_ctx *ctx)
  * @return 0 : memory allocation error
  * @return 1 : successful
  */
-static int kruskal_init(Vertex **vs, int n, Kruskal_ctx *ctx)
+static int kruskal_init(Kruskal_ctx *ctx, Vertex **vs, int n, int one_based)
 {
 	int i;
 	Edge *edge;
 	Node *node;
+	if (one_based != 0 && one_based != 1)
+		return (printf("one_based must be 0 or 1.\n"), 0);
 
 	ctx->ps = (PathNode **)xmalloc(sizeof(PathNode *) * n);
 	ctx->h = heap_create(n * (n - 1), heap_cmp_edgecost);
@@ -48,10 +51,11 @@ static int kruskal_init(Vertex **vs, int n, Kruskal_ctx *ctx)
 		}
 	}
 	ctx->T = NULL;											// Alg (1)
+	ctx->one_based = one_based;
 	return (1);
 }
 
-void	solve_kruskal(Vertex **vs, int n)
+void	solve_kruskal(Vertex **vs, int n, int one_based)
 {
 	PathNode *node;
 	Node *cur;
@@ -59,18 +63,25 @@ void	solve_kruskal(Vertex **vs, int n)
 	Kruskal_ctx ctx;
 	int u, v;
 
-	if (!kruskal_init(vs, n, &ctx))
+	if (!kruskal_init(&ctx, vs, n, one_based))
 		return ;
 	while (ctx.h->size > 0)									// Alg (4)
 	{
 		cur = heap_pop(ctx.h);								// Alg (5)
 		edge = node_get_edge(cur);
-		printf("edge %d -> %d, cost = %f\n", edge->from, edge->to, edge->cost);
+		printf("edge %d -> %d%s, cost = %f\n",
+				edge->from + ctx.one_based,
+				edge->to + ctx.one_based,
+				ctx.one_based ? " (1-based index)" : "",
+				edge->cost);
 		u = vs[edge->from]->label;							// Alg (6)
 		v = vs[edge->to]->label;							// Alg (7)
 		if (u != v)											// Alg (8)
 		{
-			printf("[DEBUG] merging %d and %d\n", u, v);
+			printf("[DEBUG] merging %d and %d%s\n",
+					u + ctx.one_based,
+					v + ctx.one_based,
+					ctx.one_based ? " (1-based index)" : "");
 			merge_pathnode(&ctx.ps[u], &ctx.ps[v]);			// Alg (8-1)
 			node = ctx.ps[u];
 			while (node)
@@ -79,13 +90,13 @@ void	solve_kruskal(Vertex **vs, int n)
 				node = node->next;
 			}
 			append_edgenode(&ctx.T, create_edgenode(edge));	// Alg (8-2)
-			print_array_pathnode(ctx.ps, n);
+			print_array_pathnode(ctx.ps, n, ctx.one_based);
 		}
 		free_node(cur);
 		if (count_edgenodes(ctx.T) == n - 1)
 		{
 			printf("\n[Final] chosen edges are:\n");
-			print_edgenode(ctx.T);
+			print_edgenode(ctx.T, ctx.one_based);
 			kruskal_free(n, &ctx);
 			return ;
 		}

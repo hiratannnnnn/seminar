@@ -121,97 +121,121 @@ void print_array_double(double *arr, int n, int max_width, int precision)
     }
 }
 
-// void	print_matrix_double(double **matrix, int r, int c)
-// {
-// 	int i;
-
-// 	for (i = 0; i < r; i++)
-// 		print_array_double(matrix[i], c);
-// }
-
-// void 	print_array_double(double *arr, int c)
-// {
-// 	int j;
-
-// 	for (j = 0; j < c; j++)
-// 		printf("%.3f%c", arr[j], j == c - 1 ? '\n' : ' ');
-// }
-
-void	print_vertex(Vertex *v)
+void	print_vertex(Vertex *v, int one_based)
 {
 	if (!v)
 		return ;
-	printf("vId: %d", v->id);
-	print_edge_list(v->incidence);
+	if (one_based != 0 && one_based != 1)
+	{
+		printf("one_based must be 0 or 1.\n");
+		return ;
+	}
+	printf("vId: %d", v->id + one_based);
+	print_edge_list(v->incidence, one_based);
 }
 
-void	print_vertices(Vertex **vs, int n)
+void	print_vertices(Vertex **vs, int n, int one_based)
 {
 	int	i;
+	if (one_based != 0 && one_based != 1)
+	{
+		printf("one_based must be 0 or 1.\n");
+		return ;
+	}
 
 	i = 0;
 	if (!vs)
 		return ;
 	while (i < n)
 	{
-		print_vertex(vs[i]);
+		print_vertex(vs[i], one_based);
 		i++;
 	}
+	if (one_based)
+		printf("Printed in 1-based indexing.\n");
 }
 
-void	print_edge_list(Edge *head)
+void	print_edge_list(Edge *head, int one_based)
 {
 	Edge	*cur;
+	if (one_based != 0 && one_based != 1)
+	{
+		printf("one_based must be 0 or 1.\n");
+		return ;
+	}
 
 	cur = head;
 	while (cur)
 	{
 		printf(" -> ");
-		printf("%d", cur->to);
+		printf("%d", cur->to + one_based);
 		cur = cur->next;
 	}
 	printf("\n");
 }
 
-void 	print_pathnode(PathNode *head)
+void 	print_pathnode(PathNode *head, int one_based)
 {
 	PathNode	*cur;
+	if (one_based != 0 && one_based != 1)
+	{
+		printf("one_based must be 0 or 1.\n");
+		return ;
+	}
 
 	cur = head;
 	while (cur)
 	{
 		printf(" -> ");
-		printf("%d", cur->v->id);
+		printf("%d", cur->v->id + one_based);
 		cur = cur->next;
 	}
 	printf("\n");
 }
 
-void		print_array_pathnode(PathNode **ps, int n)
+void		print_array_pathnode(PathNode **ps, int n, int one_based)
 {
 	int i;
+	if (one_based != 0 && one_based != 1)
+	{
+		printf("one_based must be 0 or 1.\n");
+		return ;
+	}
 
 	for (i = 0; i < n; i++)
 	{
-		printf("%d :", i);
-		print_pathnode(ps[i]);
+		printf("%d :", i + one_based);
+		print_pathnode(ps[i], one_based);
 	}
+	if (one_based)
+		printf("Printed in 1-based indexing.\n");
+	printf("\n");
 }
 
 
-void print_edgenode(EdgeNode *head)
+void print_edgenode(EdgeNode *head, int one_based)
 {
 	double cost;
+	if (one_based != 0 && one_based != 1)
+	{
+		printf("one_based must be 0 or 1.\n");
+		return ;
+	}
 
 	cost = 0.0;
 	while (head)
 	{
-		printf("%d - %d\n", head->edge->from, head->edge->to);
+		printf("%d - %d\n",
+				head->edge->from + one_based,
+				head->edge->to + one_based);
 		cost += head->edge->cost;
 		head = head->next;
 	}
 	if (cost)
 		printf("cost was %f\n", cost);
+	if (one_based)
+		printf("Printed in 1-based indexing.\n");
+	printf("\n");
 }
 
 void	print_array_char(char **ss, int n)

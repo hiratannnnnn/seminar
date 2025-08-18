@@ -137,3 +137,18 @@ int find_odd_vertices(int *degree, int n, int *odd_list)
 
     return odd_count;
 }
+
+int is_undigraph(int **matrix, int n)
+{
+	int i, j;
+
+	for (i = 0; i < n; i++)
+	{
+		for (j = 0; j < n; j++)
+		{
+			if (matrix[i][j] != matrix[j][i])
+				return (0);
+		}
+	}
+	return (1);
+}

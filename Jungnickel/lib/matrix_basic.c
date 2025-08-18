@@ -57,3 +57,14 @@ void	swap_vertex(int **matrix, int n, int i, int j)
 		matrix[k][j] = tmp;
 	}
 }
+
+void	shuffle_vertices(int **matrix, int n)
+{
+	int i, j;
+
+	for (i = 0; i < n - 1; i++)
+	{
+		j = i + rand() % (n - i);
+		swap_vertex(matrix, n, i, j);
+	}
+}

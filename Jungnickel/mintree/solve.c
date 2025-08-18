@@ -67,7 +67,7 @@ void	solve(Vertex **vs, int n)
 		node = create_edgenode(min.min_edge);
 		append_edgenode(&es[i], node);
 	}
-	// print_edgenode(es[i]);
+	// print_edgenode(es[i], 0);
 	free_edgenode(&es[i]);
 	free_pathnode(&ps[i]);
 	xfree(ps, sizeof(PathNode *) * n);

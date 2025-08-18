@@ -31,6 +31,7 @@ void		identity_matrix				(int **matrix, int n);
 void		permutation_matrix			(int **matrix, int n, int i, int j);
 void		matrix_multiply				(int **A, int **B, int **C, int n);
 void		swap_vertex					(int **matrix, int n, int i, int j);
+void		shuffle_vertices			(int **matrix, int n);
 
 /* ========= Graph Generation =========*/
 
@@ -79,6 +80,7 @@ int			is_tree						(int **matrix, int n);					// ok, but when use?
 void		compute_degrees				(int **matrix, int n, int *degree);		// ok
 int			find_odd_vertices			(int *degree, int n, int *odd_list);	// ok, but too narrow?
 void		compute_degrees_from_list	(Vertex **vs, int n, int *degree);		// ok?
+int 		is_undigraph				(int **matrix, int n);
 
 /* ========= Path Finding =========*/
 
@@ -122,6 +124,8 @@ int 	cmp_int_bogo		(int a, int b);
 int 	cmp_double_desc		(double a, double b);
 int 	cmp_double_asc		(double a, double b);
 int 	cmp_double_bogo		(double a, double b);
+int 	cmp_edge_cost		(Edge *e1, Edge *e2);
+int 	cmp_edge_cost_id	(Edge *e1, Edge *e2);
 
 // sort_edge_list.c
 void	sort_list			(Edge **head, int (*cmp)(int, int));
@@ -225,12 +229,12 @@ void 		print_matrix_int	(int **matrix, int r, int c);
 void		print_array_int		(int *arr, int n, int max_width);
 void		print_matrix_double			(double **matrix, int r, int c, int precision);
 void 		print_array_double			(double *arr, int c, int max_width, int precision);
-void		print_vertex		(Vertex *v);
-void		print_vertices		(Vertex **vs, int n);
-void		print_edge_list		(Edge *head);
-void 		print_pathnode		(PathNode *head);
-void		print_array_pathnode(PathNode **ps, int n);
-void 		print_edgenode		(EdgeNode *head);
+void		print_vertex		(Vertex *v, int one_based);
+void		print_vertices		(Vertex **vs, int n, int one_based);
+void		print_edge_list		(Edge *head, int one_based);
+void 		print_pathnode		(PathNode *head, int one_based);
+void		print_array_pathnode(PathNode **ps, int n, int one_based);
+void 		print_edgenode		(EdgeNode *head, int one_based);
 void		print_array_char	(char **ss, int n);
 void		print_info			(	);
 

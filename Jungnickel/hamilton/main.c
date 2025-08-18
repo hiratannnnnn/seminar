@@ -20,7 +20,7 @@ int main(void)
 	matrix = gen_rand_undigraph(n, 0.3);
 	write_adjacent_matrix(matrix, n, "a_graph.txt");
 	vs = adj_matrix_to_vertices(matrix, n, 1);
-	print_vertices(vs, n);
+	print_vertices(vs, n, 0);
 	printf("%d\n", find_hamilton_cycle(vs, n));
 
 	free_matrix_int(matrix, n, n);

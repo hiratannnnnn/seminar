@@ -1,0 +1,173 @@
+ 0 56 35  2 51 60
+56  0 21 57 78 70
+35 21  0 36 68 68
+ 2 57 36  0 51 61
+51 78 68 51  0 13
+60 70 68 61 13  0
+0: L  (London)
+1: MC (Mexico City)
+2: NY (New York)
+3: Pa (Paris)
+4: Pe (Peking, Beijing)
+5: To (Tokyo)
+
+---------------------------
+Conducting PRIM for Ex. 4.4.16
+
+[DEBUG] merge S and 0
+ -> 0
+[DEBUG] merge S and 3
+ -> 0 -> 3
+[DEBUG] merge S and 2
+ -> 0 -> 3 -> 2
+[DEBUG] merge S and 1
+ -> 0 -> 3 -> 2 -> 1
+[DEBUG] merge S and 4
+ -> 0 -> 3 -> 2 -> 1 -> 4
+[DEBUG] merge S and 5
+ -> 0 -> 3 -> 2 -> 1 -> 4 -> 5
+0 - 3
+0 - 2
+2 - 1
+0 - 4
+4 - 5
+cost was 122.000000
+
+mem_peak: 1452
+remaining mem: 1224
+proccess time: 0.002000
+
+---------------------------
+Conducting KRUSKAL for Ex. 4.4.16
+
+edge 0 -> 3, cost = 2.000000
+[DEBUG] merging 0 and 3
+0 : -> 0 -> 3
+1 : -> 1
+2 : -> 2
+3 :
+4 : -> 4
+5 : -> 5
+
+edge 3 -> 0, cost = 2.000000
+edge 4 -> 5, cost = 13.000000
+[DEBUG] merging 4 and 5
+0 : -> 0 -> 3
+1 : -> 1
+2 : -> 2
+3 :
+4 : -> 4 -> 5
+5 :
+
+edge 5 -> 4, cost = 13.000000
+edge 1 -> 2, cost = 21.000000
+[DEBUG] merging 1 and 2
+0 : -> 0 -> 3
+1 : -> 1 -> 2
+2 :
+3 :
+4 : -> 4 -> 5
+5 :
+
+edge 2 -> 1, cost = 21.000000
+edge 0 -> 2, cost = 35.000000
+[DEBUG] merging 0 and 1
+0 : -> 0 -> 3 -> 1 -> 2
+1 :
+2 :
+3 :
+4 : -> 4 -> 5
+5 :
+
+edge 2 -> 0, cost = 35.000000
+edge 3 -> 2, cost = 36.000000
+edge 2 -> 3, cost = 36.000000
+edge 3 -> 4, cost = 51.000000
+[DEBUG] merging 0 and 4
+0 : -> 0 -> 3 -> 1 -> 2 -> 4 -> 5
+1 :
+2 :
+3 :
+4 :
+5 :
+
+
+[Final] chosen edges are:
+0 - 3
+4 - 5
+1 - 2
+0 - 2
+3 - 4
+cost was 122.000000
+
+mem_peak: 1948
+remaining mem: 1224
+proccess time: 0.001000
+
+---------------------------
+Conducting BORUVKA for Ex. 4.4.16
+
+[DEBUG] search an edge for i: 0, j: 0
+[DEBUG] chose 0 -> 3
+[DEBUG] search an edge for i: 1, j: 1
+[DEBUG] chose 1 -> 2
+[DEBUG] search an edge for i: 2, j: 2
+[DEBUG] chose 2 -> 1
+[DEBUG] search an edge for i: 3, j: 3
+[DEBUG] chose 3 -> 0
+[DEBUG] search an edge for i: 4, j: 4
+[DEBUG] chose 4 -> 5
+[DEBUG] search an edge for i: 5, j: 5
+[DEBUG] chose 5 -> 4
+0 - 3
+1 - 2
+4 - 5
+cost was 36.000000
+
+0 : -> 0 -> 3
+1 : -> 1 -> 2
+2 :
+3 :
+4 : -> 4 -> 5
+5 :
+
+[DEBUG] search an edge for i: 0, j: 0
+[DEBUG] chose 0 -> 2
+[DEBUG] search an edge for i: 0, j: 3
+[DEBUG] chose 0 -> 2
+[DEBUG] search an edge for i: 1, j: 1
+[DEBUG] chose 1 -> 0
+[DEBUG] search an edge for i: 1, j: 2
+[DEBUG] chose 2 -> 0
+[DEBUG] search an edge for i: 4, j: 4
+[DEBUG] chose 4 -> 3
+[DEBUG] search an edge for i: 4, j: 5
+[DEBUG] chose 4 -> 3
+0 - 3
+1 - 2
+4 - 5
+0 - 2
+4 - 3
+cost was 122.000000
+
+0 :
+1 :
+2 :
+3 :
+4 : -> 4 -> 5 -> 0 -> 3 -> 1 -> 2
+5 :
+
+0 - 3
+1 - 2
+4 - 5
+0 - 2
+4 - 3
+cost was 122.000000
+
+is_spanning_tree: 1
+mem_peak: 1948
+remaining mem: 1224
+proccess time: 0.002000
+mem_peak: 1948
+remaining mem: 0
+proccess time: 0.000000

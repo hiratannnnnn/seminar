@@ -1,0 +1,243 @@
+         0         28          2 1073741823          1 1073741823 1073741823 1073741823
+        28          0 1073741823          9          8         10 1073741823 1073741823
+         2 1073741823          0 1073741823 1073741823         24 1073741823         27
+1073741823          9 1073741823          0          5 1073741823          8          7
+         1          8 1073741823          5          0         26 1073741823 1073741823
+1073741823         10         24 1073741823         26          0          8          1
+1073741823 1073741823 1073741823          8 1073741823          8          0          7
+1073741823 1073741823         27          7 1073741823          1          7          0
+is_undigraph: 1
+
+---------------------------
+Conducting PRIM for Ex. 4.4.5
+
+[DEBUG] merge S and 1 (1-based index)
+ -> 1
+[DEBUG] merge S and 5 (1-based index)
+ -> 1 -> 5
+[DEBUG] merge S and 3 (1-based index)
+ -> 1 -> 5 -> 3
+[DEBUG] merge S and 4 (1-based index)
+ -> 1 -> 5 -> 3 -> 4
+[DEBUG] merge S and 8 (1-based index)
+ -> 1 -> 5 -> 3 -> 4 -> 8
+[DEBUG] merge S and 6 (1-based index)
+ -> 1 -> 5 -> 3 -> 4 -> 8 -> 6
+[DEBUG] merge S and 7 (1-based index)
+ -> 1 -> 5 -> 3 -> 4 -> 8 -> 6 -> 7
+[DEBUG] merge S and 2 (1-based index)
+ -> 1 -> 5 -> 3 -> 4 -> 8 -> 6 -> 7 -> 2
+1 - 5
+1 - 3
+5 - 4
+4 - 8
+8 - 6
+8 - 7
+5 - 2
+cost was 31.000000
+Printed in 1-based indexing.
+
+mem_peak: 2516
+remaining mem: 2208
+proccess time: 0.001000
+
+---------------------------
+Conducting KRUSKAL for Ex. 4.4.5
+
+edge 1 -> 5 (1-based index), cost = 1.000000
+[DEBUG] merging 1 and 5 (1-based index)
+1 : -> 1 -> 5
+2 : -> 2
+3 : -> 3
+4 : -> 4
+5 :
+6 : -> 6
+7 : -> 7
+8 : -> 8
+Printed in 1-based indexing.
+
+edge 5 -> 1 (1-based index), cost = 1.000000
+edge 6 -> 8 (1-based index), cost = 1.000000
+[DEBUG] merging 6 and 8 (1-based index)
+1 : -> 1 -> 5
+2 : -> 2
+3 : -> 3
+4 : -> 4
+5 :
+6 : -> 6 -> 8
+7 : -> 7
+8 :
+Printed in 1-based indexing.
+
+edge 8 -> 6 (1-based index), cost = 1.000000
+edge 3 -> 1 (1-based index), cost = 2.000000
+[DEBUG] merging 3 and 1 (1-based index)
+1 :
+2 : -> 2
+3 : -> 3 -> 1 -> 5
+4 : -> 4
+5 :
+6 : -> 6 -> 8
+7 : -> 7
+8 :
+Printed in 1-based indexing.
+
+edge 1 -> 3 (1-based index), cost = 2.000000
+edge 5 -> 4 (1-based index), cost = 5.000000
+[DEBUG] merging 3 and 4 (1-based index)
+1 :
+2 : -> 2
+3 : -> 3 -> 1 -> 5 -> 4
+4 :
+5 :
+6 : -> 6 -> 8
+7 : -> 7
+8 :
+Printed in 1-based indexing.
+
+edge 4 -> 5 (1-based index), cost = 5.000000
+edge 4 -> 8 (1-based index), cost = 7.000000
+[DEBUG] merging 3 and 6 (1-based index)
+1 :
+2 : -> 2
+3 : -> 3 -> 1 -> 5 -> 4 -> 6 -> 8
+4 :
+5 :
+6 :
+7 : -> 7
+8 :
+Printed in 1-based indexing.
+
+edge 7 -> 8 (1-based index), cost = 7.000000
+[DEBUG] merging 7 and 3 (1-based index)
+1 :
+2 : -> 2
+3 :
+4 :
+5 :
+6 :
+7 : -> 7 -> 3 -> 1 -> 5 -> 4 -> 6 -> 8
+8 :
+Printed in 1-based indexing.
+
+edge 8 -> 7 (1-based index), cost = 7.000000
+edge 8 -> 4 (1-based index), cost = 7.000000
+edge 5 -> 2 (1-based index), cost = 8.000000
+[DEBUG] merging 7 and 2 (1-based index)
+1 :
+2 :
+3 :
+4 :
+5 :
+6 :
+7 : -> 7 -> 3 -> 1 -> 5 -> 4 -> 6 -> 8 -> 2
+8 :
+Printed in 1-based indexing.
+
+
+[Final] chosen edges are:
+1 - 5
+6 - 8
+3 - 1
+5 - 4
+4 - 8
+7 - 8
+5 - 2
+cost was 31.000000
+Printed in 1-based indexing.
+
+mem_peak: 3484
+remaining mem: 2208
+proccess time: 0.005000
+
+---------------------------
+Conducting BORUVKA for Ex. 4.4.5
+
+[DEBUG] search an edge for i: 1, j: 1 (1-based index)
+[DEBUG] chose 1 -> 5 (1-based index)
+[DEBUG] search an edge for i: 2, j: 2 (1-based index)
+[DEBUG] chose 2 -> 5 (1-based index)
+[DEBUG] search an edge for i: 3, j: 3 (1-based index)
+[DEBUG] chose 3 -> 1 (1-based index)
+[DEBUG] search an edge for i: 4, j: 4 (1-based index)
+[DEBUG] chose 4 -> 5 (1-based index)
+[DEBUG] search an edge for i: 5, j: 5 (1-based index)
+[DEBUG] chose 5 -> 1 (1-based index)
+[DEBUG] search an edge for i: 6, j: 6 (1-based index)
+[DEBUG] chose 6 -> 8 (1-based index)
+[DEBUG] search an edge for i: 7, j: 7 (1-based index)
+[DEBUG] chose 7 -> 8 (1-based index)
+[DEBUG] search an edge for i: 8, j: 8 (1-based index)
+[DEBUG] chose 8 -> 6 (1-based index)
+1 - 5
+2 - 5
+3 - 1
+4 - 5
+6 - 8
+7 - 8
+cost was 24.000000
+Printed in 1-based indexing.
+
+1 :
+2 :
+3 :
+4 : -> 4 -> 3 -> 2 -> 1 -> 5
+5 :
+6 :
+7 : -> 7 -> 6 -> 8
+8 :
+Printed in 1-based indexing.
+
+[DEBUG] search an edge for i: 4, j: 1 (1-based index)
+[DEBUG] chose 1 -> 8 (1-based index)
+[DEBUG] search an edge for i: 4, j: 2 (1-based index)
+[DEBUG] chose 2 -> 6 (1-based index)
+[DEBUG] search an edge for i: 4, j: 3 (1-based index)
+[DEBUG] chose 2 -> 6 (1-based index)
+[DEBUG] search an edge for i: 4, j: 4 (1-based index)
+[DEBUG] chose 4 -> 8 (1-based index)
+[DEBUG] search an edge for i: 4, j: 5 (1-based index)
+[DEBUG] chose 4 -> 8 (1-based index)
+[DEBUG] search an edge for i: 7, j: 6 (1-based index)
+[DEBUG] chose 6 -> 2 (1-based index)
+[DEBUG] search an edge for i: 7, j: 7 (1-based index)
+[DEBUG] chose 7 -> 4 (1-based index)
+[DEBUG] search an edge for i: 7, j: 8 (1-based index)
+[DEBUG] chose 8 -> 4 (1-based index)
+1 - 5
+2 - 5
+3 - 1
+4 - 5
+6 - 8
+7 - 8
+4 - 8
+cost was 31.000000
+Printed in 1-based indexing.
+
+1 :
+2 :
+3 :
+4 : -> 4 -> 3 -> 2 -> 1 -> 5 -> 7 -> 6 -> 8
+5 :
+6 :
+7 :
+8 :
+Printed in 1-based indexing.
+
+1 - 5
+2 - 5
+3 - 1
+4 - 5
+6 - 8
+7 - 8
+4 - 8
+cost was 31.000000
+Printed in 1-based indexing.
+
+is_spanning_tree: 1
+mem_peak: 3484
+remaining mem: 2208
+proccess time: 0.004000
+mem_peak: 3484
+remaining mem: 0
+proccess time: 0.000000

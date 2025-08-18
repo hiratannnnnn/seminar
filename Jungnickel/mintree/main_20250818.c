@@ -35,15 +35,15 @@ int main(void)
 		sort_list(&vs2[i]->incidence, cmp_int_asc);
 	// sort_list_cyclic(vs2, n2, 1);
 
-	printf("\nConducting KRUSKAL\n\n");
+	printf("\n---------------------------\nConducting KRUSKAL\n\n");
 	print_matrix_int(matrix, n, n);
 	reset_labels(vs, n);
-	solve_boruvka(vs, n);
+	solve_boruvka(vs, n, 0);
 
-	printf("\nConducting KRUSKAL\n\n");
-	print_vertices(vs2, n2);
+	printf("\n---------------------------\nConducting KRUSKAL\n\n");
+	print_vertices(vs2, n2, 0);
 	print_matrix_int(matrix2, n2, n2);
-	solve_boruvka(vs2, n2);
+	solve_boruvka(vs2, n2, 0);
 	reset_labels(vs2, n2);
 
 	// free_matrix_double(matrix, n, n);

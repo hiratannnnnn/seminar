@@ -7,6 +7,7 @@ typedef struct Boruvka_ctx
 	int 		*M;
 	int 		m_count;
 	Min_E		min;
+	int 		one_based;
 }				Boruvka_ctx;
 
 static void boruvka_free(int n, Boruvka_ctx *ctx)
@@ -23,9 +24,11 @@ static void boruvka_free(int n, Boruvka_ctx *ctx)
  * @return 0 : memory allocation error
  * @return 1 : successful
  */
-static int boruvka_init(Vertex **vs, int n, Boruvka_ctx *ctx)
+static int boruvka_init(Boruvka_ctx *ctx, Vertex **vs, int n, int one_based)
 {
 	int i;
+	if (one_based != 0 && one_based != 1)
+		return (printf("one_based must be 0 or 1.\n"), 0);
 
 	ctx->ps = (PathNode **)xmalloc(sizeof(PathNode *) * n);
 	ctx->M = (int *)xmalloc(sizeof(int) * n);
@@ -42,6 +45,7 @@ static int boruvka_init(Vertex **vs, int n, Boruvka_ctx *ctx)
 			return (boruvka_free(n, ctx), 0);
 		ctx->M[i] = 1;										// Alg (2-2)
 	}
+	ctx->one_based = one_based;
 	return (1);
 }
 
@@ -93,17 +97,17 @@ static void	merge_node_queue(Node **queue, Vertex **vs, Boruvka_ctx *ctx)
 		xfree(node, sizeof(Node));
 		node = dequeue_node(queue);
 	}
-	print_edgenode(ctx->T);
+	print_edgenode(ctx->T, ctx->one_based);
 }
 
-void	solve_boruvka(Vertex **vs, int n)
+void	solve_boruvka(Vertex **vs, int n, int one_based)
 {
 	Boruvka_ctx ctx;
 	Edge *edge;
 	Node *queue, *node;
 	int i, j;
 
-	if (!boruvka_init(vs, n, &ctx))
+	if (!boruvka_init(&ctx, vs, n, one_based))
 		return ;
 	queue = NULL;
 	while (ctx.m_count > 1)									// Alg (3)
@@ -119,18 +123,24 @@ void	solve_boruvka(Vertex **vs, int n)
 			{
 				if (!is_in_Vi(ctx.ps[i], j))
 					continue;
-				printf("[DEBUG] search an edge for i: %d, j: %d\n", i, j);
+				printf("[DEBUG] search an edge for i: %d, j: %d%s\n",
+						i + ctx.one_based,
+						j + ctx.one_based,
+						ctx.one_based ? " (1-based index)" : "");
 				edge = vs[j]->incidence;					// all j in con. comp. U
 				while (edge)
 				{
-					if (!is_in_Vi(ctx.ps[i], edge->to) && ctx.min.min_cost > edge->cost)
+					if (!is_in_Vi(ctx.ps[i], edge->to) && (!ctx.min.min_edge || cmp_edge_cost(ctx.min.min_edge, edge) > 0))// ctx.min.min_cost > edge->cost)
 					{										// Alg (5)
 						ctx.min.min_cost = edge->cost;
 						ctx.min.min_edge = edge;
 					}
 					edge = edge->next;
 				}
-				printf("[DEBUG] chose %d -> %d\n", ctx.min.min_edge->from, ctx.min.min_edge->to);
+				printf("[DEBUG] chose %d -> %d%s\n",
+						ctx.min.min_edge->from + ctx.one_based,
+						ctx.min.min_edge->to + ctx.one_based,
+						ctx.one_based ? " (1-based index)" : "");
 			}
 			node = create_node(ctx.min.min_edge, NODE_TYPE_EDGE);
 			if (!node)
@@ -140,16 +150,10 @@ void	solve_boruvka(Vertex **vs, int n)
 			}
 			append_node(&queue, node);
 		}
-		// node = queue;
-		// while (node)
-		// {
-		// 	printf("%d\n", ((Edge *)node->ptr)->to);
-		// 	node = node->next;
-		// }
 		merge_node_queue(&queue, vs, &ctx);					// Alg (9)
-		print_array_pathnode(ctx.ps, n);
+		print_array_pathnode(ctx.ps, n, ctx.one_based);
 	}
-	print_edgenode(ctx.T);
+	print_edgenode(ctx.T, ctx.one_based);
 	printf("is_spanning_tree: %d\n", is_spanning_tree(ctx.T, n));
 	boruvka_free(n, &ctx);
 }

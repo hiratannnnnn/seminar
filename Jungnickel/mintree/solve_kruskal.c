@@ -57,7 +57,6 @@ static int kruskal_init(Kruskal_ctx *ctx, Vertex **vs, int n, int one_based)
 
 void	solve_kruskal(Vertex **vs, int n, int one_based)
 {
-	PathNode *node;
 	Node *cur;
 	Edge *edge;
 	Kruskal_ctx ctx;
@@ -82,13 +81,8 @@ void	solve_kruskal(Vertex **vs, int n, int one_based)
 					u + ctx.one_based,
 					v + ctx.one_based,
 					ctx.one_based ? " (1-based index)" : "");
+			update_labels(ctx.ps[v], u);
 			merge_pathnode(&ctx.ps[u], &ctx.ps[v]);			// Alg (8-1)
-			node = ctx.ps[u];
-			while (node)
-			{
-				node->v->label = u;
-				node = node->next;
-			}
 			append_edgenode(&ctx.T, create_edgenode(edge));	// Alg (8-2)
 			print_array_pathnode(ctx.ps, n, ctx.one_based);
 		}

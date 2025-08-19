@@ -35,7 +35,7 @@ cost was 122.000000
 
 mem_peak: 1452
 remaining mem: 1224
-proccess time: 0.002000
+proccess time: 0.000000
 
 ---------------------------
 Conducting KRUSKAL for Ex. 4.4.16
@@ -167,7 +167,7 @@ cost was 122.000000
 is_spanning_tree: 1
 mem_peak: 1948
 remaining mem: 1224
-proccess time: 0.002000
+proccess time: 0.003000
 mem_peak: 1948
 remaining mem: 0
 proccess time: 0.000000

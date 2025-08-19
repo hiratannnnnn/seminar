@@ -67,7 +67,8 @@ void	solve_prim(Vertex **vs, int s, int n, int one_based)
 		min.v = NULL;
 		for (int i = 0; i < n; i++)							// Alg (4)
 		{
-			if (!is_in_Vi(ctx.S, i) && ctx.cost_to_S[i].min_cost < min.min_cost)
+			if ((ctx.S == NULL || s != vs[i]->label) &&
+				ctx.cost_to_S[i].min_cost < min.min_cost)
 			{
 				min.min_cost = ctx.cost_to_S[i].min_cost;
 				min.v = vs[i];
@@ -77,6 +78,7 @@ void	solve_prim(Vertex **vs, int s, int n, int one_based)
 				min.v->id + ctx.one_based,
 				ctx.one_based ? " (1-based index)" : "");
 		node = create_pathnode(vs[min.v->id]);
+		vs[min.v->id]->label = s;
 		append_pathnode(&ctx.S, node);
 		print_pathnode(ctx.S, ctx.one_based);
 		if (node->v->id != s)								// Alg (5)
@@ -84,7 +86,8 @@ void	solve_prim(Vertex **vs, int s, int n, int one_based)
 		edge = min.v->incidence;
 		while (edge)
 		{													// Alg (6) (7)
-			if (!is_in_Vi(ctx.S, edge->to) && ctx.cost_to_S[edge->to].min_cost > edge->cost)
+			if (s != vs[edge->to]->label &&
+				ctx.cost_to_S[edge->to].min_cost > edge->cost)
 			{
 				ctx.cost_to_S[edge->to].min_cost = edge->cost;
 				ctx.cost_to_S[edge->to].edge = edge;

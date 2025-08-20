@@ -74,6 +74,11 @@ void	solve_prim(Vertex **vs, int s, int n, int one_based)
 				min.v = vs[i];
 			}
 		}
+		if (ctx.cost_to_S[min.v->id].edge)
+			printf("[DEBUG] chose %d -> %d%s\n",
+				ctx.cost_to_S[min.v->id].edge->from + ctx.one_based,
+				ctx.cost_to_S[min.v->id].edge->to + ctx.one_based,
+				ctx.one_based ? " (1-based index)" : "");
 		printf("[DEBUG] merge S and %d%s\n",
 				min.v->id + ctx.one_based,
 				ctx.one_based ? " (1-based index)" : "");

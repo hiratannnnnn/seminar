@@ -16,14 +16,19 @@ Conducting PRIM for Ex. 4.4.16
 
 [DEBUG] merge S and 0
  -> 0
+[DEBUG] chose 0 -> 3
 [DEBUG] merge S and 3
  -> 0 -> 3
+[DEBUG] chose 0 -> 2
 [DEBUG] merge S and 2
  -> 0 -> 3 -> 2
+[DEBUG] chose 2 -> 1
 [DEBUG] merge S and 1
  -> 0 -> 3 -> 2 -> 1
+[DEBUG] chose 0 -> 4
 [DEBUG] merge S and 4
  -> 0 -> 3 -> 2 -> 1 -> 4
+[DEBUG] chose 4 -> 5
 [DEBUG] merge S and 5
  -> 0 -> 3 -> 2 -> 1 -> 4 -> 5
 0 - 3
@@ -35,7 +40,7 @@ cost was 122.000000
 
 mem_peak: 1452
 remaining mem: 1224
-proccess time: 0.000000
+proccess time: 0.001000
 
 ---------------------------
 Conducting KRUSKAL for Ex. 4.4.16
@@ -167,7 +172,7 @@ cost was 122.000000
 is_spanning_tree: 1
 mem_peak: 1948
 remaining mem: 1224
-proccess time: 0.003000
+proccess time: 0.002000
 mem_peak: 1948
 remaining mem: 0
 proccess time: 0.000000

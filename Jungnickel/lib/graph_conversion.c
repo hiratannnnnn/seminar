@@ -27,12 +27,12 @@ Vertex      **adj_matrix_to_vertices(int **matrix, int n, int undirected)
         if (undirected)
         {
             for (j = i + 1; j < n; j++)
-                if (matrix[i][j])
+                if (matrix[i][j] > 0 && matrix[i][j] != INT_MAX / 2)
                     add_undirected_edge(vertices, i, j, edge_id++, (double)matrix[i][j]);
         }
         else
             for (j = 0; j < n; j++)
-                if (matrix[i][j])
+                if (matrix[i][j] > 0 && matrix[i][j] != INT_MAX / 2)
                     add_directed_edge(vertices, i, j, edge_id++, (double)matrix[i][j]);
     }
     return vertices;
@@ -53,12 +53,12 @@ Vertex      **cost_matrix_to_vertices(double **matrix, int n, int undirected)
         if (undirected)
         {
             for (j = i + 1; j < n; j++)
-                if (matrix[i][j])
+                if (matrix[i][j] > 0 && matrix[i][j] != DBL_MAX / 2)
                     add_undirected_edge(vertices, i, j, edge_id++, matrix[i][j]);
         }
         else
             for (j = 0; j < n; j++)
-                if (matrix[i][j])
+                if (matrix[i][j] > 0 && matrix[i][j] != DBL_MAX / 2)
                     add_directed_edge(vertices, i, j, edge_id++, matrix[i][j]);
     }
     return vertices;

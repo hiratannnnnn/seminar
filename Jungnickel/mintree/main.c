@@ -13,17 +13,20 @@ int main(void)
 	proc_start = clock();
 
     double **cost;
+    Vertex **vs;
 	int n;
-	n = 10;
+	n = 25;
 
-    cost = gen_rand_undigraph_dbcost(n, 0, 30, 0.6);
+    cost = gen_rand_undigraph_dbcost(n, 0, 30, 0.3);
     if (!cost)
         return (1);
-    print_matrix_double(cost, n, n, 3);
-    nl(2);
-    solve_steiner(cost, n);
+    // print_matrix_double(cost, n, n, 3);
+    vs = cost_matrix_to_vertices(cost, n, 1);
+    nl(1);
+    solve_steiner(cost, 9, n);
 
     free_matrix_double(cost, n, n);
+    free_vertex_array(vs, n);
 	print_info();
 	return (0);
 }

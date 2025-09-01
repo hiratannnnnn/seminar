@@ -62,6 +62,19 @@ int	count_edgenodes(EdgeNode *head)
 	return len;
 }
 
+double cost_of_edgenodes(EdgeNode *head)
+{
+	double cost;
+
+	cost = 0.0;
+	while (head)
+	{
+		cost += head->edge->cost;
+		head = head->next;
+	}
+	return cost;
+}
+
 void	merge_edgenode(EdgeNode **a, EdgeNode **b)
 {
 	EdgeNode *a_last;

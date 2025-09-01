@@ -191,6 +191,7 @@ void		append_edgenode			(EdgeNode **head, EdgeNode *new_node);
 void		insert_node_after		(EdgeNode *pos, EdgeNode *new_node);
 EdgeNode 	*get_last_edgenode		(EdgeNode *head);
 int			count_edgenodes			(EdgeNode *head);
+double 		cost_of_edgenodes		(EdgeNode *head);
 void		merge_edgenode			(EdgeNode **a, EdgeNode **b);
 EdgeNode	*edgenode_pop_first			(EdgeNode **head);
 

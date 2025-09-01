@@ -14,7 +14,8 @@ void 	solve_dijkstraPQ(Vertex **vs, int s, int n);
 void	solve_bellford(Vertex **vs, int s, int n);
 
 void	solve_floyd(double **cost, int n);
-double **solve_floyd_d(double **cost, int n);
+double 	**solve_floyd_d(double **cost, int n);
+void	solve_floyd_dy(double **cost, double ***dist, int ***pred, int n);
 
 void	solve_negacycle(int **cost, int n);
 

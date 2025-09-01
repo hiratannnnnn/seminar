@@ -20,13 +20,19 @@ This project (especially Jungnickel/Makefile) is intended to be run in a Bash en
 ## How to Compile
 
 ```bash
-cd ./Jungnickel
+cd Jungnickel
 make
 ```
 
 This will compile all projects.
 
 Each project has its own Makefile, so you can compile each one separately by running `make` in the corresponding directory.
+
+```bash
+cd mintree
+make
+./mintree
+```
 
 ```bash
 bash newmain.sh <name>
@@ -86,5 +92,3 @@ just a recommendation for code coloring ;p
 </details>
 
 ---
-
-RANK...ズレそうなので飛ばす

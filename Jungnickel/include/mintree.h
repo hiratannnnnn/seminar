@@ -27,6 +27,7 @@ void		solve				(Vertex **vs, int n);
 
 // solve_prim.c
 void		solve_prim			(Vertex **vs, int s, int n, int one_based);
+void		solve_prim_steiner	(Vertex **vs, int n, int *R_S, EdgeNode **head, double *cost);
 
 // solve_kruskal.c
 void		solve_kruskal		(Vertex **vs, int n, int one_based);
@@ -35,6 +36,6 @@ void		solve_kruskal		(Vertex **vs, int n, int one_based);
 void		solve_boruvka		(Vertex **vs, int n, int one_based);
 
 // solve_steiner.c
-void 		solve_steiner		(double **cost, int n);
+void 		solve_steiner		(double **cost, int r, int n);
 
 #endif

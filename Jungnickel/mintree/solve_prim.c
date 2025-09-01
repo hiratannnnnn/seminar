@@ -103,3 +103,55 @@ void	solve_prim(Vertex **vs, int s, int n, int one_based)
 	print_edgenode(ctx.T, ctx.one_based);
 	prim_free(&ctx, n);
 }
+
+void	solve_prim_steiner(Vertex **vs, int n, int *R_S, EdgeNode **head, double *cost)
+{
+	Prim_ctx ctx;
+	PathNode *node;
+	Edge *edge;
+	Min_V min;
+	int len, i;
+
+	len = 0;
+	for (i = 0; i < n; i++)
+		if (R_S[i])
+			len++;
+	if (!prim_init(&ctx, 0, n, 0))
+		return ;
+	while (count_pathnodes(ctx.S) < len)
+	{
+		min.min_cost = DBL_MAX;
+		min.v = NULL;
+		for (int i = 0; i < n; i++)
+		{
+			if (R_S[i] &&
+				(ctx.S == NULL || 0 != vs[i]->label) &&
+				ctx.cost_to_S[i].min_cost < min.min_cost)
+			{
+				min.min_cost = ctx.cost_to_S[i].min_cost;
+				min.v = vs[i];
+			}
+		}
+		node = create_pathnode(vs[min.v->id]);
+		vs[min.v->id]->label = 0;
+		append_pathnode(&ctx.S, node);
+		// print_pathnode(ctx.S, ctx.one_based);
+		if (node->v->id != 0)
+			append_edgenode(&ctx.T, create_edgenode(ctx.cost_to_S[min.v->id].edge));
+		edge = min.v->incidence;
+		while (edge)
+		{
+			if (0 != vs[edge->to]->label &&
+				ctx.cost_to_S[edge->to].min_cost > edge->cost)
+			{
+				ctx.cost_to_S[edge->to].min_cost = edge->cost;
+				ctx.cost_to_S[edge->to].edge = edge;
+			}
+			edge = edge->next;
+		}
+	}
+	*head = ctx.T;
+	*cost = cost_of_edgenodes(ctx.T);
+	ctx.T = NULL;
+	prim_free(&ctx, n);
+}

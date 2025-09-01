@@ -13,6 +13,7 @@ int main(void)
 	proc_start = clock();
 
 	int **matrix;
+	int **pred;
 	double **cost;
 	double **result;
 	Vertex **vs;
@@ -39,13 +40,17 @@ int main(void)
 	// solve_bellford(vs, 0, n);
 	solve_floyd(cost, n);
 	// printf("final\n");
-	result = solve_floyd_d(cost, n);
+	solve_floyd_dy(cost, &result, &pred, n);
 	if (!result)
+	{
 		print_matrix_double(result, n, n, 3);
+		print_matrix_int(pred, n, n);
+	}
 	// solve_negacycle(matrix, n);
 
 	// free
 	free_matrix_int(matrix, n, n);
+	free_matrix_int(pred, n, n);
 	free_matrix_double(cost, n, n);
 	free_matrix_double(result, n, n);
 	free_vertex_array(vs, n);

@@ -58,3 +58,21 @@ int 	max_int(int a, int b)
 		return b;
 	return a;
 }
+
+double	min_double(double a, double b)
+{
+	if (fabs(a - b) < DBL_EPSILON)
+		return a;
+	if (a < b)
+		return a;
+	return b;
+}
+
+double 	max_double(double a, double b)
+{
+	if (fabs(a - b) < DBL_EPSILON)
+		return a;
+	if (a < b)
+		return b;
+	return a;
+}

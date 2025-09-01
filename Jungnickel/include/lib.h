@@ -160,6 +160,8 @@ int			sum_matrix		(int **matrix, int r, int c);						// ok
 int			sum_array		(int *arr, int n);									// ok
 int			min_int			(int a, int b);
 int 		max_int			(int a, int b);
+double		min_double		(double a, double b);
+double 		max_double		(double a, double b);
 
 // utils_char.c
 void	 	free_array_char				(char **ss, int n);						// ok

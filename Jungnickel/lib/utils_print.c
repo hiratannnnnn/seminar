@@ -109,14 +109,19 @@ void print_array_double(double *arr, int n, int max_width, int precision)
     char format[20];
 
     if (precision <= 0)
-        precision = 3;
+		precision = 3;
+	if (max_width >= 9)
+		max_width = 9;
     if (max_width <= 0)
-        sprintf(format, "%%.%df", precision);
+    	sprintf(format, "%%.%df", precision);
     else
         sprintf(format, "%%%d.%df", max_width, precision);
     for (i = 0; i < n; i++)
     {
-        printf(format, arr[i]);
+        if (arr[i] == DBL_MAX / 2)
+			printf("%*s", max_width > 0 ? max_width : 9, "DBL_MAX/2");
+		else
+			printf(format, arr[i]);
         printf((i == n - 1) ? "\n" : " ");
     }
 }

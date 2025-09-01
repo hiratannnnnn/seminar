@@ -70,7 +70,7 @@ double 	**solve_floyd_d(double **cost, int n)
 			}
 		}
 	}
-	print_matrix_double(ctx.dist, n, n, 3);
+	// print_matrix_double(ctx.dist, n, n, 3);
 	// floyd_free(&ctx, n, n);
 	return ctx.dist;
 }

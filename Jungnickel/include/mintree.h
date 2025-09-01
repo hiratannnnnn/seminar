@@ -34,4 +34,7 @@ void		solve_kruskal		(Vertex **vs, int n, int one_based);
 // solve_boruvka.c
 void		solve_boruvka		(Vertex **vs, int n, int one_based);
 
+// solve_steiner.c
+void 		solve_steiner		(double **cost, int n);
+
 #endif

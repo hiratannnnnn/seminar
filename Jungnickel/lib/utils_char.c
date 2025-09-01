@@ -23,3 +23,11 @@ int 	count_digit(int number)
 		return (1);
 	return (count_digit(number / 10) + 1);
 }
+
+void 	nl(unsigned int n)
+{
+	unsigned int i;
+
+	for (i = 0; i < n; i++)
+		printf("\n");
+}

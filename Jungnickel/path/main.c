@@ -29,7 +29,7 @@ int main(void)
 	// matrix[0][1] = matrix[1][0] = -50;
 	// matrix[0][1] = matrix[1][0] = -1;
 	// matrix[0][2] = matrix[2][0] = 1;
-	print_matrix_int(matrix, n, n);
+	// print_matrix_int(matrix, n, n);
 	print_matrix_double(cost, n, n, 3);
 
 	// solve_bfs(vs, 0, n);
@@ -38,6 +38,7 @@ int main(void)
 	// solve_dijkstraPQ(vs, 0, n);
 	// solve_bellford(vs, 0, n);
 	solve_floyd(cost, n);
+	// printf("final\n");
 	result = solve_floyd_d(cost, n);
 	if (!result)
 		print_matrix_double(result, n, n, 3);
@@ -46,6 +47,7 @@ int main(void)
 	// free
 	free_matrix_int(matrix, n, n);
 	free_matrix_double(cost, n, n);
+	free_matrix_double(result, n, n);
 	free_vertex_array(vs, n);
 
 	print_info();

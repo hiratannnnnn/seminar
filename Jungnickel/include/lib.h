@@ -164,8 +164,9 @@ double		min_double		(double a, double b);
 double 		max_double		(double a, double b);
 
 // utils_char.c
-void	 	free_array_char				(char **ss, int n);						// ok
-int 		count_digit					(int number);					// ok
+void	 	free_array_char			(char **ss, int n);						// ok
+int 		count_digit				(int number);					// ok
+void 		nl						(unsigned int n);
 
 // utils_edge_list.c
 EdgeNode		*edge_list_from_adj_list	(Vertex **vs, int n, int is_undir);		// fine

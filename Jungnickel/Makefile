@@ -1,10 +1,10 @@
-DIRS = lib path
+DIRS = lib path mintree
 
 all: archives
 
 archives:
 	@for dir in $(DIRS); do \
-		$(MAKE) -C $$dir archive; \
+		$(MAKE) -C $$dir ar; \
 	done
 	@ls -la dist/
 

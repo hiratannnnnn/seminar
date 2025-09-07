@@ -10,9 +10,9 @@ SRCS = $(wildcard *.c)
 OBJS = $(SRCS:.c=.o)
 LIB = $(DISTDIR)/$(TARGET).a
 
-all: archive
+all: ar
 
-archive: $(LIB)
+ar: $(LIB)
 
 $(LIB): $(OBJS)
 	@mkdir -p $(DISTDIR)

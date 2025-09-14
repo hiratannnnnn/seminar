@@ -265,6 +265,10 @@ char 		*ft_strtrim			(char const *str, char const *set);
 
 /* ========= Memory Allocation ========= */
 
+// memory_dump.c
+void		dump_memory_hex		(const void *ptr, int size, int offset);
+void		dump_memory_detailed(const void *ptr, int size, const char *label);
+
 // xmalloc.c
 void		*xmalloc			(size_t size);
 void		*xcalloc			(int n, size_t size_each);

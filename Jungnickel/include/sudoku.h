@@ -29,53 +29,53 @@ typedef struct s_sudoku_masks
 }				t_sudoku_masks;
 
 // solve_sudoku.c
-void solve_sudoku(int **matrix, int n);
+void solve_sudoku(int **board, int n);
 
-// sudoku_constraints.c
+// utils_constraints.c
 
-void		init_masks				(int **matrix, int n, t_sudoku_masks *masks);
+void		init_masks				(int **board, int n, t_sudoku_masks *masks);
 void		update_masks_add		(int row, int col, int num, t_sudoku_masks *masks);
 void		update_masks_remove		(int row, int col, int num, t_sudoku_masks *masks);
 sudoku_mask	get_forbidden_mask		(int row, int col, t_sudoku_masks *masks);
 int			can_place_number		(int row, int col, int num, t_sudoku_masks *masks);
 
-// sudoku_analysis.c
-int			find_empty_cell			(int **matrix, int n, int *row, int *col);
-// int			find_best_cell			(int **matrix, int n, int *row, int *col);
-// int			is_puzzle_valid			(int **matrix, int n);
-int			is_puzzle_completed		(int **matrix, int n);
-// int 		has_unique_solution		(int **matrix, int n);
+// utils_analysis.c
+int			find_empty_cell			(int **board, int n, int *row, int *col);
+// int			find_best_cell			(int **board, int n, int *row, int *col);
+// int			is_puzzle_valid			(int **board, int n);
+int			is_puzzle_completed		(int **board, int n);
+// int 		has_unique_solution		(int **board, int n);
 
-// sudoku_strategies.c
-// int			solve_naked_singles		(int **matrix, int n);
-// int 		solve_hidden_singles	(int **matrix, int n);
-// int			solve_basic_elimination	(int **matrix, int n);
-// int			solve_backtracking		(int **matrix, int n);
+// utils_strategies.c
+int			solve_backtracking		(int **board, int n, t_sudoku_masks *masks);
+// int			solve_naked_singles		(int **board, int n, t_sudoku_masks *masks);
+// int			solve_basic_elimination	(int **board, int n, t_sudoku_masks *masks);
+// int			solve_hybrid			(int **board, int n, t_sudoku_masks *masks);
 
-// sudoku_utils.c
+// utils_utils.c
 int			get_box_index			(int row, int col);
 // void		get_box_start			(int box_index,  int *start_row, int *start_col);
 int			is_valid_position		(int row, int col);
 int			is_valid_number			(int num);
 int			popcount_manual			(unsigned int mask);
 
-// sudoku_print.c
+// utils_print.c
 void		print_mask_binary		(sudoku_mask mask, const char *label);
 void		print_mask_candidates	(sudoku_mask mask, const char *label);
 void		print_masks_status		(t_sudoku_masks *masks);
 void		print_masks_candidates	(t_sudoku_masks *masks);
 
-// sudoku_debug.c
-// void		print_sudoku_grid		(int **matrix, int n);
+// utils_debug.c
+// void		print_sudoku_grid		(int **board, int n);
 // void		print_constraints_status(void);
 // void		print_available_numbers	(int row, int col);
-// void		print_solving_step		(int **matrix, int n, const char *label);
+// void		print_solving_step		(int **board, int n, const char *label);
 
-// sudoku_generator.c
-// void		generate_empty_grid		(int **matrix, int n);
-// void		generate_solved_grid	(int **matrix, int n);
-// void 		generate_puzzle			(int **matrix, int n, int difficulty);
-// int			remove_numbers_sym		(int **matrix, int n, int count);
+// utils_generator.c
+// void		generate_empty_grid		(int **board, int n);
+// void		generate_solved_grid	(int **board, int n);
+// void 		generate_puzzle			(int **board, int n, int difficulty);
+// int			remove_numbers_sym		(int **board, int n, int count);
 
 
 #endif

@@ -1,6 +1,6 @@
 #include "sudoku.h"
 
-void init_masks(int **matrix, int n, t_sudoku_masks *masks)
+void init_masks(int **board, int n, t_sudoku_masks *masks)
 {
 	int row, col, num;
 	int i;
@@ -16,7 +16,7 @@ void init_masks(int **matrix, int n, t_sudoku_masks *masks)
 	{
 		for (col = 0; col < n; col++)
 		{
-			num = matrix[row][col];
+			num = board[row][col];
 			if (num != SUDOKU_EMPTY_CELL)
 				update_masks_add(row, col, num, masks);
 		}

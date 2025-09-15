@@ -12,16 +12,17 @@ int main(void)
 	srand((unsigned int)time(NULL));
 	proc_start = clock();
 
-	int **matrix;
+	int **board;
 	int n;
 
 	n = 9;
-	matrix = gen_matrix_int(n, n);
+	// board = gen_matrix_int(n, n);
+	board = read_adj(&n, "prob.txt");
 
-	solve_sudoku(matrix, n);
+	solve_sudoku(board, n);
 
 	// free
-	free_matrix_int(matrix, n, n);
+	free_matrix_int(board, n, n);
 	print_info();
 	return (0);
 }

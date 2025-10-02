@@ -1,6 +1,6 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -I../include
-LDFLAGS = -lm
+CFLAGS = -Wall -Wextra -Werror -I../include -I../../include
+LDFLAGS = -L../../dist -lpath -lmintree -lm
 TARGET = sorting
 
 MAIN_SRC = main.c
@@ -9,7 +9,7 @@ MAIN_OBJ = main.o
 LIB_SRCS = $(filter-out $(MAIN_SRC), $(wildcard *.c))
 LIB_OBJS = $(LIB_SRCS:.c=.o)
 
-DISTDIR = ../dist
+DISTDIR = ../../dist
 BASE_LIB = $(DISTDIR)/lib.a
 THIS_LIB = $(DISTDIR)/lib$(TARGET).a
 OTHER_LIBS = $(filter-out $(BASE_LIB) $(THIS_LIB), $(wildcard $(DISTDIR)/*.a))

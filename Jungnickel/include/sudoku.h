@@ -1,7 +1,7 @@
 #ifndef SUDOKU_H
 # define SUDOKU_H
 
-# include "lib.h"
+# include "../../include/lib.h"
 
 /* ========= Consants and Macros ========= */
 

@@ -1,7 +1,7 @@
 #ifndef PATH_H
 # define PATH_H
 
-# include "lib.h"
+# include "../include/lib.h"
 
 void 	solve_bfs	(Vertex **vs, int s, int n);
 
@@ -19,7 +19,7 @@ void	solve_floyd_dy(double **cost, double ***dist, int ***pred, int n);
 
 void	solve_negacycle(int **cost, int n);
 
-
+// wtf is this
 #include "path.h"
 
 Heap 	*heap_create(int capacity, HeapCmp cmp);

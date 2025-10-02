@@ -1,7 +1,7 @@
 #ifndef MINTREE_H
 # define MINTREE_H
 
-# include "lib.h"
+# include "../include/lib.h"
 
 typedef struct Min_V
 {

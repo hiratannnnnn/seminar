@@ -6,7 +6,7 @@ archives:
 	@for dir in $(DIRS); do \
 		$(MAKE) -C $$dir ar; \
 	done
-	@ls -la dist/
+	@ls -la	 dist/
 
 clean:
 	@for dir in $(DIRS); do $(MAKE) -C $$dir clean; done
@@ -28,4 +28,4 @@ delres:
 
 re: fclean all
 
-.PHONY: all $(DIRS) clean fclean re delres
+.PHONY: all archives clean fclean re delres distclean

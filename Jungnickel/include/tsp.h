@@ -1,7 +1,7 @@
 #ifndef TSP_H
 # define TSP_H
 
-# include "lib.h"
+# include "../../include/lib.h"
 
 int 	**gen_weighted_matrix	(int n, int upper);
 

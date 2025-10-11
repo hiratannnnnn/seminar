@@ -25,7 +25,6 @@ all: ar $(MAIN_OBJS)
 		else \
 			$(CC) -o $$exec $$obj $(OTHER_LIBS) $(BASE_LIB) $(LDFLAGS); \
 		fi; \
-		$(CC) -o $$exec $$obj $(THIS_LIB) $(OTHER_LIBS) $(BASE_LIB) $(LDFLAGS); \
 	done
 
 ar: $(LIB_OBJS)

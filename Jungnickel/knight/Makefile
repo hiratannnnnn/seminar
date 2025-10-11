@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -I../include -I../../include
-LDFLAGS = -L../../dist -lpath -lmintree -lm
+LDFLAGS = -L../../dist -lpath -lmintree -lperms -lm
 TARGET = knight
 
 MAIN_SRC = main.c

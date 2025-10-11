@@ -273,5 +273,6 @@ void		dump_memory_detailed(const void *ptr, int size, const char *label);
 void		*xmalloc			(size_t size);
 void		*xcalloc			(int n, size_t size_each);
 void		xfree				(void *ptr, size_t size);
+void		*xrealloc			(void *ptr, size_t old_size, size_t new_size);
 
 #endif

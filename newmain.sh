@@ -116,6 +116,11 @@ all: ar \$(MAIN_OBJS)
 		suffix=\$\$(echo \$\$base | sed 's/^main//'); \\
 		exec=\$(TARGET)\$\$suffix; \\
 		echo "Building executable: \$\$exec"; \\
+		if [ -f \$(THIS_LIB) ]; then \\
+			\$(CC) -o \$\$exec \$\$obj \$(THIS_LIB) \$(OTHER_LIBS) \$(BASE_LIB) \$(LDFLAGS); \\
+		else \\
+			\$(CC) -o \$\$exec \$\$obj \$(OTHER_LIBS) \$(BASE_LIB) \$(LDFLAGS); \\
+		fi; \\
 		\$(CC) -o \$\$exec \$\$obj \$(THIS_LIB) \$(OTHER_LIBS) \$(BASE_LIB) \$(LDFLAGS); \\
 	done
 

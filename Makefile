@@ -1,4 +1,4 @@
-DIRS = lib path mintree
+DIRS = lib path mintree perms
 
 all: archives
 

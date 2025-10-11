@@ -37,3 +37,18 @@ void	xfree(void *ptr, size_t size)
 		mem -= size;
 	}
 }
+
+void	*xrealloc(void *ptr, size_t old_size, size_t new_size)
+{
+	void *new_ptr;
+
+	if (new_size == 0)
+		return (xfree(ptr, old_size), NULL);
+	new_ptr = realloc(ptr, new_size);
+	if (!new_ptr)
+		return (fprintf(stderr, "failed to reallocate memory size of %d.\n", (int)new_size), NULL);
+	mem += (new_size - old_size);
+	if (mem > mem_peak)
+		mem_peak = mem;
+	return (new_ptr);
+}

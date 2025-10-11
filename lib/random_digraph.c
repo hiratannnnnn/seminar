@@ -1,4 +1,5 @@
 #include "lib.h"
+#include "perms.h"
 
 /**
  * @brief Generates a rand directed adjacency matrix and writes it to a file.

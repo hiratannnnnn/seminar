@@ -17,6 +17,7 @@ int main(void)
 
 	n = 5;
 	matrix = gen_matrix_int(n, n);
+	printf("%d\n", count_breakpoints());
 
 	print_matrix_int(matrix, n, n);
 	// free

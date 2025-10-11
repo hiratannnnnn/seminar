@@ -33,8 +33,8 @@ if [ $# -eq 1 ]; then
 	fi
 elif [ $# -eq 2 ]; then
 	# Case 2: dirname subdir
-	DIR="$1"
-	PARENT_DIR="$2"
+	DIR="$2"
+	PARENT_DIR="$1"
 	FULL_PATH="$PARENT_DIR/$DIR"
 fi
 
@@ -96,7 +96,7 @@ EOF
 cat > "$FULL_PATH/Makefile" << EOF
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -I$HEADER_INCLUDE -I$INCLUDE_PATH
-LDFLAGS = -L$DIST_PATH -lpath -lmintree -lm
+LDFLAGS = -L$DIST_PATH -lpath -lmintree -lperms -lm
 TARGET = $DIR
 
 MAIN_SRCS = \$(wildcard main*.c)

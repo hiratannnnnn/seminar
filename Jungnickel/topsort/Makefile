@@ -22,7 +22,7 @@ $(TARGET): $(MAIN_OBJ)
 $(MAIN_OBJ): $(MAIN_SRC)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-archive: $(LIB_OBJS)
+ar: $(LIB_OBJS)
 	@mkdir -p $(DISTDIR)
 	@if [ -n "$(LIB_OBJS)" ]; then \
 		ar rcs $(DISTDIR)/lib$(TARGET).a $(LIB_OBJS); \
@@ -39,4 +39,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all archive clean fclean re
+.PHONY: all ar clean fclean re

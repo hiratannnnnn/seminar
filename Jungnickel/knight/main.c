@@ -24,3 +24,5 @@ int main(void)
 	print_info();
 	return (0);
 }
+
+// python print_board.py 3 10 ./knight/path-3-10.txt

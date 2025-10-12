@@ -20,10 +20,13 @@ int main(void)
 	perm = add_extremity(perm, &n);
 
 	print_array_int(perm, n, 2);
+	printf("rev 1 4\n");
 	rev(perm, 1, 4, n);
-	// transpose(perm, 1, 3, 7, n);
-	// block_interchange(perm, 1, 3, 5, 8, n);
 	print_array_int(perm, n, 2);
+	printf("transpose 1 3 7\n");
+	transpose(perm, 1, 3, 7, n);
+	print_array_int(perm, n, 2);
+	// block_interchange(perm, 1, 3, 5, 8, n);
 
 	// free
 

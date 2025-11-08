@@ -6,6 +6,18 @@ size_t		mem_peak = 0;
 clock_t		proc_start;
 clock_t		proc_end;
 
+void 	print_array_exts(Extremity *exts, int n)
+{
+	int i;
+
+	i = 0;
+	while (i < n)
+	{
+		printf("(%d, %d)\n", exts[i * 2].gene_id, exts[i * 2 + 1].gene_id);
+		i++;
+	}
+}
+
 Extremity *perm_to_exts(int *perm, int n)
 {
 	Extremity *exts;
@@ -20,7 +32,7 @@ Extremity *perm_to_exts(int *perm, int n)
 	{
 		g_id = abs(perm[i]);
 		exts[2 * (g_id - 1)].gene_id = g_id;
-		exts[2 * (g_id - 1)].sign = 0;
+		exts[2 * (g_id - 1)].sign = -1;
 		exts[2 * (g_id - 1)].reality = NULL;
 		exts[2 * (g_id - 1)].desire = NULL;
 		exts[2 * (g_id - 1) + 1].gene_id = g_id;

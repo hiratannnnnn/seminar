@@ -1,6 +1,6 @@
 #include "genome.h"
 
-static void	put_desires(Extremity **exts, int n)
+static void	put_desires(Extremity_ctx *ctx, int n)
 {
 	int i, j;
 	Extremity *cur, *tar;
@@ -9,21 +9,29 @@ static void	put_desires(Extremity **exts, int n)
 
 	for (i = 0; i < n * 2 ; i++)
 	{
-		cur = exts[i];
+		cur = ctx->exts[i];
 		cur_id = cur->id;
 		cur_sign = cur->sign;
 		tar_id = abs(cur_id) + cur_sign;
 		tar_sign = cur_sign * (-1);
 		printf("desire edge on %d to %d\n",
 			cur_id * cur_sign, tar_id * tar_sign);
-		if (tar_id == 0 || tar_id == n + 1)
-			continue;
+		if (tar_id == 0)
+		{
+			ctx->ext_l->desire = cur;
+			cur->desire = ctx->ext_l;
+		}
+		else if (tar_id == n + 1)
+		{
+			ctx->ext_r->desire = cur;
+			cur->desire = ctx->ext_r;
+		}
 		for (j = 0; j < n * 2; j++)
 		{
-			if (exts[j]->id == tar_id &&
-				exts[j]->sign == tar_sign)
+			if (ctx->exts[j]->id == tar_id &&
+				ctx->exts[j]->sign == tar_sign)
 			{
-				tar = exts[j];
+				tar = ctx->exts[j];
 				tar->desire = cur;
 			}
 		}
@@ -36,8 +44,7 @@ static void	put_realities(Extremity_ctx *ctx, int *perm, int n)
 	int id1, id2, sign1, sign2;
 	Extremity *ext1_right, *ext2_left;
 
-	i = 0;
-	while (i < n - 1)
+	for (i = 0; i < n - 1; i++)
 	{
 		id1 = abs(perm[i]);
 		sign1 = id1 / perm[i]; // no zeros
@@ -51,7 +58,6 @@ static void	put_realities(Extremity_ctx *ctx, int *perm, int n)
 			ctx->exts[2 * (id2 - 1) + 1];
 		ext1_right->reality = ext2_left;
 		ext2_left->reality = ext1_right;
-		i++;
 	}
 
 	Extremity *ext_first, *ext_last;
@@ -66,7 +72,9 @@ static void	put_realities(Extremity_ctx *ctx, int *perm, int n)
 		ctx->exts[2 * (id2 - 1) + 1] :
 		ctx->exts[2 * (id2 - 1)];
 	ext_first->reality = ctx->ext_l;
+	ctx->ext_l->reality = ext_first;
 	ext_last->reality = ctx->ext_r;
+	ctx->ext_r->reality = ext_last;
 }
 
 static Extremity **perm_to_exts(int *perm, int n)
@@ -91,6 +99,32 @@ static Extremity **perm_to_exts(int *perm, int n)
 	return (exts);
 }
 
+static void	chase_exts_first(Extremity_ctx *ctx)
+{
+	Extremity *cur, *pair, *start;
+	int oriented;
+
+	oriented = 1;
+	cur = ctx->ext_l->reality;
+	start = cur;
+	while (1)
+	{
+		pair = get_pair_of(ctx, cur);
+		if (pair->reality &&
+			pair->reality != ctx->ext_r &&
+			cur->sign != pair->reality->sign)
+			oriented = 0;
+		cur = pair->reality;
+		if (cur == NULL ||
+			cur == ctx->ext_l ||
+			cur == ctx->ext_r ||
+			cur == start)
+			break;
+	}
+	ctx->head->oriented = oriented;
+	ctx->head->start = start;
+}
+
 void	Extremity_free(Extremity_ctx *ctx, int n)
 {
 	if (ctx->exts)
@@ -99,6 +133,8 @@ void	Extremity_free(Extremity_ctx *ctx, int n)
 		free_ext(ctx->ext_l);
 	if (ctx->ext_r)
 		free_ext(ctx->ext_r);
+	if (ctx->head)
+		free_component_list(ctx->head);
 }
 
 int Extremity_init(Extremity_ctx *ctx, int *perm, int n)
@@ -113,6 +149,10 @@ int Extremity_init(Extremity_ctx *ctx, int *perm, int n)
 	if (!ctx->ext_r)
 		return (Extremity_free(ctx, n), -1);
 	put_realities(ctx, perm, n);
-	put_desires(ctx->exts, n);
+	put_desires(ctx, n);
+	ctx->head = create_component();
+	if (!ctx->head)
+		return (Extremity_free(ctx, n), -1);
+	chase_exts_first(ctx);
 	return (1);
 }

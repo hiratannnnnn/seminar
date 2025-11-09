@@ -20,37 +20,6 @@ void 	free_array_exts(Extremity **exts, int n)
 	xfree(exts, sizeof(Extremity *) * (n * 2));
 }
 
-void 	print_array_exts(Extremity **exts, int n)
-{
-	int i;
-	int id1, sign1;
-	int id2, sign2;
-	Extremity *ext1, *ext2;
-
-	i = 0;
-	while (i < n)
-	{
-		ext1 = exts[i * 2];
-		ext2 = exts[i * 2 + 1];
-		id1 = ext1->id;
-		id2 = ext2->id;
-		sign1 = ext1->sign;
-		sign2 = ext2->sign;
-		printf("%d->", id1 * sign1);
-		if (ext1->reality)
-			printf("%d\n", ext1->reality->id * ext1->reality->sign);
-		else
-			printf("None\n");
-		printf("%d->", id2 * sign2);
-		if (ext2->reality)
-			printf("%d\n", ext2->reality->id * ext2->reality->sign);
-		else
-			printf("None\n");
-		i++;
-	}
-	printf("\n");
-}
-
 Extremity *create_ext(int id, int sign)
 {
 	Extremity *ext;
@@ -63,4 +32,56 @@ Extremity *create_ext(int id, int sign)
 	ext->reality = NULL;
 	ext->desire = NULL;
 	return (ext);
+}
+
+void	free_component(Component *comp)
+{
+	xfree(comp, sizeof(Component));
+}
+
+void	free_component_list(Component *head)
+{
+	Component *cur, *tmp;
+
+	cur = head;
+	while (cur)
+	{
+		tmp = cur;
+		free_component(cur);
+		cur = tmp->next;
+	}
+}
+
+Component *create_component(void)
+{
+	Component *comp;
+
+	comp = (Component *)xmalloc(sizeof(Component) * 1);
+	if (!comp)
+		return (NULL);
+	comp->start = NULL;
+	comp->end = NULL;
+	comp->type = 0;
+	comp->oriented = 0;
+	comp->prev = NULL;
+	comp->next = NULL;
+	return (comp);
+}
+
+int is_all_true(int *array, int n)
+{
+	int i;
+
+	for (i = 0; i < n; i++)
+		if (array[i] == 0)
+			return (0);
+	return (1);
+}
+
+Extremity *get_pair_of(Extremity_ctx *ctx, Extremity *ext)
+{
+	if (ext->sign == 1)
+		return (ctx->exts[2 * (ext->id - 1)]);
+	else
+		return (ctx->exts[2 * (ext->id - 1) + 1]);
 }

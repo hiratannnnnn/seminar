@@ -1,6 +1,7 @@
 #ifndef LIB_H
 # define LIB_H
 
+#include <fcntl.h>
 # include <math.h>
 # include <limits.h>
 # include <stdio.h>
@@ -12,6 +13,8 @@
 # include <unistd.h>
 # include <float.h>
 # include "types.h"
+
+# include "get_next_line.h"
 
 extern	size_t		mem;
 extern	size_t		mem_peak;

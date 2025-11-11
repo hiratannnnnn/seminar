@@ -12,7 +12,7 @@
 
 #include "get_next_line.h"
 
-char	*extract_line(char *stash)
+static char	*extract_line(char *stash)
 {
 	size_t	i;
 	size_t	len_nl;
@@ -36,7 +36,7 @@ char	*extract_line(char *stash)
 	return (line);
 }
 
-char	*update_stash(char *stash)
+static char	*update_stash(char *stash)
 {
 	size_t	len;
 	size_t	len_nl;
@@ -60,7 +60,7 @@ char	*update_stash(char *stash)
 	return (new);
 }
 
-char	*read_to_stash(int fd, char *stash)
+static char	*read_to_stash(int fd, char *stash)
 {
 	char	*buff;
 	int		read_bytes;

@@ -33,6 +33,20 @@ int 	*gen_unsigned_perm(int n)
 	return (perm);
 }
 
+int		*gen_signed_perm(int n)
+{
+	int *perm;
+	int i;
+
+	perm = gen_unsigned_perm(n);
+	if (!perm)
+		return (NULL);
+	for (i = 0; i < n; i++)
+		if (rand() % 2 == 0)
+			perm[i] = (-1) * perm[i];
+	return (perm);
+}
+
 void	*add_extremity(int *perm, int *n)
 {
 	int *new_perm;

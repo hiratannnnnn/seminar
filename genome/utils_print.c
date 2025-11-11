@@ -103,3 +103,13 @@ void	print_chromosomes(Extremity_ctx *ctx, int n)
 	}
 	free_array_int(used, n);
 }
+
+void 	print_stack(Stack_int *head)
+{
+	while (head)
+	{
+		printf("%d ", head->nbr);
+		head = head->next;
+	}
+	nl(1);
+}

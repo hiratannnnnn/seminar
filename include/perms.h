@@ -6,6 +6,7 @@
 // gen_perms.c
 int			*gen_perm			(int start, int end, int *n);
 int 		*gen_unsigned_perm	(int n);
+int			*gen_signed_perm	(int n);
 void		*add_extremity		(int *perm, int *n);
 void		*add_pairs			(int *perm, int *n);
 

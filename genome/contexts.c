@@ -150,6 +150,8 @@ int Extremity_init(Extremity_ctx *ctx, int *perm, int n)
 		return (Extremity_free(ctx, n), -1);
 	put_realities(ctx, perm, n);
 	put_desires(ctx, n);
+	ctx->n = n;
+	ctx->perm = perm;
 	ctx->head = create_component();
 	if (!ctx->head)
 		return (Extremity_free(ctx, n), -1);

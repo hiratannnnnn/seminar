@@ -30,9 +30,6 @@ char	*ft_strchr(char *s, char c);
 char	*ft_strjoin(char *st, char *bf);
 
 // get_next_line.c
-char	*extract_line(char *stash);
-char	*update_stash(char *stash);
-char	*read_to_stash(int fd, char *stash);
 char	*get_next_line(int fd);
 
 #endif

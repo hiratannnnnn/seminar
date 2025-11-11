@@ -251,6 +251,7 @@ int			write_adjacent_matrix	(int **matrix, int n, char const *filename);	// ok
 int 		write_adjacent_list		(int **matrix, int n, char const *filename);	// ok
 int 		write_path_node			(PathNode *head, char const *filename);
 int 		write_double_matrix		(double **matrix, int r, int c, char const *filename);
+int 		write_perm				(int *perm, int n, char const *filename);
 void 		save_some_matrix		(int n, double edge_prob,						// ok
 	int **(*gen_some_mat)(int, double), char const *filename);
 

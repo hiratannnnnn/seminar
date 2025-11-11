@@ -136,6 +136,26 @@ int 	write_path_node(PathNode *head, char const *filename)
 	return (0);
 }
 
+int write_perm(int *perm, int n, char const *filename)
+{
+    FILE *fp;
+    int i;
+
+    if (!perm || n <= 0)
+        return (-2);
+    fp = fopen(filename, "w");
+    if (!fp)
+    {
+        printf("Failed to open file %s\n", filename);
+        return (-1);
+    }
+    fprintf(fp, "%d\n", n);
+    for (i = 0; i < n; i++)
+        fprintf(fp, "%d%c", perm[i], (i == n - 1) ? '\n' : ' ');
+    fclose(fp);
+    return (0);
+}
+
 void 	save_some_matrix(int n, double edge_prob,
 	int **(*gen_some_mat)(int, double), char const *filename)
 {

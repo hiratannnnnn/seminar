@@ -52,7 +52,7 @@ Extremity *get_pair_of(Extremity_ctx *ctx, Extremity *ext)
 		return (ctx->exts[2 * (ext->id - 1) + 1]);
 }
 
-Extremity *get_index_of(Extremity_ctx *ctx, int index)
+Extremity *get_ext_by_perm_index(Extremity_ctx *ctx, Extremity **exts, int index)
 {
 	int *perm;
 	int sign;
@@ -62,7 +62,18 @@ Extremity *get_index_of(Extremity_ctx *ctx, int index)
 	id = abs(perm[index]);
 	sign = perm[index] / id;
 	sign = (sign == 1) ? sign : sign + 1;
-	return (ctx->exts[2 * (id - 1) + sign]);
+	return (exts[2 * (id - 1) + sign]);
+}
+
+Extremity *get_ext_by_value(Extremity **exts, int value)
+{
+	int id;
+	int sign;
+
+	id = abs(value);
+	sign = value / id;
+	sign = (sign == 1) ? sign : sign + 1;
+	return (exts[2 * (id - 1) + sign]);
 }
 
 int 	is_nullish(Extremity_ctx *ctx, Extremity *ext)
@@ -70,4 +81,20 @@ int 	is_nullish(Extremity_ctx *ctx, Extremity *ext)
 	return (ext == NULL ||
 			ext == ctx->ext_l ||
 			ext == ctx->ext_r);
+}
+
+void	reverse_p(int *perm, int *sigma, int n, int n_cent)
+{
+	int i;
+
+	i = 0;
+	while (i < n_cent)
+	{
+		if (perm[i] == 0 || perm[i] == n + 1)
+		{
+			perm[i] = n + 1 - perm[i];
+			sigma[i] = (-1) * sigma[i];
+		}
+		i++;
+	}
 }

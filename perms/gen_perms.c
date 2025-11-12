@@ -47,6 +47,19 @@ int		*gen_signed_perm(int n)
 	return (perm);
 }
 
+int 	*gen_id_perm(int n)
+{
+	int *perm;
+	int i;
+
+	perm = (int *)xmalloc(sizeof(int) * n);
+	if (!perm)
+		return (NULL);
+	for (i = 0; i < n; i++)
+		perm[i] = i + 1;
+	return (perm);
+}
+
 void	*add_extremity(int *perm, int *n)
 {
 	int *new_perm;

@@ -9,8 +9,9 @@ int 		*gen_unsigned_perm	(int n);
 int			*gen_signed_perm	(int n);
 void		*add_extremity		(int *perm, int *n);
 void		*add_pairs			(int *perm, int *n);
+int 		*gen_id_perm		(int n);
 
 // shuffle_perms.c
-void		shuffle_perm	(int *perm, int n);
+void		shuffle_perm		(int *perm, int n);
 
 #endif

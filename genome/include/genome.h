@@ -32,8 +32,15 @@ typedef struct Extremity_ctx
 	Extremity **exts;
 	Extremity *ext_l;
 	Extremity *ext_r;
+	Extremity **goals;
+	Extremity *goal_l;
+	Extremity *goal_r;
 	int n;
 	int *perm;
+	int *sigma;
+	int n_cent;
+	int *perm_cent;
+	int *sigma_cent;
 	Component *head;
 }	Extremity_ctx;
 
@@ -44,19 +51,27 @@ typedef struct Stack_int
 	struct Stack_int *next;
 }			Stack_int;
 
+// contexts.c
+void		put_desires			(Extremity **exts, Extremity *ext_l, Extremity *ext_r, int n);
+void		put_realities		(Extremity **exts, Extremity *ext_l, Extremity *ext_r, int *perm, int n);
+void		Extremity_free		(Extremity_ctx *ctx, int n);
+int 		Extremity_init		(Extremity_ctx *ctx, int *perm, int n);
+Extremity 	**perm_to_exts		(int *perm, int n);
+void		print_Extremity_ctx	(Extremity_ctx *ctx);
+
 // components.c
 void		free_component		(Component *comp);
 void		free_component_list	(Component *head);
 Component 	*create_component	(void);
 
 // find_components.c
-void 		find_components_1	(Extremity_ctx *ctx, int *maxes, int *mins, int n);
+void 		find_components_1	(Extremity_ctx *ctx, int *maxes, int *mins);
 
 // preprocess.c
 int 		preprocess			(Extremity_ctx *ctx, int *maxes, int *mins);
 
 // solve.c
-int 		solve_dcj			(int *perm, int n);
+int 		solve_dcj			(Extremity_ctx *ctx);
 
 // stacks.c
 void 		free_stack_node		(Stack_int *node);
@@ -72,8 +87,10 @@ void 		free_array_exts		(Extremity **exts, int n);
 Extremity 	*create_ext			(int id, int sign);
 int 		is_all_true			(int *array, int n);
 Extremity 	*get_pair_of		(Extremity_ctx *ctx, Extremity *ext);
-Extremity 	*get_index_of		(Extremity_ctx *ctx, int index);
+Extremity 	*get_ext_by_perm_index		(Extremity_ctx *ctx, Extremity **exts, int index);
+Extremity 	*get_ext_by_value			(Extremity **exts, int value);
 int 		is_nullish			(Extremity_ctx *ctx, Extremity *ext);
+void		reverse_p			(int *perm, int *sigma, int n, int n_cent);
 
 // utils_print.c
 void 		print_array_exts	(Extremity **exts, int n);
@@ -84,10 +101,7 @@ void 		print_stack			(Stack_int *head);
 
 // utils_read.c
 int 		*read_perm			(char *filename, int *n);
-
-// contexts.c
-void		Extremity_free		(Extremity_ctx *ctx, int n);
-int 		Extremity_init		(Extremity_ctx *ctx, int *perm, int n);
+int			read_exts			(char const *filename, Extremity_ctx *ctx, int *n);
 
 // operations.c
 void		cut_exts			(Extremity *e1, Extremity *e2);

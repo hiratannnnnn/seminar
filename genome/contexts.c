@@ -1,6 +1,6 @@
 #include "genome.h"
 
-static void	put_desires(Extremity_ctx *ctx, int n)
+void	put_desires(Extremity **exts, Extremity *ext_l, Extremity *ext_r, int n)
 {
 	int i, j;
 	Extremity *cur, *tar;
@@ -9,36 +9,36 @@ static void	put_desires(Extremity_ctx *ctx, int n)
 
 	for (i = 0; i < n * 2 ; i++)
 	{
-		cur = ctx->exts[i];
+		cur = exts[i];
 		cur_id = cur->id;
 		cur_sign = cur->sign;
 		tar_id = abs(cur_id) + cur_sign;
 		tar_sign = cur_sign * (-1);
-		printf("desire edge on %d to %d\n",
-			cur_id * cur_sign, tar_id * tar_sign);
+		// printf("desire edge on %d to %d\n",
+		// 	cur_id * cur_sign, tar_id * tar_sign);
 		if (tar_id == 0)
 		{
-			ctx->ext_l->desire = cur;
-			cur->desire = ctx->ext_l;
+			ext_l->desire = cur;
+			cur->desire = ext_l;
 		}
 		else if (tar_id == n + 1)
 		{
-			ctx->ext_r->desire = cur;
-			cur->desire = ctx->ext_r;
+			ext_r->desire = cur;
+			cur->desire = ext_r;
 		}
 		for (j = 0; j < n * 2; j++)
 		{
-			if (ctx->exts[j]->id == tar_id &&
-				ctx->exts[j]->sign == tar_sign)
+			if (exts[j]->id == tar_id &&
+				exts[j]->sign == tar_sign)
 			{
-				tar = ctx->exts[j];
+				tar = exts[j];
 				tar->desire = cur;
 			}
 		}
 	}
 }
 
-static void	put_realities(Extremity_ctx *ctx, int *perm, int n)
+void	put_realities(Extremity **exts, Extremity *ext_l, Extremity *ext_r, int *perm, int n)
 {
 	int i;
 	int id1, id2, sign1, sign2;
@@ -51,11 +51,11 @@ static void	put_realities(Extremity_ctx *ctx, int *perm, int n)
 		id2 = abs(perm[i + 1]);
 		sign2 = id2 / perm[i + 1];
 		ext1_right = (sign1 == 1) ?
-			ctx->exts[2 * (id1 - 1) + 1] :
-			ctx->exts[2 * (id1 - 1)];
+			exts[2 * (id1 - 1) + 1] :
+			exts[2 * (id1 - 1)];
 		ext2_left = (sign2 == 1) ?
-			ctx->exts[2 * (id2 - 1)] :
-			ctx->exts[2 * (id2 - 1) + 1];
+			exts[2 * (id2 - 1)] :
+			exts[2 * (id2 - 1) + 1];
 		ext1_right->reality = ext2_left;
 		ext2_left->reality = ext1_right;
 	}
@@ -65,19 +65,21 @@ static void	put_realities(Extremity_ctx *ctx, int *perm, int n)
 	sign1 = id1 / perm[0];
 	id2 = abs(perm[n - 1]);
 	sign2 = id2 / perm[n - 1];
-	ext_first = (sign1 == 1) ?
-		ctx->exts[2 * (id1 - 1)] :
-		ctx->exts[2 * (id1 - 1) + 1];
-	ext_last = (sign2 == 1) ?
-		ctx->exts[2 * (id2 - 1) + 1] :
-		ctx->exts[2 * (id2 - 1)];
-	ext_first->reality = ctx->ext_l;
-	ctx->ext_l->reality = ext_first;
-	ext_last->reality = ctx->ext_r;
-	ctx->ext_r->reality = ext_last;
+	// ext_first = (sign1 == 1) ?
+	// 	exts[2 * (id1 - 1)] :
+	// 	exts[2 * (id1 - 1) + 1];
+	ext_first = get_ext_by_value(exts, (-1) * perm[0]);
+	// ext_last = (sign2 == 1) ?
+	// 	exts[2 * (id2 - 1) + 1] :
+	// 	exts[2 * (id2 - 1)];
+	ext_last = get_ext_by_value(exts, perm[n - 1]);
+	ext_first->reality = ext_l;
+	ext_l->reality = ext_first;
+	ext_last->reality = ext_r;
+	ext_r->reality = ext_last;
 }
 
-static Extremity **perm_to_exts(int *perm, int n)
+Extremity **perm_to_exts(int *perm, int n)
 {
 	Extremity **exts;
 	int i, g_id;
@@ -85,7 +87,6 @@ static Extremity **perm_to_exts(int *perm, int n)
 	exts = (Extremity **)xmalloc(sizeof(Extremity *) * (n * 2));
 	if (!exts)
 		return (NULL);
-	printf("sizeof(Extremity): %d\n", sizeof(Extremity));
 	i = 0;
 	while (i < n)
 	{
@@ -133,6 +134,12 @@ void	Extremity_free(Extremity_ctx *ctx, int n)
 		free_ext(ctx->ext_l);
 	if (ctx->ext_r)
 		free_ext(ctx->ext_r);
+	if (ctx->goals)
+		free_array_exts(ctx->goals, n);
+	if (ctx->goal_l)
+		free_ext(ctx->goal_l);
+	if (ctx->goal_r)
+		free_ext(ctx->goal_r);
 	if (ctx->head)
 		free_component_list(ctx->head);
 }
@@ -148,8 +155,8 @@ int Extremity_init(Extremity_ctx *ctx, int *perm, int n)
 	ctx->ext_r = create_ext(n + 1, -1);
 	if (!ctx->ext_r)
 		return (Extremity_free(ctx, n), -1);
-	put_realities(ctx, perm, n);
-	put_desires(ctx, n);
+	put_realities(ctx->exts, ctx->ext_l, ctx->ext_r, perm, n);
+	put_desires(ctx->exts, ctx->ext_l, ctx->ext_r, n);
 	ctx->n = n;
 	ctx->perm = perm;
 	ctx->head = create_component();
@@ -157,4 +164,25 @@ int Extremity_init(Extremity_ctx *ctx, int *perm, int n)
 		return (Extremity_free(ctx, n), -1);
 	chase_exts_first(ctx);
 	return (1);
+}
+
+void	print_Extremity_ctx(Extremity_ctx *ctx)
+{
+	printf("==========\n\n");
+	print_array_exts(ctx->exts, ctx->n);
+	print_array_exts(ctx->goals, ctx->n);
+
+	printf("%p, %p, %p, %p\n", ctx->ext_l, ctx->ext_r, ctx->goal_l, ctx->goal_r);
+	printf("n: %d\n", ctx->n);
+	printf("n_cent: %d\n", ctx->n_cent);
+	print_array_int(ctx->perm, ctx->n, 3);
+	print_array_int(ctx->perm_cent, ctx->n_cent, 3);
+	print_array_int(ctx->sigma_cent, ctx->n_cent, 3);
+
+	print_components(ctx->head);
+
+
+
+	printf("\n==========\n");
+
 }

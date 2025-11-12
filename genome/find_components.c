@@ -1,20 +1,25 @@
 #include "genome.h"
 
-static void 	logger(Extremity_ctx *ctx, int *Min, int *Max, int *min, int *max, Stack_int *stack_1, Stack_int *stack_2)
+static void 	logger(Extremity_ctx *ctx, int i, int *Min, int *Max, int *min, int *max, Stack_int *stack_1, Stack_int *stack_2)
 {
-	int n;
+	int n_cent;
 
-	n = ctx->n;
+	n_cent = ctx->n_cent;
+	printf("===== LOGGER =====\n\n");
+	printf("i: %d, n: %d, n_cent: %d\n", i, ctx->n, ctx->n_cent);
 	printf("Min: ");
-	print_array_int(Min, n, 2);
+	print_array_int(Min, n_cent, 2);
 	printf("Max: ");
-	print_array_int(Max, n, 2);
+	print_array_int(Max, n_cent, 2);
 	printf("min: ");
-	print_array_int(min, n, 2);
+	print_array_int(min, n_cent, 2);
 	printf("max: ");
-	print_array_int(max, n, 2);
+	print_array_int(max, n_cent, 2);
+	printf("stack_1: ");
 	print_stack(stack_1);
+	printf("stack_2: ");
 	print_stack(stack_2);
+	printf("\n========\n\n");
 }
 
 void 	update_stack(int *array, Stack_int *stack, int i, int pi, int (*f)(int, int))
@@ -38,23 +43,27 @@ void	report_component(Extremity_ctx *ctx, Extremity *start, Extremity *end, int 
 	ctx->head = comp;
 }
 
-void	find_components_1(Extremity_ctx *ctx, int *maxes, int *mins, int n)
+void	find_components_1(Extremity_ctx *ctx, int *maxes, int *mins)
 {
 	Stack_int *stack_1, *stack_2;
 	int *Min, *Max, *min, *max;
-	int *perm;
-	int i, s, pi;
+	int *perm_cent, *sigma_cent;
+	int i, s, pi, n, n_cent;
+	n = ctx->n;
+	n_cent = ctx->n_cent;
+	perm_cent = ctx->perm_cent;
+	sigma_cent = ctx->sigma_cent;
+	print_array_int(sigma_cent, n_cent, 2);
 
-	Min = (int *)xcalloc(n, sizeof(int));
-	Max = (int *)xcalloc(n, sizeof(int));
-	min = (int *)xcalloc(n, sizeof(int));
-	max = (int *)xcalloc(n, sizeof(int));
+	Min = (int *)xcalloc(n_cent, sizeof(int));
+	Max = (int *)xcalloc(n_cent, sizeof(int));
+	min = (int *)xcalloc(n_cent, sizeof(int));
+	max = (int *)xcalloc(n_cent, sizeof(int));
 	stack_1 = stack_2 = NULL;
-	perm = ctx->perm;
 	if (!Min || !Max || !min || !max)
 		return ;
 	printf("allocated arrays.\n");
-	for (i = 0; i < n; i++)
+	for (i = 0; i < n_cent; i++)
 	{
 		Min[i] = n + 1;
 		Max[i] = 0;
@@ -62,41 +71,42 @@ void	find_components_1(Extremity_ctx *ctx, int *maxes, int *mins, int n)
 		max[i] = 0;
 		push_stack(&stack_1, i);
 		push_stack(&stack_2, i);
-		while (perm[i] != n + 1)
+		while (perm_cent[i] != n + 1)
 		{
-			printf("i: %d, perm[i]: %d\n", i, perm[i]);
+			printf("i: %d, perm_cent[i]: %d\n", i, perm_cent[i]);
 			printf("update minima and maxima.\n");
-			pi = abs(perm[i]);
+			pi = perm_cent[i];
 			update_stack(Min, stack_1, i, pi, min_int);
 			update_stack(Max, stack_1, i, pi, max_int);
 			update_stack(min, stack_2, i, pi, min_int);
 			update_stack(max, stack_2, i, pi, max_int);
 
-			logger(ctx, Min, Max, min, max, stack_1, stack_2);
+			logger(ctx, i, Min, Max, min, max, stack_1, stack_2);
 
 			printf("Find components of types 1 and 3\n");
 			s = peek_stack(stack_1);
-			while (perm[s] > perm[i] || maxes[s] < perm[i])
+			while (perm_cent[s] > perm_cent[i] || maxes[s] < perm_cent[i])
 			{
+				printf("while 1\n");
 				pop_stack(&stack_1);
 				update_stack(Min, stack_1, i, pi, min_int);
 				update_stack(Max, stack_1, i, pi, max_int);
 				s = peek_stack(stack_1);
 			}
-			if (perm[i] / pi == 1 &&
+			if (sigma_cent[i] == 1 &&
 				maxes[i] == maxes[s] &&
-				((perm[s] != 0 && Max[s] - Min[s] == i - s) ||
-				(perm[s] == 0 && Max[s] - Min[s] == i - s - 1 &&
-				get_index_of(ctx, Min[s])->reality == ctx->ext_l)))
+				((perm_cent[s] != 0 && Max[s] - Min[s] == i - s) ||
+				(perm_cent[s] == 0 && Max[s] - Min[s] == i - s - 1 &&
+				get_ext_by_perm_index(ctx, ctx->exts, Min[s])->reality == ctx->ext_l)))
 			{
 				printf("report_component type 1\n");
-				report_component(ctx, get_index_of(ctx, s), get_index_of(ctx, i), 1);
+				report_component(ctx, get_ext_by_perm_index(ctx, ctx->exts, s), get_ext_by_perm_index(ctx, ctx->exts, i), 1);
 			}
 			// Find components of type 7
 			printf("Find components of type 7\n");
-			logger(ctx, Min, Max, min, max, stack_1, stack_2);
+			logger(ctx, i, Min, Max, min, max, stack_1, stack_2);
 			s = peek_stack(stack_2);
-			while ((perm[s] < perm[i] || mins[s] > perm[s]) && perm[s] > 0)
+			while ((perm_cent[s] < perm_cent[i] || mins[s] > perm_cent[s]) && perm_cent[s] > 0)
 			{
 				if (s == INT_MIN)
 				{
@@ -107,22 +117,20 @@ void	find_components_1(Extremity_ctx *ctx, int *maxes, int *mins, int n)
 				update_stack(min, stack_2, i, pi, min_int);
 				update_stack(max, stack_2, i, pi, max_int);
 				s = peek_stack(stack_2);
-				logger(ctx, Min, Max, min, max, stack_1, stack_2);
+				logger(ctx, i, Min, Max, min, max, stack_1, stack_2);
 			}
-			if (perm[i] / pi == -1 &&
+			if (sigma_cent[i] == -1 &&
 				mins[i] == mins[s] &&
-				perm[s] == 0 &&
+				perm_cent[s] == 0 &&
 				max[s] - min[s] == i - s - 1 &&
-				max[s]) // && // is at a right chromosome end in B)
-				// all elements from s to i are on the same chromosome in B
+				max[s]) // && // is at a right chromosome end in B)// all elements from s to i are on the same chromosome in B
 			{
 				// report the component (s, ..., i)
 				printf("report_component type 7\n");
-				report_component(ctx, get_index_of(ctx, s), get_index_of(ctx, i), 7);
+				report_component(ctx, get_ext_by_perm_index(ctx, ctx->exts, s), get_ext_by_perm_index(ctx, ctx->exts, i), 7);
 			}
-
 			printf("update stacks\n");
-			if (perm[i] / pi == 1)
+			if (sigma_cent[i] == 1)
 				push_stack(&stack_1, i);
 			else
 				push_stack(&stack_2, i);
@@ -130,14 +138,14 @@ void	find_components_1(Extremity_ctx *ctx, int *maxes, int *mins, int n)
 		}
 
 		s = peek_stack(stack_1);
-		while (perm[s] != 0)
+		while (perm_cent[s] != 0)
 		{
 			pop_stack(&stack_1);
 			update_stack(Min, stack_1, i, pi, min_int);
 			update_stack(Max, stack_1, i, pi, max_int);
 			s = peek_stack(stack_1);
 		}
-		if (perm[s + 1] / abs(perm[s + 1]) == 1 &&
+		if (sigma_cent[s + 1] == 1 &&
 			Max[s] - Min[s] == i - s - 2 &&
 			Min[s] && // is at a left chromosome end in B
 			Max[s] && // is at a right chromosome end in B
@@ -147,7 +155,7 @@ void	find_components_1(Extremity_ctx *ctx, int *maxes, int *mins, int n)
 		{
 			// report the component (s, ..., i)
 			printf("report_component type 4\n");
-			report_component(ctx, get_index_of(ctx, s), get_index_of(ctx, i), 4);
+			report_component(ctx, get_ext_by_perm_index(ctx, ctx->exts, s), get_ext_by_perm_index(ctx, ctx->exts, i), 4);
 		}
 	}
 }

@@ -27,6 +27,12 @@ typedef struct Component
 	struct Component *next;
 }		Component;
 
+typedef struct
+{
+	int *ends;
+	int *starts;
+}	Components;
+
 typedef struct Extremity_ctx
 {
 	Extremity **exts;
@@ -53,7 +59,7 @@ typedef struct Stack_int
 
 // contexts.c
 void		put_desires			(Extremity **exts, Extremity *ext_l, Extremity *ext_r, int n);
-void		put_realities		(Extremity **exts, Extremity *ext_l, Extremity *ext_r, int *perm, int n);
+void		put_realities		(Extremity_ctx *ctx, Extremity **exts, Extremity *ext_l, Extremity *ext_r, int *perm, int n);
 void		Extremity_free		(Extremity_ctx *ctx, int n);
 int 		Extremity_init		(Extremity_ctx *ctx, int *perm, int n);
 Extremity 	**perm_to_exts		(int *perm, int n);
@@ -65,7 +71,7 @@ void		free_component_list	(Component *head);
 Component 	*create_component	(void);
 
 // find_components.c
-void 		find_components_1	(Extremity_ctx *ctx, int *maxes, int *mins);
+void 		find_components_1	(Extremity_ctx *ctx, int *maxes, int *mins, Components *cmps);
 
 // preprocess.c
 int 		preprocess			(Extremity_ctx *ctx, int *maxes, int *mins);
@@ -88,7 +94,7 @@ Extremity 	*create_ext			(int id, int sign);
 int 		is_all_true			(int *array, int n);
 Extremity 	*get_pair_of		(Extremity_ctx *ctx, Extremity *ext);
 Extremity 	*get_ext_by_perm_index		(Extremity_ctx *ctx, Extremity **exts, int index);
-Extremity 	*get_ext_by_value			(Extremity **exts, int value);
+Extremity 	*get_ext_by_value			(Extremity_ctx *ctx, Extremity **exts, int value);
 int 		is_nullish			(Extremity_ctx *ctx, Extremity *ext);
 void		reverse_p			(int *perm, int *sigma, int n, int n_cent);
 
@@ -104,7 +110,7 @@ int 		*read_perm			(char *filename, int *n);
 int			read_exts			(char const *filename, Extremity_ctx *ctx, int *n);
 
 // operations.c
-void		cut_exts			(Extremity *e1, Extremity *e2);
-void		join_exts			(Extremity *e1, Extremity *e2);
+void		cut_exts			(Extremity_ctx *ctx, Extremity *e1, Extremity *e2);
+void		join_exts			(Extremity_ctx *ctx, Extremity *e1, Extremity *e2);
 
 #endif

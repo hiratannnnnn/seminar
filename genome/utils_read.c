@@ -64,7 +64,7 @@ int *read_perm(char *filename, int *n)
 // 	return (count);
 // }
 
-static void	cut_line(Extremity **exts, char const *line, int n)
+static void	cut_line(Extremity_ctx *ctx, Extremity **exts, char const *line, int n)
 {
 	int i, tmp;
 	char *cur, *endptr;
@@ -81,8 +81,8 @@ static void	cut_line(Extremity **exts, char const *line, int n)
 			break;
 		if (*cur == '^')
 		{
-			ext = get_ext_by_value(exts, tmp);
-			cut_exts(ext, ext->reality);
+			ext = get_ext_by_value(ctx, exts, tmp);
+			cut_exts(ctx, ext, ext->reality);
 			cur++;
 		}
 		else
@@ -191,9 +191,9 @@ int	read_exts(char const *filename, Extremity_ctx *ctx, int *n)
 	ctx->ext_r = create_ext(*n + 1, -1);
 	if (!ctx->ext_r)
 		return (-1);
-	put_realities(ctx->exts, ctx->ext_l, ctx->ext_r, perm, *n);
+	put_realities(ctx, ctx->exts, ctx->ext_l, ctx->ext_r, perm, *n);
 	put_desires(ctx->exts, ctx->ext_l, ctx->ext_r, *n);
-	cut_line(ctx->exts, line, *n);
+	cut_line(ctx, ctx->exts, line, *n);
 	free(line);
 	line = get_next_line(fd);
 	printf("%s", line);
@@ -205,9 +205,9 @@ int	read_exts(char const *filename, Extremity_ctx *ctx, int *n)
 	ctx->goal_r = create_ext(*n + 1, -1);
 	if (!ctx->goal_r)
 		return (-1);
-	put_realities(ctx->goals, ctx->goal_l, ctx->goal_r, id_perm, *n);
+	put_realities(ctx, ctx->goals, ctx->goal_l, ctx->goal_r, id_perm, *n);
 	put_desires(ctx->goals, ctx->goal_l, ctx->goal_r, *n);
-	cut_line(ctx->goals, line, *n);
+	cut_line(ctx, ctx->goals, line, *n);
 	free(line);
 	close(fd);
 	ctx->head = create_component();

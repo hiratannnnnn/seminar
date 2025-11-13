@@ -60,19 +60,23 @@ Extremity *get_ext_by_perm_index(Extremity_ctx *ctx, Extremity **exts, int index
 
 	perm = ctx->perm;
 	id = abs(perm[index]);
-	sign = perm[index] / id;
-	sign = (sign == 1) ? sign : sign + 1;
+	sign = (perm[index] > 0) ? 1 : 0;
 	return (exts[2 * (id - 1) + sign]);
 }
 
-Extremity *get_ext_by_value(Extremity **exts, int value)
+Extremity *get_ext_by_value(Extremity_ctx *ctx, Extremity **exts, int value)
 {
 	int id;
 	int sign;
+	int n;
 
+	n = ctx->n;
 	id = abs(value);
-	sign = value / id;
-	sign = (sign == 1) ? sign : sign + 1;
+	if (id == 0)
+		return (ctx->ext_l);
+	if (id == n)
+		return (ctx->ext_r);
+	sign = (value > 0) ? 1 : 0;
 	return (exts[2 * (id - 1) + sign]);
 }
 

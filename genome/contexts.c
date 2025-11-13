@@ -14,8 +14,6 @@ void	put_desires(Extremity **exts, Extremity *ext_l, Extremity *ext_r, int n)
 		cur_sign = cur->sign;
 		tar_id = abs(cur_id) + cur_sign;
 		tar_sign = cur_sign * (-1);
-		// printf("desire edge on %d to %d\n",
-		// 	cur_id * cur_sign, tar_id * tar_sign);
 		if (tar_id == 0)
 		{
 			ext_l->desire = cur;
@@ -38,7 +36,7 @@ void	put_desires(Extremity **exts, Extremity *ext_l, Extremity *ext_r, int n)
 	}
 }
 
-void	put_realities(Extremity **exts, Extremity *ext_l, Extremity *ext_r, int *perm, int n)
+void	put_realities(Extremity_ctx *ctx, Extremity **exts, Extremity *ext_l, Extremity *ext_r, int *perm, int n)
 {
 	int i;
 	int id1, id2, sign1, sign2;
@@ -65,14 +63,8 @@ void	put_realities(Extremity **exts, Extremity *ext_l, Extremity *ext_r, int *pe
 	sign1 = id1 / perm[0];
 	id2 = abs(perm[n - 1]);
 	sign2 = id2 / perm[n - 1];
-	// ext_first = (sign1 == 1) ?
-	// 	exts[2 * (id1 - 1)] :
-	// 	exts[2 * (id1 - 1) + 1];
-	ext_first = get_ext_by_value(exts, (-1) * perm[0]);
-	// ext_last = (sign2 == 1) ?
-	// 	exts[2 * (id2 - 1) + 1] :
-	// 	exts[2 * (id2 - 1)];
-	ext_last = get_ext_by_value(exts, perm[n - 1]);
+	ext_first = get_ext_by_value(ctx, exts, (-1) * perm[0]);
+	ext_last = get_ext_by_value(ctx, exts, perm[n - 1]);
 	ext_first->reality = ext_l;
 	ext_l->reality = ext_first;
 	ext_last->reality = ext_r;
@@ -130,18 +122,34 @@ void	Extremity_free(Extremity_ctx *ctx, int n)
 {
 	if (ctx->exts)
 		free_array_exts(ctx->exts, n);
+	ctx->exts = NULL;
 	if (ctx->ext_l)
 		free_ext(ctx->ext_l);
+	ctx->ext_l = NULL;
 	if (ctx->ext_r)
 		free_ext(ctx->ext_r);
+	ctx->ext_r = NULL;
 	if (ctx->goals)
 		free_array_exts(ctx->goals, n);
+	ctx->goals = NULL;
 	if (ctx->goal_l)
 		free_ext(ctx->goal_l);
+	ctx->goal_l = NULL;
 	if (ctx->goal_r)
 		free_ext(ctx->goal_r);
+	ctx->goal_r = NULL;
+	if (ctx->perm)
+		free_array_int(ctx->perm, ctx->n);
+	ctx->perm = NULL;
+	if (ctx->perm_cent)
+		free_array_int(ctx->perm_cent, ctx->n_cent);
+	ctx->perm_cent = NULL;
+	if (ctx->sigma_cent)
+		free_array_int(ctx->sigma_cent, ctx->n_cent);
+	ctx->sigma_cent = NULL;
 	if (ctx->head)
 		free_component_list(ctx->head);
+	ctx->head = NULL;
 }
 
 int Extremity_init(Extremity_ctx *ctx, int *perm, int n)
@@ -155,7 +163,7 @@ int Extremity_init(Extremity_ctx *ctx, int *perm, int n)
 	ctx->ext_r = create_ext(n + 1, -1);
 	if (!ctx->ext_r)
 		return (Extremity_free(ctx, n), -1);
-	put_realities(ctx->exts, ctx->ext_l, ctx->ext_r, perm, n);
+	put_realities(ctx, ctx->exts, ctx->ext_l, ctx->ext_r, perm, n);
 	put_desires(ctx->exts, ctx->ext_l, ctx->ext_r, n);
 	ctx->n = n;
 	ctx->perm = perm;

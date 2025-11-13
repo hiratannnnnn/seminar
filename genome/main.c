@@ -22,7 +22,8 @@ int main(void)
 	*/
 	// perm = read_perm("long_perm.txt", &n);
 	// perm = read_perm("read.txt", &n);
-	read_exts("read.txt", &ctx, &n);
+	// read_exts("read.txt", &ctx, &n);
+	read_exts("example.txt", &ctx, &n);
 	reverse_p(ctx.perm_cent, ctx.sigma_cent, ctx.n, ctx.n_cent);
 	reverse_p(ctx.perm_cent, ctx.sigma_cent, ctx.n, ctx.n_cent);
 	print_Extremity_ctx(&ctx);

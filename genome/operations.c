@@ -1,25 +1,23 @@
 #include "genome.h"
 
-void	cut_exts(Extremity *e1, Extremity *e2)
+void	cut_exts(Extremity_ctx *ctx, Extremity *left, Extremity *right)
 {
-	if (e1->reality != e2 || e2->reality != e1)
+	if (left->reality != right || right->reality != left)
 	{
 		printf("Cannot cut disconnected ones.\n");
 		return ;
 	}
-	e1->reality = NULL;
-	e2->reality = NULL;
+	left->reality = ctx->ext_r;
+	right->reality = ctx->ext_l;
 }
 
-void	join_exts(Extremity *e1, Extremity *e2)
+void	join_exts(Extremity_ctx *ctx, Extremity *left, Extremity *right)
 {
-	if (e1->reality != NULL || e2->reality != NULL)
+	if (!is_nullish(ctx, left->reality) || !is_nullish(ctx, right->reality))
 	{
 		printf("Cut the edge first.\n");
 		return ;
 	}
-	e1->reality = e2;
-	e2->reality = e1;
+	left->reality = right;
+	right->reality = left;
 }
-
-// void	randomize_chromosome()

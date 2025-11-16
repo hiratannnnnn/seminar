@@ -11,8 +11,8 @@ int main(void)
 	setvbuf(stdout, NULL, _IONBF, 0);
 	srand((unsigned int)time(NULL));
 	proc_start = clock();
-	int n;
 	Extremity_ctx ctx;
+	int n;
 
 	/* for generating some permutation.
 	// n = 100;
@@ -22,10 +22,12 @@ int main(void)
 	*/
 	// perm = read_perm("long_perm.txt", &n);
 	// perm = read_perm("read.txt", &n);
-	// read_exts("read.txt", &ctx, &n);
-	read_exts("example.txt", &ctx, &n);
-	reverse_p(ctx.perm_cent, ctx.sigma_cent, ctx.n, ctx.n_cent);
-	reverse_p(ctx.perm_cent, ctx.sigma_cent, ctx.n, ctx.n_cent);
+	read_exts("read.txt", &ctx, &n);
+	// read_exts("example.txt", &ctx, &n);
+	reverse_p(&ctx, ctx.perm_cent, ctx.sigma_cent);
+	reverse_p(&ctx, ctx.perm_cent, ctx.sigma_cent);
+
+
 	print_Extremity_ctx(&ctx);
 
 	// print_array_int(perm, n, 2);
@@ -35,7 +37,8 @@ int main(void)
 	// printf("transpose 1 3 7\n");
 	// transpose(perm, 1, 3, 7, n);
 	// print_array_int(perm, n, 2);
-	solve_dcj(&ctx);
+	solve_dcj_mine(&ctx);
+	// solve_dcj(&ctx);
 
 	// TODO
 	Extremity_free(&ctx, n);

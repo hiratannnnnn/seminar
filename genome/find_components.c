@@ -112,7 +112,6 @@ void	find_components_1(Extremity_ctx *ctx, int *maxes, int *mins, Components *cm
 	n_cent = ctx->n_cent;
 	perm_cent = ctx->perm_cent;
 	sigma_cent = ctx->sigma_cent;
-	print_array_int(sigma_cent, n_cent, 2);
 
 	Min.id = (int *)xcalloc(n_cent, sizeof(int));
 	Max.id = (int *)xcalloc(n_cent, sizeof(int));
@@ -172,7 +171,7 @@ void	find_components_1(Extremity_ctx *ctx, int *maxes, int *mins, Components *cm
 			printf("maxes[%d] == maxes[%d]: %d == %d\n", s, i, maxes[s], maxes[i]);
 			printf("Max.id[s] - Min.id[s]: %d\n", Max.id[s] - Min.id[s]);
 			printf("get_ext_by_value(ctx, ctx->exts, Min.id[s] * Min.sign[s])->id: %d\n", get_ext_by_value(ctx, ctx->exts, Min.id[s] * Min.sign[s])->id);
-			if (sigma_cent[i] == 1 &&
+			if (sigma_cent[i] == 1 && i != s &&
 				maxes[s] == maxes[i] &&
 				((perm_cent[s] != 0 && Max.id[s] - Min.id[s] == i - s) ||
 				(perm_cent[s] == 0 && Max.id[s] - Min.id[s] == i - s - 1 &&
@@ -194,7 +193,7 @@ void	find_components_1(Extremity_ctx *ctx, int *maxes, int *mins, Components *cm
 				s = peek_stack(stack_2);
 				// logger(ctx, i, &Min, &Max, &min, &max, stack_1, stack_2, cmp_ids);
 			}
-			if (sigma_cent[i] == -1 &&
+			if (sigma_cent[i] == -1 && i != s &&
 				mins[i] == mins[s] &&
 				perm_cent[s] == 0 &&
 				max.id[s] - min.id[s] == i - s - 1 &&

@@ -31,22 +31,59 @@ void 	print_array_exts(Extremity **exts, int n)
 	}
 }
 
-void	print_components(Component *head)
+void	print_components(Extremity_ctx *ctx, Components *cmps)
 {
-	Component *cur;
+	int *starts;
+	int i, n_cent;
 
-	cur = head;
-	while (cur)
+	starts = cmps->starts;
+	n_cent = ctx->n_cent;
+	i = 0;
+	while (i < n_cent)
 	{
-		printf("%p, %p, %d, %d, %p, %p\n",
-			cur->start,
-			cur->end,
-			cur->type,
-			cur->oriented,
-			cur->prev,
-			cur->next);
-		cur = cur->next;
+		if (starts[i] != -1)
+			printf("(%d, %d)\n", starts[i], i);
+		i++;
 	}
+}
+
+void	print_perm_cent(int *perm, int *sigma, int n)
+{
+	int i;
+
+	printf("ind:");
+	i = 0;
+	while (i < n)
+	{
+		if (i < 10)
+			printf("   %d", i);
+		else
+			printf("  %d", i);
+		i++;
+	}
+	nl(1);
+	printf("gem:");
+	i = 0;
+	while (i < n)
+	{
+		if (sigma[i] == 1)
+		{
+			if (perm[i] < 10)
+				printf("   ");
+			else
+				printf("  ");
+		}
+		if (sigma[i] == -1)
+		{
+			if (perm[i] < 10)
+				printf("  -");
+			else
+				printf(" -");
+		}
+		printf("%d", perm[i]);
+		i++;
+	}
+	nl(1);
 }
 
 void	chase_exts(Extremity_ctx *ctx, Extremity *ext, int *used)

@@ -147,6 +147,12 @@ void	Extremity_free(Extremity_ctx *ctx, int n)
 	if (ctx->sigma_cent)
 		free_array_int(ctx->sigma_cent, ctx->n_cent);
 	ctx->sigma_cent = NULL;
+	if (ctx->pb_cent)
+		free_array_int(ctx->pb_cent, ctx->nb_cent);
+	ctx->pb_cent = NULL;
+	if (ctx->sb_cent)
+		free_array_int(ctx->sb_cent, ctx->nb_cent);
+	ctx->sb_cent = NULL;
 	if (ctx->head)
 		free_component_list(ctx->head);
 	ctx->head = NULL;
@@ -186,10 +192,6 @@ void	print_Extremity_ctx(Extremity_ctx *ctx)
 	print_array_int(ctx->perm, ctx->n, 3);
 	print_array_int(ctx->perm_cent, ctx->n_cent, 3);
 	print_array_int(ctx->sigma_cent, ctx->n_cent, 3);
-
-	print_components(ctx->head);
-
-
 
 	printf("\n==========\n");
 

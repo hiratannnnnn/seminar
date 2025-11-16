@@ -11,11 +11,14 @@ typedef struct Extremity
 	struct Extremity *desire;	// B
 }	Extremity;
 
-// typedef struct
-// {
-// 	Extremity *from;
-// 	Extremity *to;
-// }	Adjacency;
+typedef struct Adjacency
+{
+	Extremity *left;
+	Extremity *right;
+	struct Adjacency *left_to;
+	struct Adjacency *right_to;
+	int visited;
+}	Adjacency;
 
 typedef struct Component
 {
@@ -45,8 +48,11 @@ typedef struct Extremity_ctx
 	int *perm;
 	int *sigma;
 	int n_cent;
+	int nb_cent;
 	int *perm_cent;
 	int *sigma_cent;
+	int *pb_cent;
+	int *sb_cent;
 	Component *head;
 }	Extremity_ctx;
 
@@ -77,6 +83,7 @@ void 		find_components_1	(Extremity_ctx *ctx, int *maxes, int *mins, Components 
 int 		preprocess			(Extremity_ctx *ctx, int *maxes, int *mins);
 
 // solve.c
+int 		solve_dcj_mine		(Extremity_ctx *ctx);
 int 		solve_dcj			(Extremity_ctx *ctx);
 
 // stacks.c
@@ -96,11 +103,12 @@ Extremity 	*get_pair_of		(Extremity_ctx *ctx, Extremity *ext);
 Extremity 	*get_ext_by_perm_index		(Extremity_ctx *ctx, Extremity **exts, int index);
 Extremity 	*get_ext_by_value			(Extremity_ctx *ctx, Extremity **exts, int value);
 int 		is_nullish			(Extremity_ctx *ctx, Extremity *ext);
-void		reverse_p			(int *perm, int *sigma, int n, int n_cent);
+void		reverse_p			(Extremity_ctx *ctx, int *perm, int *sigma);
 
 // utils_print.c
 void 		print_array_exts	(Extremity **exts, int n);
-void		print_components	(Component *head);
+void		print_components	(Extremity_ctx *ctx, Components *cmps);
+void		print_perm_cent		(int *perm, int *sigma, int n);
 void		chase_exts			(Extremity_ctx *ctx, Extremity *ext, int *used);
 void		print_chromosomes	(Extremity_ctx *ctx, int n);
 void 		print_stack			(Stack_int *head);

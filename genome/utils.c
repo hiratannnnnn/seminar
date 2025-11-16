@@ -46,6 +46,11 @@ int is_all_true(int *array, int n)
 
 Extremity *get_pair_of(Extremity_ctx *ctx, Extremity *ext)
 {
+	int n;
+
+	n = ctx->n;
+	if (ext->id == 0 || ext->id == n + 1)
+		return ext;
 	if (ext->sign == 1)
 		return (ctx->exts[2 * (ext->id - 1)]);
 	else
@@ -74,7 +79,7 @@ Extremity *get_ext_by_value(Extremity_ctx *ctx, Extremity **exts, int value)
 	id = abs(value);
 	if (id == 0)
 		return (ctx->ext_l);
-	if (id == n)
+	if (id == n + 1)
 		return (ctx->ext_r);
 	sign = (value > 0) ? 1 : 0;
 	return (exts[2 * (id - 1) + sign]);
@@ -87,13 +92,26 @@ int 	is_nullish(Extremity_ctx *ctx, Extremity *ext)
 			ext == ctx->ext_r);
 }
 
-void	reverse_p(int *perm, int *sigma, int n, int n_cent)
+void	reverse_p(Extremity_ctx *ctx, int *perm, int *sigma)
 {
-	int i;
+	int i, n, n_cent;
+	Extremity *ext;
 
+	n = ctx->n;
+	n_cent = ctx->n_cent;
 	i = 0;
 	while (i < n_cent)
 	{
+		ext = get_ext_by_value(ctx, ctx->exts, perm[i] * sigma[i]);
+		if (ext->reality == ctx->ext_l)
+			ext->reality = ctx->ext_r;
+		else if (ext->reality == ctx->ext_r)
+			ext->reality = ctx->ext_l;
+		ext = get_pair_of(ctx, ext);
+		if (ext->reality == ctx->ext_l)
+			ext->reality = ctx->ext_r;
+		else if (ext->reality == ctx->ext_r)
+			ext->reality = ctx->ext_l;
 		if (perm[i] == 0 || perm[i] == n + 1)
 		{
 			perm[i] = n + 1 - perm[i];

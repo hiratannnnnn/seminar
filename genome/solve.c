@@ -188,7 +188,7 @@ Adjacency *choose_l_r(Extremity_ctx *ctx, Adjacency *next, Adjacency *prev)
 	v_2 = get_value_ext(ctx, prev->right);
 	v_3 = get_value_ext(ctx, next->left);
 	v_4 = get_value_ext(ctx, next->right);
-	if (v_1 == 0 || v_2 == 0 || v_3 == 0 || v_4 == 0)
+	if (v_3 == 0 || v_4 == 0)
 		return NULL;
 	else if (v_1 == v_3)
 		return next->right_to;
@@ -379,7 +379,7 @@ int solve_dcj_mine(Extremity_ctx *ctx)
 				break;
 			}
 		}
-		if (len_l + len_r % 2 == 1)
+		if ((len_l + len_r) % 2 == 1)
 		{
 			printf("found an odd path.\n");
 			odd_paths++;

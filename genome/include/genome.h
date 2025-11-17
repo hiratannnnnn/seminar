@@ -76,6 +76,10 @@ void		free_component		(Component *comp);
 void		free_component_list	(Component *head);
 Component 	*create_component	(void);
 
+// examples.c
+int 		write_perm_ext		(int *perm, int n, double cut_prob, char const *filename);
+int 		make_example		(int n, char const *filename, double cut_prob);
+
 // find_components.c
 void 		find_components_1	(Extremity_ctx *ctx, int *maxes, int *mins, Components *cmps);
 

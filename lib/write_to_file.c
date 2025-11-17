@@ -151,7 +151,7 @@ int write_perm(int *perm, int n, char const *filename)
     }
     fprintf(fp, "%d\n", n);
     for (i = 0; i < n; i++)
-        fprintf(fp, "%d%c", perm[i], (i == n - 1) ? '\n' : ' ');
+        {fprintf(fp, "%d%c", perm[i], (i == n - 1) ? '\n' : ' ');}
 	for (i = 0; i < n; i++)
 		fprintf(fp, "%d%c", i+1, (i == n - 1) ? '\n' : ' ');
     fclose(fp);

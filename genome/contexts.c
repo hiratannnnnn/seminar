@@ -92,32 +92,6 @@ Extremity **perm_to_exts(int *perm, int n)
 	return (exts);
 }
 
-static void	chase_exts_first(Extremity_ctx *ctx)
-{
-	Extremity *cur, *pair, *start;
-	int oriented;
-
-	oriented = 1;
-	cur = ctx->ext_l->reality;
-	start = cur;
-	while (1)
-	{
-		pair = get_pair_of(ctx, cur);
-		if (pair->reality &&
-			pair->reality != ctx->ext_r &&
-			cur->sign != pair->reality->sign)
-			oriented = 0;
-		cur = pair->reality;
-		if (cur == NULL ||
-			cur == ctx->ext_l ||
-			cur == ctx->ext_r ||
-			cur == start)
-			break;
-	}
-	ctx->head->oriented = oriented;
-	ctx->head->start = start;
-}
-
 void	Extremity_free(Extremity_ctx *ctx, int n)
 {
 	if (ctx->exts)
@@ -153,9 +127,6 @@ void	Extremity_free(Extremity_ctx *ctx, int n)
 	if (ctx->sb_cent)
 		free_array_int(ctx->sb_cent, ctx->nb_cent);
 	ctx->sb_cent = NULL;
-	if (ctx->head)
-		free_component_list(ctx->head);
-	ctx->head = NULL;
 }
 
 int Extremity_init(Extremity_ctx *ctx, int *perm, int n)
@@ -173,10 +144,6 @@ int Extremity_init(Extremity_ctx *ctx, int *perm, int n)
 	put_desires(ctx->exts, ctx->ext_l, ctx->ext_r, n);
 	ctx->n = n;
 	ctx->perm = perm;
-	ctx->head = create_component();
-	if (!ctx->head)
-		return (Extremity_free(ctx, n), -1);
-	chase_exts_first(ctx);
 	return (1);
 }
 

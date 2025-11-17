@@ -6,32 +6,6 @@ typedef struct
 	int *sign;
 }		Centinel;
 
-// static void 	logger(Extremity_ctx *ctx, int i, int *Min, int *Max, int *min, int *max, Stack_int *stack_1, Stack_int *stack_2)
-// {
-// 	int n_cent;
-
-// 	n_cent = ctx->n_cent;
-// 	printf("===== LOGGER =====\n\n");
-// 	printf("i: %d, n: %d, n_cent: %d\n", i, ctx->n, ctx->n_cent);
-// 	printf("sgn: ");
-// 	print_array_int(ctx->sigma_cent, n_cent, 2);
-// 	printf("ids: ");
-// 	print_array_int(ctx->perm_cent, n_cent, 2);
-// 	printf("Min: ");
-// 	print_array_int(Min, n_cent, 2);
-// 	printf("Max: ");
-// 	print_array_int(Max, n_cent, 2);
-// 	printf("min: ");
-// 	print_array_int(min, n_cent, 2);
-// 	printf("max: ");
-// 	print_array_int(max, n_cent, 2);
-// 	printf("stack_1: ");
-// 	print_stack(stack_1);
-// 	printf("stack_2: ");
-// 	print_stack(stack_2);
-// 	printf("\n========\n\n");
-// }
-
 static void 	logger(Extremity_ctx *ctx, int i, Centinel *Min, Centinel *Max, Centinel *min, Centinel *max, Stack_int *stack_1, Stack_int *stack_2, int *cmp_ids)
 {
 	int n_cent;
@@ -60,12 +34,6 @@ static void 	logger(Extremity_ctx *ctx, int i, Centinel *Min, Centinel *Max, Cen
 	printf("\n========\n\n");
 }
 
-// void 	update_stack(int *array, Stack_int *stack, int i, int pi, int (*f)(int, int))
-// {
-// 	array[i] = pi;
-// 	array[peek_stack(stack)] = f(array[peek_stack(stack)], pi);
-// }
-
 void 	update_stack(Centinel *array, Stack_int *stack, int i, int pi, int si, int (*f)(int, int))
 {
 	array->id[i] = pi;
@@ -73,21 +41,6 @@ void 	update_stack(Centinel *array, Stack_int *stack, int i, int pi, int si, int
 	array->id[peek_stack(stack)] = f(array->id[peek_stack(stack)], pi);
 	array->sign[peek_stack(stack)] = f(array->sign[peek_stack(stack)], si);
 }
-
-// void	report_component(Extremity_ctx *ctx, Extremity *start, Extremity *end, int type)
-// {
-// 	Component *comp;
-
-// 	comp = create_component();
-// 	comp->start = start;
-// 	comp->end = end;
-// 	comp->type = type;
-// 	if (ctx->head)
-// 		ctx->head->prev = comp;
-// 	comp->prev = NULL;
-// 	comp->next = ctx->head;
-// 	ctx->head = comp;
-// }
 
 void	report_component(Components *cmps, int s, int i)
 {

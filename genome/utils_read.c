@@ -45,25 +45,6 @@ int *read_perm(char *filename, int *n)
 	return (perm);
 }
 
-// static int count_numbers(char const *line)
-// {
-// 	int count;
-// 	char const *cur;
-
-// 	count = 0;
-// 	cur = line;
-// 	while(*cur)
-// 	{
-// 		while (*cur == ' ' || *cur == '\n' || *cur == '^')
-// 			cur++;
-// 		if (!*cur)
-// 			break;
-// 		strtol(cur, (char **)&cur, 10);
-// 		count++;
-// 	}
-// 	return (count);
-// }
-
 static void	cut_line(Extremity_ctx *ctx, Extremity **exts, char const *line, int n)
 {
 	int i, tmp;
@@ -222,7 +203,6 @@ int	read_exts(char const *filename, Extremity_ctx *ctx, int *n)
 	cut_line(ctx, ctx->goals, line, *n);
 	free(line);
 	close(fd);
-	ctx->head = create_component();
 	free_array_int(id_perm, *n);
 	return (1);
 }

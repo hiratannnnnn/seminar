@@ -1,5 +1,11 @@
 #include "genome.h"
 
+/**
+ * @param perm      : 1 ~ n, signed
+ * @param n         : number of genes
+ * @param cut_prob  : probability of cutting each adj.
+ * @param filename  : filename
+ */
 int write_perm_ext(int *perm, int n, double cut_prob, char const *filename)
 {
     FILE *fp;
@@ -9,10 +15,7 @@ int write_perm_ext(int *perm, int n, double cut_prob, char const *filename)
         return (-2);
     fp = fopen(filename, "w");
     if (!fp)
-    {
-        printf("Failed to open file %s\n", filename);
-        return (-1);
-    }
+        return (printf("Failed to open file %s\n", filename), -1);
     fprintf(fp, "%d\n", n);
     for (i = 0; i < n; i++)
 	{
@@ -32,6 +35,11 @@ int write_perm_ext(int *perm, int n, double cut_prob, char const *filename)
     return (0);
 }
 
+/**
+ * @param n         : number of genes
+ * @param filename  : filename
+ * @param cut_prob  : probability of cutting each adj.
+ */
 int make_example(int n, char const *filename, double cut_prob)
 {
     int *perm;

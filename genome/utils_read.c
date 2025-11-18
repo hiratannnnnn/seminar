@@ -19,32 +19,6 @@ static void	put_nums(int *perm, char *line, int n)
 	}
 }
 
-int *read_perm(char *filename, int *n)
-{
-	int fd;
-	int *perm;
-	char *line;
-
-	fd = open(filename, O_RDONLY);
-	if (fd < 3)
-		return (printf("Wrong file.\n"), NULL);
-	line = get_next_line(fd);
-	printf("%s", line);
-	*n = atoi(line);
-	free(line);
-	if (*n < 0)
-		return (printf("Wrong size.\n"), NULL);
-	perm = (int *)xmalloc(sizeof(int) * (*n));
-	if (!perm)
-		return (printf("Malloc Error.\n"), NULL);
-	line = get_next_line(fd);
-	printf("%s", line);
-	put_nums(perm, line, *n);
-	free(line);
-	close(fd);
-	return (perm);
-}
-
 static void	cut_line(Extremity_ctx *ctx, Extremity **exts, char const *line, int n)
 {
 	int i, tmp;
@@ -75,7 +49,7 @@ static void	cut_line(Extremity_ctx *ctx, Extremity **exts, char const *line, int
 	}
 }
 
-static int count_centinels(char const *line)
+static int count_sentinels(char const *line)
 {
 	char *str;
 	int count;
@@ -91,7 +65,7 @@ static int count_centinels(char const *line)
 	return (count);
 }
 
-static void	put_nums_centinels(int *perm, int *perm_cent, int *sigma_cent, char const *line, int n)
+static void	put_nums_sentinels(int *perm, int *perm_sent, int *sigma_sent, char const *line, int n)
 {
 	int i, j;
 	char *cur, *endptr;
@@ -99,8 +73,8 @@ static void	put_nums_centinels(int *perm, int *perm_cent, int *sigma_cent, char 
 	i = 0;
 	j = 0;
 	cur = (char *)line;
-	perm_cent[j] = 0;
-	sigma_cent[j] = 1;
+	perm_sent[j] = 0;
+	sigma_sent[j] = 1;
 	j++;
 	while (i < n)
 	{
@@ -110,87 +84,102 @@ static void	put_nums_centinels(int *perm, int *perm_cent, int *sigma_cent, char 
 			break;
 		if (*cur == '^')
 		{
-			perm_cent[j] = n + 1;
-			sigma_cent[j] = 1;
+			perm_sent[j] = n + 1;
+			sigma_sent[j] = 1;
 			j++;
-			perm_cent[j] = 0;
-			sigma_cent[j] = 1;
+			perm_sent[j] = 0;
+			sigma_sent[j] = 1;
 			j++;
 			cur = cur + 1;
 		}
 		strtol(cur, &endptr, 10);
-		perm_cent[j] = abs(perm[i]);
-		sigma_cent[j] = abs(perm[i]) / perm[i];
+		perm_sent[j] = abs(perm[i]);
+		sigma_sent[j] = abs(perm[i]) / perm[i];
 		i++;
 		j++;
 		cur = endptr;
 	}
-	perm_cent[j] = n + 1;
-	sigma_cent[j] = 1;
+	perm_sent[j] = n + 1;
+	sigma_sent[j] = 1;
+}
+
+static	int read_first_line(int fd, Extremity_ctx *ctx, int *n)
+{
+	char *line;
+
+	line = get_next_line(fd);
+	*n = atoi(line);
+	ctx->n = *n;
+	free(line);
+	if (*n <= 0)
+		return (printf("Wrong size.\n"), -1);
+	return (1);
+}
+
+static	int read_second_line(int fd, Extremity_ctx *ctx)
+{
+	int n, c_sent;
+	int *perm, *perm_sent, *sigma_sent;
+	char *line;
+
+	n = ctx->n;
+	line = get_next_line(fd);
+	if (!line)
+		return (-1);
+	perm = (int *)xmalloc(sizeof(int) * (n));
+	if (!perm)
+		return (-1);
+	put_nums(perm, line, n);
+	ctx->perm = perm;
+	c_sent = count_sentinels(line);
+	ctx->n_sent = n + c_sent * 2;
+	perm_sent = (int *)xmalloc(sizeof(int) * (ctx->n_sent));
+	if (!perm_sent)
+		return (-1);
+	sigma_sent = (int *)xmalloc(sizeof(int) * (ctx->n_sent));
+	if (!sigma_sent)
+		return (-1);
+	put_nums_sentinels(perm, perm_sent, sigma_sent, line, n);
+	ctx->perm_sent = perm_sent;
+	ctx->sigma_sent = sigma_sent;
+	ctx->exts = perm_to_exts(perm, n);
+	ctx->ext_l = create_ext(0, 1);
+	if (!ctx->ext_l)
+		return (-1);
+	ctx->ext_r = create_ext(n + 1, -1);
+	if (ctx->ext_r)
+		return (-1);
+	put_realities(ctx, ctx->exts, ctx->ext_l, ctx->ext_r, perm, n);
+	put_desires(ctx->exts, ctx->ext_l, ctx->ext_r, n);
+	cut_line(ctx, ctx->exts, line, n);
+	free(line);
+	return (1);
 }
 
 int	read_exts(char const *filename, Extremity_ctx *ctx, int *n)
 {
-	int fd;
-	int c_cent;
-	int *perm, *perm_cent, *sigma_cent, *id_perm;
+	int fd, c_sent;
+	int *id_perm;
 	char *line;
 
 	fd = open(filename, O_RDONLY);
 	if (fd < 3)
 		return (printf("Wrong file.\n"), -1);
-	line = get_next_line(fd);
-	*n = atoi(line);
-	ctx->n = *n;
-	free(line);
-	if (*n < 0)
-		return (printf("Wrong size.\n"), -1);
-
-
-
-	perm = (int *)xmalloc(sizeof(int) * (*n));
-	if (!perm)
-		return (printf("Malloc Error.\n"), -1);
-	line = get_next_line(fd);
-	printf("%s", line);
-	put_nums(perm, line, *n);
-	ctx->perm = perm;
-	// print_array_int(perm, *n, 2);
-	c_cent = count_centinels(line);
-	ctx->n_cent = ctx->n + c_cent * 2;
-	perm_cent = (int *)xmalloc(sizeof(int) * (ctx->n_cent));
-	sigma_cent = (int *)xmalloc(sizeof(int) * (ctx->n_cent));
-	if (!perm_cent || !sigma_cent)
-		return (printf("Malloc Error.\n"), -1);
-	put_nums_centinels(perm, perm_cent, sigma_cent, line, ctx->n);
-	// print_array_int(perm_cent, ctx->n_cent, 2);
-	// print_array_int(sigma_cent, ctx->n_cent, 2);
-	ctx->perm_cent = perm_cent;
-	ctx->sigma_cent = sigma_cent;
-	ctx->exts = perm_to_exts(perm, *n);
-	ctx->ext_l = create_ext(0, 1);
-	if (!ctx->ext_l)
+	if (read_first_line(fd, ctx, n) == -1)
 		return (-1);
-	ctx->ext_r = create_ext(*n + 1, -1);
-	if (!ctx->ext_r)
+	if (read_second_line(fd, ctx) == -1)
 		return (-1);
-	put_realities(ctx, ctx->exts, ctx->ext_l, ctx->ext_r, perm, *n);
-	put_desires(ctx->exts, ctx->ext_l, ctx->ext_r, *n);
-	cut_line(ctx, ctx->exts, line, *n);
-	free(line);
-
-
 
 	line = get_next_line(fd);
 	printf("%s", line);
 	id_perm = gen_id_perm(*n);
-	c_cent = count_centinels(line);
-	ctx->nb_cent = ctx->n + 2 * c_cent;
-	ctx->pb_cent = (int *)xmalloc(sizeof(int) * (ctx->nb_cent));
-	ctx->sb_cent = (int *)xmalloc(sizeof(int) * (ctx->nb_cent));
-	put_nums_centinels(id_perm, ctx->pb_cent, ctx->sb_cent, line, ctx->n);
-	print_array_int(ctx->pb_cent, ctx->nb_cent, 3);
-	print_array_int(ctx->sb_cent, ctx->nb_cent, 3);
+	c_sent = count_sentinels(line);
+	ctx->nb_sent = ctx->n + 2 * c_sent;
+	ctx->pb_sent = (int *)xmalloc(sizeof(int) * (ctx->nb_sent));
+	ctx->sb_sent = (int *)xmalloc(sizeof(int) * (ctx->nb_sent));
+	put_nums_sentinels(id_perm, ctx->pb_sent, ctx->sb_sent, line, ctx->n);
+	print_array_int(ctx->pb_sent, ctx->nb_sent, 3);
+	print_array_int(ctx->sb_sent, ctx->nb_sent, 3);
 	ctx->goals = perm_to_exts(id_perm, *n);
 	ctx->goal_l = create_ext(0, 1);
 	if (!ctx->goal_l)

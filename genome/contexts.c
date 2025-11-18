@@ -115,18 +115,18 @@ void	Extremity_free(Extremity_ctx *ctx, int n)
 	if (ctx->perm)
 		free_array_int(ctx->perm, ctx->n);
 	ctx->perm = NULL;
-	if (ctx->perm_cent)
-		free_array_int(ctx->perm_cent, ctx->n_cent);
-	ctx->perm_cent = NULL;
-	if (ctx->sigma_cent)
-		free_array_int(ctx->sigma_cent, ctx->n_cent);
-	ctx->sigma_cent = NULL;
-	if (ctx->pb_cent)
-		free_array_int(ctx->pb_cent, ctx->nb_cent);
-	ctx->pb_cent = NULL;
-	if (ctx->sb_cent)
-		free_array_int(ctx->sb_cent, ctx->nb_cent);
-	ctx->sb_cent = NULL;
+	if (ctx->perm_sent)
+		free_array_int(ctx->perm_sent, ctx->n_sent);
+	ctx->perm_sent = NULL;
+	if (ctx->sigma_sent)
+		free_array_int(ctx->sigma_sent, ctx->n_sent);
+	ctx->sigma_sent = NULL;
+	if (ctx->pb_sent)
+		free_array_int(ctx->pb_sent, ctx->nb_sent);
+	ctx->pb_sent = NULL;
+	if (ctx->sb_sent)
+		free_array_int(ctx->sb_sent, ctx->nb_sent);
+	ctx->sb_sent = NULL;
 }
 
 int Extremity_init(Extremity_ctx *ctx, int *perm, int n)
@@ -155,10 +155,10 @@ void	print_Extremity_ctx(Extremity_ctx *ctx)
 
 	printf("%p, %p, %p, %p\n", ctx->ext_l, ctx->ext_r, ctx->goal_l, ctx->goal_r);
 	printf("n: %d\n", ctx->n);
-	printf("n_cent: %d\n", ctx->n_cent);
+	printf("n_sent: %d\n", ctx->n_sent);
 	print_array_int(ctx->perm, ctx->n, 3);
-	print_array_int(ctx->perm_cent, ctx->n_cent, 3);
-	print_array_int(ctx->sigma_cent, ctx->n_cent, 3);
+	print_array_int(ctx->perm_sent, ctx->n_sent, 3);
+	print_array_int(ctx->sigma_sent, ctx->n_sent, 3);
 
 	printf("\n==========\n");
 

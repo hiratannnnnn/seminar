@@ -23,32 +23,32 @@ static Adjacency *choose_l_r(Extremity_ctx *ctx, Adjacency *next, Adjacency *pre
 
 int solve_dcj_mine(Extremity_ctx *ctx)
 {
-	int i,  n, n_cent, nb_cent;
+	int i,  n, n_sent, nb_sent;
 	int cycles, odd_paths;
-	int *perm_cent, *sigma_cent, *pb_cent, *sb_cent;
+	int *perm_sent, *sigma_sent, *pb_sent, *sb_sent;
 	Extremity *left, *right;
 	Adjacency **adj_A, **adj_B;
 	int sign_diff;
 
 	n = ctx->n;
-	n_cent = ctx->n_cent;
-	nb_cent = ctx->nb_cent;
-	perm_cent = ctx->perm_cent;
-	sigma_cent = ctx->sigma_cent;
-	pb_cent = ctx->pb_cent;
-	sb_cent = ctx->sb_cent;
+	n_sent = ctx->n_sent;
+	nb_sent = ctx->nb_sent;
+	perm_sent = ctx->perm_sent;
+	sigma_sent = ctx->sigma_sent;
+	pb_sent = ctx->pb_sent;
+	sb_sent = ctx->sb_sent;
 	cycles = 0;
 	odd_paths = 0;
 	printf("%d, %d\n", cycles, odd_paths);
 
 	int *map_A = (int *)xcalloc((2 * n), sizeof(int));
 	int	*map_B = (int *)xcalloc((2 * n), sizeof(int));
-	adj_A = (Adjacency **)xmalloc(sizeof(Adjacency *) * (n_cent - 1));
-	adj_B = (Adjacency **)xmalloc(sizeof(Adjacency *) * (nb_cent - 1));
-	for (i = 0; i < n_cent - 1; i++)
+	adj_A = (Adjacency **)xmalloc(sizeof(Adjacency *) * (n_sent - 1));
+	adj_B = (Adjacency **)xmalloc(sizeof(Adjacency *) * (nb_sent - 1));
+	for (i = 0; i < n_sent - 1; i++)
 	{
-		left = get_ext_by_value(ctx, ctx->exts, perm_cent[i] * sigma_cent[i]);
-		right = get_ext_by_value(ctx, ctx->exts, perm_cent[i + 1] * sigma_cent[i + 1] * (-1));
+		left = get_ext_by_value(ctx, ctx->exts, perm_sent[i] * sigma_sent[i]);
+		right = get_ext_by_value(ctx, ctx->exts, perm_sent[i + 1] * sigma_sent[i + 1] * (-1));
 		adj_A[i] = create_adj_node(left, right);
 		if (!is_nullish(ctx, left))
 		{
@@ -56,10 +56,10 @@ int solve_dcj_mine(Extremity_ctx *ctx)
 			map_A[left->id - 1 + n] = left->sign;
 		}
 	}
-	for (i = 0; i < nb_cent - 1; i++)
+	for (i = 0; i < nb_sent - 1; i++)
 	{
-		left = get_ext_by_value(ctx, ctx->goals, pb_cent[i] * sb_cent[i]);
-		right = get_ext_by_value(ctx, ctx->goals, pb_cent[i + 1] * sb_cent[i + 1] * (-1));
+		left = get_ext_by_value(ctx, ctx->goals, pb_sent[i] * sb_sent[i]);
+		right = get_ext_by_value(ctx, ctx->goals, pb_sent[i + 1] * sb_sent[i + 1] * (-1));
 		adj_B[i] = create_adj_node(left, right);
 		if (!is_nullish(ctx, left))
 		{
@@ -69,7 +69,7 @@ int solve_dcj_mine(Extremity_ctx *ctx)
 	}
 	print_array_int(map_A, 2 * n, 2);
 	print_array_int(map_B, 2 * n, 2);
-	for (i = 0; i < n_cent - 1; i++)
+	for (i = 0; i < n_sent - 1; i++)
 	{
 		left = adj_A[i]->left;
 		right = adj_A[i]->right;
@@ -88,7 +88,7 @@ int solve_dcj_mine(Extremity_ctx *ctx)
 				adj_B[map_B[right->id - 1]];
 		}
 	}
-	for (i = 0; i < nb_cent - 1; i++)
+	for (i = 0; i < nb_sent - 1; i++)
 	{
 		left = adj_B[i]->left;
 		right = adj_B[i]->right;
@@ -111,7 +111,7 @@ int solve_dcj_mine(Extremity_ctx *ctx)
 	int len_l, len_r;
 	Adjacency *cur, *next, *prev, *seek_l, *seek_r, *last_l, *last_r;
 
-	for (i = 0; i < n_cent - 1; i++)
+	for (i = 0; i < n_sent - 1; i++)
 	{
 		if (adj_A[i]->visited)
 		{
@@ -177,7 +177,7 @@ int solve_dcj_mine(Extremity_ctx *ctx)
 	printf("d: %f\n", n - cycles - (odd_paths / 2.0));
 	free_array_int(map_A, 2 * n);
 	free_array_int(map_B, 2 * n);
-	free_list_adj(adj_A, n_cent - 1);
-	free_list_adj(adj_B, nb_cent - 1);
+	free_list_adj(adj_A, n_sent - 1);
+	free_list_adj(adj_B, nb_sent - 1);
 	return (1);
 }

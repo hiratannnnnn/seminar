@@ -68,7 +68,7 @@ void	dfs_cover(TreeNode *node, int *leaf_c, int *long_b_c, int *short_b_c)
 		(*short_b_c)++;
 }
 
-TreeNode *build_tree(Components *cmps, int n_cent)
+TreeNode *build_tree(Components *cmps, int n_sent)
 {
 	TreeNode *root, *p, *q, *new_q, *new_p;
 	int i;
@@ -80,7 +80,7 @@ TreeNode *build_tree(Components *cmps, int n_cent)
 	root->parent = NULL;
 	p = root;
 	q = NULL;
-	for (i = 0; i < n_cent; i++)
+	for (i = 0; i < n_sent; i++)
 	{
 		if (cmps->starts[i] != -1)
 		{
@@ -121,39 +121,39 @@ int solve_dcj(Extremity_ctx *ctx)
     Components cmps;
     int *maxes, *mins;
     int i, n;
-    int n_cent;
+    int n_sent;
     int leaf_count, long_branch_count, short_branch_count, dHP;
     TreeNode *T, *T0;
 
     n = ctx->n;
-    n_cent = ctx->n_cent;
-    printf("n:%d, n_cent:%d\n", n, n_cent);
+    n_sent = ctx->n_sent;
+    printf("n:%d, n_sent:%d\n", n, n_sent);
 
-    maxes = (int *)xmalloc(sizeof(int) * n_cent);
-    mins  = (int *)xmalloc(sizeof(int) * n_cent);
-    cmps.starts = (int *)xmalloc(sizeof(int) * n_cent);
-    cmps.ends   = (int *)xmalloc(sizeof(int) * n_cent);
+    maxes = (int *)xmalloc(sizeof(int) * n_sent);
+    mins  = (int *)xmalloc(sizeof(int) * n_sent);
+    cmps.starts = (int *)xmalloc(sizeof(int) * n_sent);
+    cmps.ends   = (int *)xmalloc(sizeof(int) * n_sent);
     if (!maxes || !mins || !cmps.starts || !cmps.ends)
         return -1;
 
-    for (i = 0; i < n_cent; i++) {
+    for (i = 0; i < n_sent; i++) {
         cmps.starts[i] = -1;
         cmps.ends[i]   = -1;
     }
     printf("allocated arrays.\n");
     preprocess(ctx, maxes, mins);
-    print_array_int(maxes, n_cent, 3);
-    print_array_int(mins, n_cent, 3);
+    print_array_int(maxes, n_sent, 3);
+    print_array_int(mins, n_sent, 3);
 
     find_components_1(ctx, maxes, mins, &cmps);
 
 	printf("starts ends\n");
-    print_array_int(cmps.starts, n_cent, 3);
-    print_array_int(cmps.ends, n_cent, 3);
+    print_array_int(cmps.starts, n_sent, 3);
+    print_array_int(cmps.ends, n_sent, 3);
 	print_components(ctx, &cmps);
-	print_perm_cent(ctx->perm_cent, ctx->sigma_cent, ctx->n_cent);
+	print_perm_sent(ctx->perm_sent, ctx->sigma_sent, ctx->n_sent);
 
-    T  = build_tree(&cmps, n_cent);
+    T  = build_tree(&cmps, n_sent);
     T0 = simplify_tree(T);
 
     leaf_count = long_branch_count = short_branch_count = 0;
@@ -168,9 +168,9 @@ int solve_dcj(Extremity_ctx *ctx)
     printf("Estimated DCJ distance (dHP): %d\n", dHP);
 
     free_tree(T0);
-    free_array_int(maxes, n_cent);
-    free_array_int(mins, n_cent);
-    free_array_int(cmps.starts, n_cent);
-    free_array_int(cmps.ends, n_cent);
+    free_array_int(maxes, n_sent);
+    free_array_int(mins, n_sent);
+    free_array_int(cmps.starts, n_sent);
+    free_array_int(cmps.ends, n_sent);
     return dHP;
 }

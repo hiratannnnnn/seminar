@@ -37,12 +37,12 @@ typedef struct Extremity_ctx
 	int n;
 	int *perm;
 	int *sigma;
-	int n_cent;
-	int nb_cent;
-	int *perm_cent;
-	int *sigma_cent;
-	int *pb_cent;
-	int *sb_cent;
+	int n_sent;
+	int nb_sent;
+	int *perm_sent;
+	int *sigma_sent;
+	int *pb_sent;
+	int *sb_sent;
 }	Extremity_ctx;
 
 typedef struct Stack_int
@@ -96,13 +96,12 @@ void		cut_exts			(Extremity_ctx *ctx, Extremity *e1, Extremity *e2);
 // utils_print.c
 void 		print_array_exts	(Extremity **exts, int n);
 void		print_components	(Extremity_ctx *ctx, Components *cmps);
-void		print_perm_cent		(int *perm, int *sigma, int n);
+void		print_perm_sent		(int *perm, int *sigma, int n);
 void		chase_exts			(Extremity_ctx *ctx, Extremity *ext, int *used);
 void		print_chromosomes	(Extremity_ctx *ctx, int n);
 void 		print_stack			(Stack_int *head);
 
 // utils_read.c
-int 		*read_perm			(char *filename, int *n);
 int			read_exts			(char const *filename, Extremity_ctx *ctx, int *n);
 
 // utils_stacks.c

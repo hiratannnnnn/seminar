@@ -26,29 +26,29 @@ static void	pop_stack_thres(Stack_int **head, int thres, int sign)
 int preprocess(Extremity_ctx *ctx, int *maxes, int *mins)
 {
 	Stack_int *M_stack, *m_stack;
-	int *perm_cent, *sigma_cent;
-	int n, n_cent, i, id, prev_id;
+	int *perm_sent, *sigma_sent;
+	int n, n_sent, i, id, prev_id;
 
 	M_stack = create_stack_node((ctx->n) + 1);
 	m_stack = create_stack_node(0);
 	if (!M_stack || !m_stack)
 		return (-1);
 	n = ctx->n;
-	n_cent = ctx->n_cent;
-	perm_cent = ctx->perm_cent;
-	sigma_cent = ctx->sigma_cent;
+	n_sent = ctx->n_sent;
+	perm_sent = ctx->perm_sent;
+	sigma_sent = ctx->sigma_sent;
 	i = 0;
-	while (i < n_cent)
+	while (i < n_sent)
 	{
 		maxes[i] = n + 1;
 		mins[i] = 0;
 		i++;
-		while (!(perm_cent[i] * sigma_cent[i] != n + 1 ||
-				(perm_cent[i] == 0 && sigma_cent[i] == -1)))
+		while (!(perm_sent[i] * sigma_sent[i] != n + 1 ||
+				(perm_sent[i] == 0 && sigma_sent[i] == -1)))
 		{
 			printf("%d\n", i);
-			id = perm_cent[i];
-			prev_id = perm_cent[i - 1];
+			id = perm_sent[i];
+			prev_id = perm_sent[i - 1];
 			if (prev_id > id)
 				push_stack(&M_stack, prev_id);
 			else

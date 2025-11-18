@@ -22,8 +22,8 @@ int main(void)
 
 	// read_exts("read.txt", &ctx, &n);
 	read_exts("tests/ex_100.txt", &ctx, &n);
-	reverse_p(&ctx, ctx.perm_cent, ctx.sigma_cent);
-	reverse_p(&ctx, ctx.perm_cent, ctx.sigma_cent);
+	reverse_p(&ctx, ctx.perm_sent, ctx.sigma_sent);
+	reverse_p(&ctx, ctx.perm_sent, ctx.sigma_sent);
 
 	// print_Extremity_ctx(&ctx);
 

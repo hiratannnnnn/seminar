@@ -7,7 +7,7 @@ void 	free_stack_node(Stack_int *node)
 
 void	free_stack(Stack_int *head)
 {
-	Stack_int *cur, *tmp;
+	Stack_int	*cur, *tmp;
 
 	cur = head;
 	while (cur)
@@ -20,7 +20,7 @@ void	free_stack(Stack_int *head)
 
 Stack_int *create_stack_node(int nbr)
 {
-	Stack_int *node;
+	Stack_int	*node;
 
 	node = (Stack_int *)xmalloc(sizeof(Stack_int) * 1);
 	if (!node)
@@ -33,7 +33,7 @@ Stack_int *create_stack_node(int nbr)
 
 void push_stack(Stack_int **head, int nbr)
 {
-	Stack_int *node;
+	Stack_int	*node;
 
 	if (!head)
 		return ;
@@ -52,7 +52,7 @@ void push_stack(Stack_int **head, int nbr)
 
 Stack_int *pop_stack(Stack_int **head)
 {
-	Stack_int *cur;
+	Stack_int	*cur;
 
 	if (!head || !(*head))
 		return (NULL);

@@ -20,13 +20,13 @@ int 	is_nullish(Extremity_ctx *ctx, Extremity *ext)
 
 void	reverse_p(Extremity_ctx *ctx, int *perm, int *sigma)
 {
-	int i, n, n_cent;
+	int i, n, n_sent;
 	Extremity *ext;
 
 	n = ctx->n;
-	n_cent = ctx->n_cent;
+	n_sent = ctx->n_sent;
 	i = 0;
-	while (i < n_cent)
+	while (i < n_sent)
 	{
 		ext = get_ext_by_value(ctx, ctx->exts, perm[i] * sigma[i]);
 		if (ext->reality == ctx->ext_l)

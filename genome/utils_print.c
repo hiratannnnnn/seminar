@@ -31,22 +31,6 @@ void 	print_array_exts(Extremity **exts, int n)
 	}
 }
 
-void	print_components(Extremity_ctx *ctx, Components *cmps)
-{
-	int *starts;
-	int i, n_sent;
-
-	starts = cmps->starts;
-	n_sent = ctx->n_sent;
-	i = 0;
-	while (i < n_sent)
-	{
-		if (starts[i] != -1)
-			printf("(%d, %d)\n", starts[i], i);
-		i++;
-	}
-}
-
 void	print_perm_sent(int *perm, int *sigma, int n)
 {
 	int i;

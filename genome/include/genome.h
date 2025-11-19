@@ -94,7 +94,6 @@ void		cut_exts			(Extremity_ctx *ctx, Extremity *e1, Extremity *e2);
 
 // utils_print.c
 void 		print_array_exts	(Extremity **exts, int n);
-void		print_components	(Extremity_ctx *ctx, Components *cmps);
 void		print_perm_sent		(int *perm, int *sigma, int n);
 void		chase_exts			(Extremity_ctx *ctx, Extremity *ext, int *used);
 void		print_chromosomes	(Extremity_ctx *ctx, int n);

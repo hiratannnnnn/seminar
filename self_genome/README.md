@@ -26,6 +26,11 @@ gcc ./srcs/*.c ./lib/*.c -I./include main.c -o solve
 └─tests
 	テスト用テキストファイル（容量注意）
 
-処理を変える場合
+### 処理を変える場合
+
 ./srcs/main.c
 を編集してください。
+
+例）ログを出力しないようにする
+solve_dcj_mine(&ctx, 1)
+->solve_dcj_mine(&ctx, 0)

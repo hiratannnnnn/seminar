@@ -22,12 +22,10 @@ int main(void)
 
 	// Extremity_init("read.txt", &ctx, &n);
 	Extremity_init("tests/ex_100.txt", &ctx, &n);
-	reverse_p(&ctx, ctx.perm_sent, ctx.sigma_sent);
-	reverse_p(&ctx, ctx.perm_sent, ctx.sigma_sent);
-
 	// print_Extremity_ctx(&ctx);
 
 	solve_dcj_mine(&ctx);
+	// reverse_p(&ctx, ctx.perm_sent, ctx.sigma_sent);
 	// solve_dcj(&ctx);
 
 	// TODO

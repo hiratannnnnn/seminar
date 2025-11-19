@@ -147,7 +147,7 @@ static	int read_second_line(int fd, Extremity_ctx *ctx)
 	if (!ctx->ext_l)
 		return (-1);
 	ctx->ext_r = create_ext(n + 1, -1);
-	if (ctx->ext_r)
+	if (!ctx->ext_r)
 		return (-1);
 	put_realities(ctx, ctx->exts, ctx->ext_l, ctx->ext_r, perm, n);
 	put_desires(ctx->exts, ctx->ext_l, ctx->ext_r, n);
@@ -156,42 +156,57 @@ static	int read_second_line(int fd, Extremity_ctx *ctx)
 	return (1);
 }
 
-int	read_exts(char const *filename, Extremity_ctx *ctx, int *n)
+static int read_third_line(int fd, Extremity_ctx *ctx)
 {
-	int fd, c_sent;
+	int n, cb_sent;
 	int *id_perm;
 	char *line;
+
+	n = ctx->n;
+	line = get_next_line(fd);
+	id_perm = gen_id_perm(n);
+	if (!id_perm)
+		return (-1);
+	cb_sent = count_sentinels(line);
+	ctx->nb_sent = n + 2 * cb_sent;
+	ctx->pb_sent = (int *)xmalloc(sizeof(int) * (ctx->nb_sent));
+	if (!ctx->pb_sent)
+		return (-1);
+	ctx->sb_sent = (int *)xmalloc(sizeof(int) * (ctx->nb_sent));
+	if (!ctx->sb_sent)
+		return (-1);
+	put_nums_sentinels(id_perm, ctx->pb_sent, ctx->sb_sent, line, n);
+	ctx->goals = perm_to_exts(id_perm, n);
+	ctx->goal_l = create_ext(0, 1);
+	if (!ctx->goal_l)
+		return (-1);
+	ctx->goal_r = create_ext(n + 1, -1);
+	if (!ctx->goal_r)
+		return (-1);
+	put_realities(ctx, ctx->goals, ctx->goal_l, ctx->goal_r, id_perm, n);
+	put_desires(ctx->goals, ctx->goal_l, ctx->goal_r, n);
+	cut_line(ctx, ctx->goals, line, n);
+	free(line);
+	free_array_int(id_perm, n);
+	return (1);
+}
+
+int	Extremity_init(char const *filename, Extremity_ctx *ctx, int *n)
+{
+	int fd;
 
 	fd = open(filename, O_RDONLY);
 	if (fd < 3)
 		return (printf("Wrong file.\n"), -1);
 	if (read_first_line(fd, ctx, n) == -1)
 		return (-1);
+	printf("read first line\n");
 	if (read_second_line(fd, ctx) == -1)
 		return (-1);
-
-	line = get_next_line(fd);
-	printf("%s", line);
-	id_perm = gen_id_perm(*n);
-	c_sent = count_sentinels(line);
-	ctx->nb_sent = ctx->n + 2 * c_sent;
-	ctx->pb_sent = (int *)xmalloc(sizeof(int) * (ctx->nb_sent));
-	ctx->sb_sent = (int *)xmalloc(sizeof(int) * (ctx->nb_sent));
-	put_nums_sentinels(id_perm, ctx->pb_sent, ctx->sb_sent, line, ctx->n);
-	print_array_int(ctx->pb_sent, ctx->nb_sent, 3);
-	print_array_int(ctx->sb_sent, ctx->nb_sent, 3);
-	ctx->goals = perm_to_exts(id_perm, *n);
-	ctx->goal_l = create_ext(0, 1);
-	if (!ctx->goal_l)
+	printf("read second line.\n");
+	if (read_third_line(fd, ctx) == -1)
 		return (-1);
-	ctx->goal_r = create_ext(*n + 1, -1);
-	if (!ctx->goal_r)
-		return (-1);
-	put_realities(ctx, ctx->goals, ctx->goal_l, ctx->goal_r, id_perm, *n);
-	put_desires(ctx->goals, ctx->goal_l, ctx->goal_r, *n);
-	cut_line(ctx, ctx->goals, line, *n);
-	free(line);
+	printf("read third line.\n");
 	close(fd);
-	free_array_int(id_perm, *n);
 	return (1);
 }

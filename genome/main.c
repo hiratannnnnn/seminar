@@ -20,8 +20,8 @@ int main(void)
 	// make_example(1000, "tests/ex_1000.txt", 0.1);
 	// make_example(10000, "tests/ex_10000.txt", 0.1);
 
-	// read_exts("read.txt", &ctx, &n);
-	read_exts("tests/ex_100.txt", &ctx, &n);
+	// Extremity_init("read.txt", &ctx, &n);
+	Extremity_init("tests/ex_100.txt", &ctx, &n);
 	reverse_p(&ctx, ctx.perm_sent, ctx.sigma_sent);
 	reverse_p(&ctx, ctx.perm_sent, ctx.sigma_sent);
 

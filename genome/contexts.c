@@ -129,24 +129,6 @@ void	Extremity_free(Extremity_ctx *ctx, int n)
 	ctx->sb_sent = NULL;
 }
 
-int Extremity_init(Extremity_ctx *ctx, int *perm, int n)
-{
-	ctx->exts = perm_to_exts(perm, n);
-	if (!ctx->exts)
-		return (Extremity_free(ctx, n), -1);
-	ctx->ext_l = create_ext(0, 1);
-	if (!ctx->ext_l)
-		return (Extremity_free(ctx, n), -1);
-	ctx->ext_r = create_ext(n + 1, -1);
-	if (!ctx->ext_r)
-		return (Extremity_free(ctx, n), -1);
-	put_realities(ctx, ctx->exts, ctx->ext_l, ctx->ext_r, perm, n);
-	put_desires(ctx->exts, ctx->ext_l, ctx->ext_r, n);
-	ctx->n = n;
-	ctx->perm = perm;
-	return (1);
-}
-
 void	print_Extremity_ctx(Extremity_ctx *ctx)
 {
 	printf("==========\n\n");

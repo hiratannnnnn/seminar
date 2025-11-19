@@ -56,7 +56,6 @@ typedef struct Stack_int
 void		put_desires			(Extremity **exts, Extremity *ext_l, Extremity *ext_r, int n);
 void		put_realities		(Extremity_ctx *ctx, Extremity **exts, Extremity *ext_l, Extremity *ext_r, int *perm, int n);
 void		Extremity_free		(Extremity_ctx *ctx, int n);
-int 		Extremity_init		(Extremity_ctx *ctx, int *perm, int n);
 Extremity 	**perm_to_exts		(int *perm, int n);
 void		print_Extremity_ctx	(Extremity_ctx *ctx);
 
@@ -102,7 +101,7 @@ void		print_chromosomes	(Extremity_ctx *ctx, int n);
 void 		print_stack			(Stack_int *head);
 
 // utils_read.c
-int			read_exts			(char const *filename, Extremity_ctx *ctx, int *n);
+int 		Extremity_init		(char const *filename, Extremity_ctx *ctx, int *n);
 
 // utils_stacks.c
 void 		free_stack_node		(Stack_int *node);

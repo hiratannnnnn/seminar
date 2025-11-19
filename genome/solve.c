@@ -21,14 +21,12 @@ static Adjacency *choose_l_r(Extremity_ctx *ctx, Adjacency *next, Adjacency *pre
 	return (printf("ERROR.\n"), NULL);
 }
 
-int solve_dcj_mine(Extremity_ctx *ctx)
+static int set_maps_adjs(Extremity_ctx *ctx, int *map_A, int *map_B,
+	Adjacency **adj_A, Adjacency **adj_B, int log_output)
 {
-	int i,  n, n_sent, nb_sent;
-	int cycles, odd_paths;
+	int i, n, n_sent, nb_sent;
 	int *perm_sent, *sigma_sent, *pb_sent, *sb_sent;
 	Extremity *left, *right;
-	Adjacency **adj_A, **adj_B;
-	int sign_diff;
 
 	n = ctx->n;
 	n_sent = ctx->n_sent;
@@ -37,14 +35,6 @@ int solve_dcj_mine(Extremity_ctx *ctx)
 	sigma_sent = ctx->sigma_sent;
 	pb_sent = ctx->pb_sent;
 	sb_sent = ctx->sb_sent;
-	cycles = 0;
-	odd_paths = 0;
-	printf("%d, %d\n", cycles, odd_paths);
-
-	int *map_A = (int *)xcalloc((2 * n), sizeof(int));
-	int	*map_B = (int *)xcalloc((2 * n), sizeof(int));
-	adj_A = (Adjacency **)xmalloc(sizeof(Adjacency *) * (n_sent - 1));
-	adj_B = (Adjacency **)xmalloc(sizeof(Adjacency *) * (nb_sent - 1));
 	for (i = 0; i < n_sent - 1; i++)
 	{
 		left = get_ext_by_value(ctx, ctx->exts, perm_sent[i] * sigma_sent[i]);
@@ -67,8 +57,31 @@ int solve_dcj_mine(Extremity_ctx *ctx)
 			map_B[left->id - 1 + n] = left->sign;
 		}
 	}
-	print_array_int(map_A, 2 * n, 2);
-	print_array_int(map_B, 2 * n, 2);
+	if (log_output)
+	{
+		printf("map_A: ");
+		print_array_int(map_A, 2 * n, 2);
+		printf("map_B: ");
+		print_array_int(map_B, 2 * n, 2);
+	}
+	return (1);
+}
+
+static int put_adjs(Extremity_ctx *ctx, int *map_A, int *map_B,
+	Adjacency **adj_A, Adjacency **adj_B, int log_output)
+{
+	int i, n, n_sent, nb_sent;
+	int *perm_sent, *sigma_sent, *pb_sent, *sb_sent;
+	Extremity *left, *right;
+	int sign_diff;
+
+	n = ctx->n;
+	n_sent = ctx->n_sent;
+	nb_sent = ctx->nb_sent;
+	perm_sent = ctx->perm_sent;
+	sigma_sent = ctx->sigma_sent;
+	pb_sent = ctx->pb_sent;
+	sb_sent = ctx->sb_sent;
 	for (i = 0; i < n_sent - 1; i++)
 	{
 		left = adj_A[i]->left;
@@ -108,76 +121,115 @@ int solve_dcj_mine(Extremity_ctx *ctx)
 				adj_A[map_A[right->id - 1]];
 		}
 	}
-	int len_l, len_r;
-	Adjacency *cur, *next, *prev, *seek_l, *seek_r, *last_l, *last_r;
+	return (1);
+}
 
+static int track_paths(Extremity_ctx *ctx, Adjacency **adj_A, Adjacency **adj_B, int log_output)
+{
+	int i, n, n_sent, cycles, odd_paths;
+	int len_l, len_r;
+	Extremity *left, *right;
+	Adjacency *cur, *prev, *next, *seek_l, *seek_r, *last;
+
+	n = ctx->n;
+	n_sent = ctx->n_sent;
+	cycles = odd_paths = 0;
 	for (i = 0; i < n_sent - 1; i++)
 	{
 		if (adj_A[i]->visited)
 		{
-			printf("%d: visited.\n", i);
+			if (log_output)
+				printf("%d: visited.\n", i);
 			continue;
 		}
 		cur = adj_A[i];
-		printf("%d: STARTING FROM (%d, %d)\n", i, get_value_ext(ctx, cur->left), get_value_ext(ctx, cur->right));
-		len_l = 0;
-		len_r = 0;
+		if (log_output)
+			printf("%d: STARTING FROM (%d, %d)\n", i,
+				get_value_ext(ctx, cur->left),
+				get_value_ext(ctx, cur->right));
+		len_l = len_r = 0;
 		left = cur->left;
 		right = cur->right;
 		seek_l = cur->left_to;
 		seek_r = cur->right_to;
-		last_l = NULL;
+		last = NULL;
 		cur->visited = 1;
-
 		prev = cur;
 		next = seek_l;
 		while (next)
 		{
 			len_l++;
-			printf("len: %d, seeking left.(%d, %d)\n", len_l, get_value_ext(ctx, next->left), get_value_ext(ctx, next->right));
+			if (log_output)
+				printf("len: %d, seeking left. (%d, %d)\n", len_l,
+					get_value_ext(ctx, next->left),
+					get_value_ext(ctx, next->right));
 			next->visited = 1;
-			last_l = next;
+			last = next;
 			next = choose_l_r(ctx, next, prev);
-			prev = last_l;
+			prev = last;
 			if (cur == prev)
 			{
 				if (seek_r)
 				{
-					printf("found a cycle.\n");
+					if (log_output)
+						printf("found a cycle.\n");
 					cycles++;
 				}
 				break;
 			}
 		}
-		if (cur == last_l)
+		if (cur == last)
 			continue;
 		prev = cur;
 		next = seek_r;
 		while (next)
 		{
 			len_r++;
-			printf("len: %d, seeking right.(%d, %d)\n", len_r, get_value_ext(ctx, next->left), get_value_ext(ctx, next->right));
+			if (log_output)
+				printf("len: %d, seeking right. (%d, %d)\n", len_r,
+					get_value_ext(ctx, next->left),
+					get_value_ext(ctx, next->right));
 			next->visited = 1;
-			last_r = next;
+			last = next;
 			next = choose_l_r(ctx, next, prev);
-			prev = last_r;
-			if (cur == last_r)
+			prev = last;
+			if (cur == last)
 			{
-				printf("error?\n");
+				// this must not happen.
+				printf("ERROR.\n");
 				break;
 			}
 		}
 		if ((len_l + len_r) % 2 == 1)
 		{
-			printf("found an odd path.\n");
+			if (log_output)
+				printf("found an odd path.\n");
 			odd_paths++;
 		}
 	}
 	printf("N: %d, C: %d, I: %d\n", n, cycles, odd_paths);
-	printf("d: %f\n", n - cycles - (odd_paths / 2.0));
-	free_array_int(map_A, 2 * n);
-	free_array_int(map_B, 2 * n);
-	free_list_adj(adj_A, n_sent - 1);
-	free_list_adj(adj_B, nb_sent - 1);
+	printf("d: %.1f\n", n - cycles - (odd_paths / 2.0));
+	return (1);
+}
+
+int solve_dcj_mine(Extremity_ctx *ctx, int log_output)
+{
+	int i,  n, n_sent, nb_sent;
+	int *map_A, *map_B;
+	Extremity *left, *right;
+	Adjacency **adj_A, **adj_B;
+	int sign_diff;
+
+	map_A = (int *)xcalloc((2 * ctx->n), sizeof(int));
+	map_B = (int *)xcalloc((2 * ctx->n), sizeof(int));
+	adj_A = (Adjacency **)xmalloc(sizeof(Adjacency *) * (ctx->n_sent - 1));
+	adj_B = (Adjacency **)xmalloc(sizeof(Adjacency *) * (ctx->nb_sent - 1));
+	set_maps_adjs(ctx, map_A, map_B, adj_A, adj_B, log_output);
+	put_adjs(ctx, map_A, map_B, adj_A, adj_B, log_output);
+	track_paths(ctx, adj_A, adj_B, log_output);
+	free_array_int(map_A, 2 * ctx->n);
+	free_array_int(map_B, 2 * ctx->n);
+	free_list_adj(adj_A, ctx->n_sent - 1);
+	free_list_adj(adj_B, ctx->nb_sent - 1);
 	return (1);
 }

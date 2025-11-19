@@ -215,32 +215,21 @@ static int track_paths(Extremity_ctx *ctx, Adjacency **adj_A, Adjacency **adj_B,
 int solve_dcj_mine(Extremity_ctx *ctx, int log_output)
 {
 	int i,  n, n_sent, nb_sent;
-	int cycles, odd_paths;
-	int *perm_sent, *sigma_sent, *pb_sent, *sb_sent;
+	int *map_A, *map_B;
 	Extremity *left, *right;
 	Adjacency **adj_A, **adj_B;
 	int sign_diff;
 
-	n = ctx->n;
-	n_sent = ctx->n_sent;
-	nb_sent = ctx->nb_sent;
-	perm_sent = ctx->perm_sent;
-	sigma_sent = ctx->sigma_sent;
-	pb_sent = ctx->pb_sent;
-	sb_sent = ctx->sb_sent;
-	cycles = 0;
-	odd_paths = 0;
-
-	int *map_A = (int *)xcalloc((2 * n), sizeof(int));
-	int	*map_B = (int *)xcalloc((2 * n), sizeof(int));
-	adj_A = (Adjacency **)xmalloc(sizeof(Adjacency *) * (n_sent - 1));
-	adj_B = (Adjacency **)xmalloc(sizeof(Adjacency *) * (nb_sent - 1));
+	map_A = (int *)xcalloc((2 * ctx->n), sizeof(int));
+	map_B = (int *)xcalloc((2 * ctx->n), sizeof(int));
+	adj_A = (Adjacency **)xmalloc(sizeof(Adjacency *) * (ctx->n_sent - 1));
+	adj_B = (Adjacency **)xmalloc(sizeof(Adjacency *) * (ctx->nb_sent - 1));
 	set_maps_adjs(ctx, map_A, map_B, adj_A, adj_B, log_output);
 	put_adjs(ctx, map_A, map_B, adj_A, adj_B, log_output);
 	track_paths(ctx, adj_A, adj_B, log_output);
-	free_array_int(map_A, 2 * n);
-	free_array_int(map_B, 2 * n);
-	free_list_adj(adj_A, n_sent - 1);
-	free_list_adj(adj_B, nb_sent - 1);
+	free_array_int(map_A, 2 * ctx->n);
+	free_array_int(map_B, 2 * ctx->n);
+	free_list_adj(adj_A, ctx->n_sent - 1);
+	free_list_adj(adj_B, ctx->nb_sent - 1);
 	return (1);
 }

@@ -3,11 +3,14 @@ CFLAGS = -Wall -Wextra -Werror -I./include -I../include
 LDFLAGS = -L../dist -lpath -lmintree -lm
 TARGET = genome
 
-MAIN_SRCS = $(wildcard main*.c)
-MAIN_OBJS = $(MAIN_SRCS:.c=.o)
+SRCDIR = srcs
+OBJDIR = objs
 
-LIB_SRCS = $(filter-out $(MAIN_SRCS), $(wildcard *.c))
-LIB_OBJS = $(LIB_SRCS:.c=.o)
+MAIN_SRCS = $(wildcard main*.c)
+LIB_SRCS = $(filter-out $(MAIN_SRCS), $(wildcard $(SRCDIR)/*.c))
+
+MAIN_OBJS = $(MAIN_SRCS:%.c=$(OBJDIR)/%.o)
+LIB_OBJS = $(LIB_SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
 DISTDIR = ../dist
 BASE_LIB = $(DISTDIR)/lib.a
@@ -35,6 +38,14 @@ ar: $(LIB_OBJS)
 	fi
 
 %.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/%.o: %.c
+	@mkdir -p $(OBJDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/%.o: $(SRCDIR)/%.c
+	@mkdir -p $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:

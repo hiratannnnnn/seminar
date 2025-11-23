@@ -70,7 +70,7 @@ void 		find_components_1	(Extremity_ctx *ctx, int *maxes, int *mins, Components 
 int 		preprocess			(Extremity_ctx *ctx, int *maxes, int *mins);
 
 // solve.c
-int 		solve_dcj_mine		(Extremity_ctx *ctx);
+int 		solve_dcj_mine		(Extremity_ctx *ctx, int log_output);
 int 		solve_dcj			(Extremity_ctx *ctx);
 
 // utils.c

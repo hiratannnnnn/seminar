@@ -68,20 +68,15 @@ static int set_maps_adjs(Extremity_ctx *ctx, int *map_A, int *map_B,
 }
 
 static int put_adjs(Extremity_ctx *ctx, int *map_A, int *map_B,
-	Adjacency **adj_A, Adjacency **adj_B, int log_output)
+	Adjacency **adj_A, Adjacency **adj_B)
 {
 	int i, n, n_sent, nb_sent;
-	int *perm_sent, *sigma_sent, *pb_sent, *sb_sent;
 	Extremity *left, *right;
 	int sign_diff;
 
 	n = ctx->n;
 	n_sent = ctx->n_sent;
 	nb_sent = ctx->nb_sent;
-	perm_sent = ctx->perm_sent;
-	sigma_sent = ctx->sigma_sent;
-	pb_sent = ctx->pb_sent;
-	sb_sent = ctx->sb_sent;
 	for (i = 0; i < n_sent - 1; i++)
 	{
 		left = adj_A[i]->left;
@@ -124,11 +119,10 @@ static int put_adjs(Extremity_ctx *ctx, int *map_A, int *map_B,
 	return (1);
 }
 
-static int track_paths(Extremity_ctx *ctx, Adjacency **adj_A, Adjacency **adj_B, int log_output)
+static int track_paths(Extremity_ctx *ctx, Adjacency **adj_A, int log_output)
 {
 	int i, n, n_sent, cycles, odd_paths;
 	int len_l, len_r;
-	Extremity *left, *right;
 	Adjacency *cur, *prev, *next, *seek_l, *seek_r, *last;
 
 	n = ctx->n;
@@ -148,8 +142,6 @@ static int track_paths(Extremity_ctx *ctx, Adjacency **adj_A, Adjacency **adj_B,
 				get_value_ext(ctx, cur->left),
 				get_value_ext(ctx, cur->right));
 		len_l = len_r = 0;
-		left = cur->left;
-		right = cur->right;
 		seek_l = cur->left_to;
 		seek_r = cur->right_to;
 		last = NULL;
@@ -214,19 +206,16 @@ static int track_paths(Extremity_ctx *ctx, Adjacency **adj_A, Adjacency **adj_B,
 
 int solve_dcj_mine(Extremity_ctx *ctx, int log_output)
 {
-	int i,  n, n_sent, nb_sent;
 	int *map_A, *map_B;
-	Extremity *left, *right;
 	Adjacency **adj_A, **adj_B;
-	int sign_diff;
 
 	map_A = (int *)xcalloc((2 * ctx->n), sizeof(int));
 	map_B = (int *)xcalloc((2 * ctx->n), sizeof(int));
 	adj_A = (Adjacency **)xmalloc(sizeof(Adjacency *) * (ctx->n_sent - 1));
 	adj_B = (Adjacency **)xmalloc(sizeof(Adjacency *) * (ctx->nb_sent - 1));
 	set_maps_adjs(ctx, map_A, map_B, adj_A, adj_B, log_output);
-	put_adjs(ctx, map_A, map_B, adj_A, adj_B, log_output);
-	track_paths(ctx, adj_A, adj_B, log_output);
+	put_adjs(ctx, map_A, map_B, adj_A, adj_B);
+	track_paths(ctx, adj_A, log_output);
 	free_array_int(map_A, 2 * ctx->n);
 	free_array_int(map_B, 2 * ctx->n);
 	free_list_adj(adj_A, ctx->n_sent - 1);

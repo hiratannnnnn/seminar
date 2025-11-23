@@ -150,7 +150,6 @@ int solve_dcj(Extremity_ctx *ctx)
 	printf("starts ends\n");
     print_array_int(cmps.starts, n_sent, 3);
     print_array_int(cmps.ends, n_sent, 3);
-	print_components(ctx, &cmps);
 	print_perm_sent(ctx->perm_sent, ctx->sigma_sent, ctx->n_sent);
 
     T  = build_tree(&cmps, n_sent);

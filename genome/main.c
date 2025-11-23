@@ -24,7 +24,7 @@ int main(void)
 	Extremity_init("tests/ex_100.txt", &ctx, &n);
 	// print_Extremity_ctx(&ctx);
 
-	solve_dcj_mine(&ctx);
+	solve_dcj_mine(&ctx, 1);
 	// reverse_p(&ctx, ctx.perm_sent, ctx.sigma_sent);
 	// solve_dcj(&ctx);
 

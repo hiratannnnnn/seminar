@@ -1,4 +1,3 @@
-// filepath: $(pwd)/genome/main.c
 #include "genome.h"
 
 size_t		mem = 0;
@@ -14,12 +13,13 @@ int main(void)
 	Extremity_ctx ctx;
 	int n;
 
-	Extremity_init("tests/ex_10000.txt", &ctx, &n);
+	if (Extremity_init("tests/ex_100.txt", &ctx, &n) == -1)
+		return (printf("Error while reading file.\n"), 1);
 	// print_Extremity_ctx(&ctx);
 
-	proc_start = clock();
+	// proc_start = clock();
 	// solve_dcj_mine(&ctx, 0);
-	solve_dcj_mine(&ctx, 1);
+	solve_dcj_mine(&ctx, 0);
 
 	// TODO
 	Extremity_free(&ctx, n);
@@ -27,3 +27,29 @@ int main(void)
 	print_info();
 	return (0);
 }
+
+// int main(int argc, char **argv)
+// {
+// 	if (argc != 2)
+// 		return (printf("Too few (or much) arguments.\n"), 1);
+// 	setvbuf(stdout, NULL, _IONBF, 0);
+// 	srand((unsigned int)time(NULL));
+// 	proc_start = clock();
+// 	Extremity_ctx ctx;
+// 	int n;
+
+// 	if (Extremity_init(argv[1], &ctx, &n) == -1)
+// 		return (printf("Error while reading file.\n"), 1);
+
+// 	// print_Extremity_ctx(&ctx);
+
+// 	proc_start = clock();
+// 	// solve_dcj_mine(&ctx, 0);
+// 	solve_dcj_mine(&ctx, 1);
+
+// 	// TODO
+// 	Extremity_free(&ctx, n);
+// 	free_array_int(ctx.perm, n);
+// 	print_info();
+// 	return (0);
+// }

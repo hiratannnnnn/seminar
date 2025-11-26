@@ -26,12 +26,6 @@ typedef struct Adjacency
 	int visited;
 }	Adjacency;
 
-typedef struct
-{
-	int *ends;
-	int *starts;
-}	Components;
-
 typedef struct Extremity_ctx
 {
 	Extremity **exts;
@@ -52,11 +46,12 @@ typedef struct Extremity_ctx
 }	Extremity_ctx;
 
 // contexts.c
+void		print_Extremity_ctx	(Extremity_ctx *ctx);
+void		Extremity_free		(Extremity_ctx *ctx, int n);
 void		put_desires			(Extremity **exts, Extremity *ext_l, Extremity *ext_r, int n);
 void		put_realities		(Extremity_ctx *ctx, Extremity **exts, Extremity *ext_l, Extremity *ext_r, int *perm, int n);
-void		Extremity_free		(Extremity_ctx *ctx, int n);
 Extremity 	**perm_to_exts		(int *perm, int n);
-void		print_Extremity_ctx	(Extremity_ctx *ctx);
+int 		Extremity_init		(char const *filename, Extremity_ctx *ctx, int *n);
 
 // examples.c
 int 		write_perm_ext		(int *perm, int n, double cut_prob, char const *filename);
@@ -91,6 +86,12 @@ void		chase_exts			(Extremity_ctx *ctx, Extremity *ext, int *used);
 void		print_chromosomes	(Extremity_ctx *ctx, int n);
 
 // utils_read.c
-int 		Extremity_init		(char const *filename, Extremity_ctx *ctx, int *n);
+void		put_nums			(int *perm, char *line, int n);
+void		cut_line			(Extremity_ctx *ctx, Extremity **exts, char const *line, int n);
+int		 	count_sentinels		(char const *line);
+void		put_nums_sentinels	(int *perm, int *perm_sent, int *sigma_sent, char const *line, int n);
+int 		read_first_line		(int fd, Extremity_ctx *ctx, int *n);
+int 		read_second_line	(int fd, Extremity_ctx *ctx);
+int 		read_third_line		(int fd, Extremity_ctx *ctx);
 
 #endif

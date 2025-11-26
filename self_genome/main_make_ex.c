@@ -1,4 +1,3 @@
-// filepath: $(pwd)/genome/main.c
 #include "genome.h"
 
 size_t		mem = 0;

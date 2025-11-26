@@ -1,5 +1,59 @@
 #include "genome.h"
 
+void	Extremity_free(Extremity_ctx *ctx, int n)
+{
+	if (ctx->exts)
+		free_array_exts(ctx->exts, n);
+	ctx->exts = NULL;
+	if (ctx->ext_l)
+		free_ext(ctx->ext_l);
+	ctx->ext_l = NULL;
+	if (ctx->ext_r)
+		free_ext(ctx->ext_r);
+	ctx->ext_r = NULL;
+	if (ctx->goals)
+		free_array_exts(ctx->goals, n);
+	ctx->goals = NULL;
+	if (ctx->goal_l)
+		free_ext(ctx->goal_l);
+	ctx->goal_l = NULL;
+	if (ctx->goal_r)
+		free_ext(ctx->goal_r);
+	ctx->goal_r = NULL;
+	if (ctx->perm)
+		free_array_int(ctx->perm, ctx->n);
+	ctx->perm = NULL;
+	if (ctx->perm_sent)
+		free_array_int(ctx->perm_sent, ctx->n_sent);
+	ctx->perm_sent = NULL;
+	if (ctx->sigma_sent)
+		free_array_int(ctx->sigma_sent, ctx->n_sent);
+	ctx->sigma_sent = NULL;
+	if (ctx->pb_sent)
+		free_array_int(ctx->pb_sent, ctx->nb_sent);
+	ctx->pb_sent = NULL;
+	if (ctx->sb_sent)
+		free_array_int(ctx->sb_sent, ctx->nb_sent);
+	ctx->sb_sent = NULL;
+}
+
+void	print_Extremity_ctx(Extremity_ctx *ctx)
+{
+	printf("==========\n\n");
+	print_array_exts(ctx->exts, ctx->n);
+	print_array_exts(ctx->goals, ctx->n);
+
+	printf("%p, %p, %p, %p\n", ctx->ext_l, ctx->ext_r, ctx->goal_l, ctx->goal_r);
+	printf("n: %d\n", ctx->n);
+	printf("n_sent: %d\n", ctx->n_sent);
+	print_array_int(ctx->perm, ctx->n, 3);
+	print_array_int(ctx->perm_sent, ctx->n_sent, 3);
+	print_array_int(ctx->sigma_sent, ctx->n_sent, 3);
+
+	printf("\n==========\n");
+
+}
+
 void	put_desires(Extremity **exts, Extremity *ext_l, Extremity *ext_r, int n)
 {
 	int i, j;
@@ -92,56 +146,22 @@ Extremity **perm_to_exts(int *perm, int n)
 	return (exts);
 }
 
-void	Extremity_free(Extremity_ctx *ctx, int n)
+int	Extremity_init(char const *filename, Extremity_ctx *ctx, int *n)
 {
-	if (ctx->exts)
-		free_array_exts(ctx->exts, n);
-	ctx->exts = NULL;
-	if (ctx->ext_l)
-		free_ext(ctx->ext_l);
-	ctx->ext_l = NULL;
-	if (ctx->ext_r)
-		free_ext(ctx->ext_r);
-	ctx->ext_r = NULL;
-	if (ctx->goals)
-		free_array_exts(ctx->goals, n);
-	ctx->goals = NULL;
-	if (ctx->goal_l)
-		free_ext(ctx->goal_l);
-	ctx->goal_l = NULL;
-	if (ctx->goal_r)
-		free_ext(ctx->goal_r);
-	ctx->goal_r = NULL;
-	if (ctx->perm)
-		free_array_int(ctx->perm, ctx->n);
-	ctx->perm = NULL;
-	if (ctx->perm_sent)
-		free_array_int(ctx->perm_sent, ctx->n_sent);
-	ctx->perm_sent = NULL;
-	if (ctx->sigma_sent)
-		free_array_int(ctx->sigma_sent, ctx->n_sent);
-	ctx->sigma_sent = NULL;
-	if (ctx->pb_sent)
-		free_array_int(ctx->pb_sent, ctx->nb_sent);
-	ctx->pb_sent = NULL;
-	if (ctx->sb_sent)
-		free_array_int(ctx->sb_sent, ctx->nb_sent);
-	ctx->sb_sent = NULL;
-}
+	int fd;
 
-void	print_Extremity_ctx(Extremity_ctx *ctx)
-{
-	printf("==========\n\n");
-	print_array_exts(ctx->exts, ctx->n);
-	print_array_exts(ctx->goals, ctx->n);
-
-	printf("%p, %p, %p, %p\n", ctx->ext_l, ctx->ext_r, ctx->goal_l, ctx->goal_r);
-	printf("n: %d\n", ctx->n);
-	printf("n_sent: %d\n", ctx->n_sent);
-	print_array_int(ctx->perm, ctx->n, 3);
-	print_array_int(ctx->perm_sent, ctx->n_sent, 3);
-	print_array_int(ctx->sigma_sent, ctx->n_sent, 3);
-
-	printf("\n==========\n");
-
+	fd = open(filename, O_RDONLY);
+	if (fd < 3)
+		return (printf("Wrong file.\n"), -1);
+	if (read_first_line(fd, ctx, n) == -1)
+		return (-1);
+	printf("read first line\n");
+	if (read_second_line(fd, ctx) == -1)
+		return (-1);
+	printf("read second line.\n");
+	if (read_third_line(fd, ctx) == -1)
+		return (-1);
+	printf("read third line.\n");
+	close(fd);
+	return (1);
 }

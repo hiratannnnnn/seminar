@@ -1,6 +1,6 @@
 #include "genome.h"
 
-static void	put_nums(int *perm, char *line, int n)
+void	put_nums(int *perm, char *line, int n)
 {
 	int i;
 	char *cur, *endptr;
@@ -19,7 +19,7 @@ static void	put_nums(int *perm, char *line, int n)
 	}
 }
 
-static void	cut_line(Extremity_ctx *ctx, Extremity **exts, char const *line, int n)
+void	cut_line(Extremity_ctx *ctx, Extremity **exts, char const *line, int n)
 {
 	int i, tmp;
 	char *cur, *endptr;
@@ -49,7 +49,7 @@ static void	cut_line(Extremity_ctx *ctx, Extremity **exts, char const *line, int
 	}
 }
 
-static int count_sentinels(char const *line)
+int count_sentinels(char const *line)
 {
 	char *str;
 	int count;
@@ -65,7 +65,7 @@ static int count_sentinels(char const *line)
 	return (count);
 }
 
-static void	put_nums_sentinels(int *perm, int *perm_sent, int *sigma_sent, char const *line, int n)
+void	put_nums_sentinels(int *perm, int *perm_sent, int *sigma_sent, char const *line, int n)
 {
 	int i, j;
 	char *cur, *endptr;
@@ -103,7 +103,7 @@ static void	put_nums_sentinels(int *perm, int *perm_sent, int *sigma_sent, char 
 	sigma_sent[j] = 1;
 }
 
-static	int read_first_line(int fd, Extremity_ctx *ctx, int *n)
+int read_first_line(int fd, Extremity_ctx *ctx, int *n)
 {
 	char *line;
 
@@ -116,7 +116,7 @@ static	int read_first_line(int fd, Extremity_ctx *ctx, int *n)
 	return (1);
 }
 
-static	int read_second_line(int fd, Extremity_ctx *ctx)
+int read_second_line(int fd, Extremity_ctx *ctx)
 {
 	int n, c_sent;
 	int *perm, *perm_sent, *sigma_sent;
@@ -156,7 +156,7 @@ static	int read_second_line(int fd, Extremity_ctx *ctx)
 	return (1);
 }
 
-static int read_third_line(int fd, Extremity_ctx *ctx)
+int read_third_line(int fd, Extremity_ctx *ctx)
 {
 	int n, cb_sent;
 	int *id_perm;
@@ -188,25 +188,5 @@ static int read_third_line(int fd, Extremity_ctx *ctx)
 	cut_line(ctx, ctx->goals, line, n);
 	free(line);
 	free_array_int(id_perm, n);
-	return (1);
-}
-
-int	Extremity_init(char const *filename, Extremity_ctx *ctx, int *n)
-{
-	int fd;
-
-	fd = open(filename, O_RDONLY);
-	if (fd < 3)
-		return (printf("Wrong file.\n"), -1);
-	if (read_first_line(fd, ctx, n) == -1)
-		return (-1);
-	printf("read first line\n");
-	if (read_second_line(fd, ctx) == -1)
-		return (-1);
-	printf("read second line.\n");
-	if (read_third_line(fd, ctx) == -1)
-		return (-1);
-	printf("read third line.\n");
-	close(fd);
 	return (1);
 }

@@ -4,12 +4,22 @@
 
 ```bash
 gcc ./srcs/*.c ./lib/*.c -I./include main_make_ex.c -o make_ex
+./make_ex
 ```
 
 ### tests/ex_**.txt を読み、実行する
 
 ```bash
 gcc ./srcs/*.c ./lib/*.c -I./include main.c -o solve
+./solve
+```
+
+### CLI引数としてファイル名を読む
+
+main.cの下の方のコメントアウトに一応コマンドライン引数を取る方のmain関数も用意しました。
+```bash
+gcc ./srcs/*.c ./lib/*.c -I./include main.c -o solve
+./solve filename.txt
 ```
 
 ├─include
@@ -31,6 +41,9 @@ gcc ./srcs/*.c ./lib/*.c -I./include main.c -o solve
 ./srcs/main.c
 を編集してください。
 
-例）ログを出力しないようにする
+### ログを出力しないようにする
+```c
 solve_dcj_mine(&ctx, 1)
-->solve_dcj_mine(&ctx, 0)
+//                   ↓
+solve_dcj_mine(&ctx, 0)
+```

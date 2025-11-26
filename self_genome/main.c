@@ -13,15 +13,15 @@ int main(void)
 	Extremity_ctx ctx;
 	int n;
 
-	if (Extremity_init("tests/ex_100.txt", &ctx, &n) == -1)
+	//                      edit ↓ here
+	if (Extremity_init("tests/ex_6.txt", &ctx, &n) == -1)
 		return (printf("Error while reading file.\n"), 1);
-	// print_Extremity_ctx(&ctx);
+	print_Extremity_ctx(&ctx);
 
 	// proc_start = clock();
 	// solve_dcj_mine(&ctx, 0);
-	solve_dcj_mine(&ctx, 0);
+	solve_dcj_mine(&ctx, 1);
 
-	// TODO
 	Extremity_free(&ctx, n);
 	free_array_int(ctx.perm, n);
 	print_info();

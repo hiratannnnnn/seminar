@@ -139,12 +139,12 @@ static int track_paths(Extremity_ctx *ctx, Adjacency **adj_A, Adjacency **adj_B,
 		if (adj_A[i]->visited)
 		{
 			if (log_output)
-				printf("%d: visited.\n", i);
+				printf("i=%d: visited.\n", i);
 			continue;
 		}
 		cur = adj_A[i];
 		if (log_output)
-			printf("%d: STARTING FROM (%d, %d)\n", i,
+			printf("i=%d: STARTING FROM (%d, %d)\n", i,
 				get_value_ext(ctx, cur->left),
 				get_value_ext(ctx, cur->right));
 		len_l = len_r = 0;
@@ -160,7 +160,7 @@ static int track_paths(Extremity_ctx *ctx, Adjacency **adj_A, Adjacency **adj_B,
 		{
 			len_l++;
 			if (log_output)
-				printf("len: %d, seeking left. (%d, %d)\n", len_l,
+				printf("    len_l = %d: seeking left. (%d, %d)\n", len_l,
 					get_value_ext(ctx, next->left),
 					get_value_ext(ctx, next->right));
 			next->visited = 1;
@@ -172,7 +172,7 @@ static int track_paths(Extremity_ctx *ctx, Adjacency **adj_A, Adjacency **adj_B,
 				if (seek_r)
 				{
 					if (log_output)
-						printf("found a cycle.\n");
+						printf("    found a cycle.\n");
 					cycles++;
 				}
 				break;
@@ -186,7 +186,7 @@ static int track_paths(Extremity_ctx *ctx, Adjacency **adj_A, Adjacency **adj_B,
 		{
 			len_r++;
 			if (log_output)
-				printf("len: %d, seeking right. (%d, %d)\n", len_r,
+				printf("    len_r = %d: seeking right. (%d, %d)\n", len_r,
 					get_value_ext(ctx, next->left),
 					get_value_ext(ctx, next->right));
 			next->visited = 1;
@@ -203,7 +203,7 @@ static int track_paths(Extremity_ctx *ctx, Adjacency **adj_A, Adjacency **adj_B,
 		if ((len_l + len_r) % 2 == 1)
 		{
 			if (log_output)
-				printf("found an odd path.\n");
+				printf("    found an odd path.\n");
 			odd_paths++;
 		}
 	}

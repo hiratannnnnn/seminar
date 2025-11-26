@@ -7,7 +7,7 @@ void 	print_array_exts(Extremity **exts, int n)
 	int id2, sign2;
 	Extremity *ext1, *ext2;
 
-	printf("\n==== Printing Connections from each Extremity. ====\n\n");
+	printf("==== Printing Connections from each Extremity. ====\n\n");
 	i = 0;
 	while (i < n)
 	{

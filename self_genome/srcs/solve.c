@@ -214,11 +214,8 @@ static int track_paths(Extremity_ctx *ctx, Adjacency **adj_A, Adjacency **adj_B,
 
 int solve_dcj_mine(Extremity_ctx *ctx, int log_output)
 {
-	int i,  n, n_sent, nb_sent;
 	int *map_A, *map_B;
-	Extremity *left, *right;
 	Adjacency **adj_A, **adj_B;
-	int sign_diff;
 
 	map_A = (int *)xcalloc((2 * ctx->n), sizeof(int));
 	map_B = (int *)xcalloc((2 * ctx->n), sizeof(int));

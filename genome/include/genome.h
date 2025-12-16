@@ -43,6 +43,7 @@ typedef struct Extremity_ctx
 	int *sigma_sent;
 	int *pb_sent;
 	int *sb_sent;
+	FILE *fp;
 }	Extremity_ctx;
 
 typedef struct Stack_int
@@ -52,12 +53,22 @@ typedef struct Stack_int
 	struct Stack_int *next;
 }			Stack_int;
 
+typedef enum
+{
+	PARALLEL,
+	ADVERSE
+}		Cut_type;
+
 // contexts.c
 void		put_desires			(Extremity **exts, Extremity *ext_l, Extremity *ext_r, int n);
 void		put_realities		(Extremity_ctx *ctx, Extremity **exts, Extremity *ext_l, Extremity *ext_r, int *perm, int n);
 void		Extremity_free		(Extremity_ctx *ctx, int n);
 Extremity 	**perm_to_exts		(int *perm, int n);
 void		print_Extremity_ctx	(Extremity_ctx *ctx);
+
+// double_cut_join.c
+void		double_cut_join		(Extremity_ctx *ctx, Extremity *src, Extremity *tar);
+void		double_cut_join2	(Extremity_ctx *ctx, Adjacency *a, Adjacency *b, Cut_type type);
 
 // examples.c
 int 		write_perm_ext		(int *perm, int n, double cut_prob, char const *filename);

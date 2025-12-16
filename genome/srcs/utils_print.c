@@ -27,6 +27,16 @@ void 	print_array_exts(Extremity **exts, int n)
 			printf("%d\n", ext2->reality->id * ext2->reality->sign);
 		else
 			printf("None\n");
+		// printf("%d->", id1 * sign1);
+		// if (ext1->desire)
+		// 	printf("%d\n", ext1->desire->id * ext1->desire->sign);
+		// else
+		// 	printf("None\n");
+		// printf("%d->", id2 * sign2);
+		// if (ext2->desire)
+		// 	printf("%d\n", ext2->desire->id * ext2->desire->sign);
+		// else
+		// 	printf("None\n");
 		i++;
 	}
 }

@@ -212,11 +212,110 @@ static int track_paths(Extremity_ctx *ctx, Adjacency **adj_A, Adjacency **adj_B,
 	return (1);
 }
 
+static int is_diff(Extremity_ctx *ctx, Extremity *a, Extremity *b)
+{
+	if (!is_nullish(ctx,a))
+	{
+		if (a != b)
+			return (1);
+		else
+			return (0);
+	}
+	else
+	{
+		if (a == b)
+			return (0);
+		if (is_nullish(ctx, b))
+			return (0);
+	}
+	return (1);
+}
+
+static void proceed(Extremity_ctx *ctx, int log_output)
+{
+	Extremity **exts;
+	Extremity **goals;
+	Extremity *src;
+	Extremity *tar;
+	int tar_id;
+	int tar_sign;
+	int c;
+	int i;
+
+	exts = ctx->exts;
+	goals = ctx->goals;
+	c = 0;
+	for (i = 0; i < (ctx->n) * 2; i++)
+	{
+		src = exts[i];
+		tar_id = goals[i]->reality->id;
+		tar_sign = goals[i]->reality->sign;
+		tar_sign = (tar_sign == 1) ? 1 : 0;
+		if (tar_id == 0)
+			tar = ctx->ext_l;
+		else if (tar_id == ctx->n + 1)
+			tar = ctx->ext_r;
+		else
+			tar = exts[(tar_id - 1) * 2 + tar_sign];
+		if (!is_nullish(ctx, tar) && is_diff(ctx, src->reality, tar))
+		{
+			if (log_output)
+			{
+				int src_num = src->id * src->sign;
+				int tar_num = tar->id * tar->sign;
+				int src_pair_num = src->reality->id * src->reality->sign;
+				int tar_pair_num = tar->reality->id * tar->reality->sign;
+				fprintf(ctx->fp, "(%d, %d) (%d, %d) --DCJ--> (%d, %d) (%d, %d)\n",
+					src_num, src_pair_num, tar_num, tar_pair_num,
+					src_num, tar_num, src_pair_num, tar_pair_num);
+			}
+			double_cut_join(ctx, src, tar);
+			c++;
+		}
+	}
+	for (i = 0; i < (ctx->n) * 2; i++)
+	{
+		src = exts[i];
+		tar_id = goals[i]->reality->id;
+		tar_sign = goals[i]->reality->sign;
+		tar_sign = (tar_sign == 1) ? 1 : 0;
+		if (tar_id == 0)
+			tar = ctx->ext_l;
+		else if (tar_id == ctx->n + 1)
+			tar = ctx->ext_r;
+		else
+			tar = exts[(tar_id - 1) * 2 + tar_sign];
+		if (is_nullish(ctx, tar) && is_diff(ctx, src->reality, tar))
+		{
+			if (log_output)
+			{
+				int src_num = src->id * src->sign;
+				int tar_num = tar->id * tar->sign;
+				int src_pair_num = src->reality->id * src->reality->sign;
+				int tar_pair_num = tar->reality->id * tar->reality->sign;
+				fprintf(ctx->fp, "(%d, %d) (%d, %d) --DCJ--> (%d, %d) (%d, %d)\n",
+					src_num, src_pair_num, tar_num, tar_pair_num,
+					src_num, tar_num, src_pair_num, tar_pair_num);
+			}
+			double_cut_join(ctx, src, tar);
+			c++;
+		}
+	}
+	if (log_output)
+		fprintf(ctx->fp, "number of dcjs: %d\n", c);
+}
+
 int solve_dcj_mine(Extremity_ctx *ctx, int log_output)
 {
 	int *map_A, *map_B;
 	Adjacency **adj_A, **adj_B;
 
+	if (log_output)
+	{
+		ctx->fp = fopen("log", "w");
+		if (!ctx->fp)
+			return (-1);
+	}
 	map_A = (int *)xcalloc((2 * ctx->n), sizeof(int));
 	map_B = (int *)xcalloc((2 * ctx->n), sizeof(int));
 	adj_A = (Adjacency **)xmalloc(sizeof(Adjacency *) * (ctx->n_sent - 1));
@@ -224,9 +323,12 @@ int solve_dcj_mine(Extremity_ctx *ctx, int log_output)
 	set_maps_adjs(ctx, map_A, map_B, adj_A, adj_B, log_output);
 	put_adjs(ctx, map_A, map_B, adj_A, adj_B, log_output);
 	track_paths(ctx, adj_A, adj_B, log_output);
+	proceed(ctx, log_output);
 	free_array_int(map_A, 2 * ctx->n);
 	free_array_int(map_B, 2 * ctx->n);
 	free_list_adj(adj_A, ctx->n_sent - 1);
 	free_list_adj(adj_B, ctx->nb_sent - 1);
+	if (log_output)
+		fclose(ctx->fp);
 	return (1);
 }

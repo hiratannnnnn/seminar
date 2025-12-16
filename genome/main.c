@@ -21,7 +21,7 @@ int main(void)
 	// make_example(10000, "tests/ex_10000.txt", 0.1);
 
 	// Extremity_init("read.txt", &ctx, &n);
-	Extremity_init("tests/ex_100.txt", &ctx, &n);
+	Extremity_init("tests/ex_5.txt", &ctx, &n);
 	// print_Extremity_ctx(&ctx);
 
 	solve_dcj_mine(&ctx, 1);

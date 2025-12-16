@@ -8,7 +8,6 @@ clock_t		proc_end;
 int main(void)
 {
 	setvbuf(stdout, NULL, _IONBF, 0);
-	srand((unsigned int)time(NULL));
 	proc_start = clock();
 	Extremity_ctx ctx;
 	int n;

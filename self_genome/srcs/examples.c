@@ -46,7 +46,7 @@ int make_example(int n, char const *filename, double cut_prob)
 
     perm = gen_signed_perm(n);
     write_perm_ext(perm, n, cut_prob, filename);
-    print_array_int(perm, n, 4);
+    // print_array_int(perm, n, 4);
 	free_array_int(perm, n);
     return (1);
 }

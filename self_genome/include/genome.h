@@ -6,6 +6,8 @@
 # include <stdlib.h>
 # include <fcntl.h>
 # include <time.h>
+# include <sys/stat.h>
+# include <errno.h>
 
 # include "lib.h"
 

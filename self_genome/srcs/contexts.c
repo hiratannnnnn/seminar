@@ -49,6 +49,8 @@ void	print_Extremity_ctx(Extremity_ctx *ctx)
 	print_array_int(ctx->perm, ctx->n, 3);
 	print_array_int(ctx->perm_sent, ctx->n_sent, 3);
 	print_array_int(ctx->sigma_sent, ctx->n_sent, 3);
+	print_array_int(ctx->pb_sent, ctx->nb_sent, 3);
+	print_array_int(ctx->sb_sent, ctx->nb_sent, 3);
 
 	printf("\n==========\n");
 

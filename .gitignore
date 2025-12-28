@@ -12,7 +12,7 @@ result_*
 *_path.txt
 
 rainbow/
-latex/
+# latex/
 
 *.aux
 *.fdb_latexmk

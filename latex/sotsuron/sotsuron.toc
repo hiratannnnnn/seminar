@@ -6,10 +6,10 @@
 \contentsline {chapter}{\numberline {第2章}必要な定理}{3}{}%
 \contentsline {section}{\numberline {2.1}Bergeron2006からの定理}{3}{}%
 \contentsline {section}{\numberline {2.2}DCJ理論の数学的基礎}{3}{}%
-\contentsline {section}{\numberline {2.3}d = ...}{3}{}%
-\contentsline {chapter}{\numberline {第3章}アルゴリズム1}{4}{}%
-\contentsline {section}{\numberline {3.1}必要なデータ構造}{4}{}%
-\contentsline {section}{\numberline {3.2}正当性}{4}{}%
-\contentsline {chapter}{\numberline {第4章}アルゴリズム2}{5}{}%
-\contentsline {section}{\numberline {4.1}必要なデータ構造}{5}{}%
-\contentsline {section}{\numberline {4.2}正当性}{5}{}%
+\contentsline {section}{\numberline {2.3}(2.2)式に関する考察}{3}{}%
+\contentsline {chapter}{\numberline {第3章}アルゴリズム1}{5}{}%
+\contentsline {section}{\numberline {3.1}必要なデータ構造}{5}{}%
+\contentsline {section}{\numberline {3.2}正当性}{5}{}%
+\contentsline {chapter}{\numberline {第4章}アルゴリズム2}{6}{}%
+\contentsline {section}{\numberline {4.1}必要なデータ構造}{6}{}%
+\contentsline {section}{\numberline {4.2}正当性}{7}{}%

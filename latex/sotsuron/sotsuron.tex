@@ -5,6 +5,10 @@
 \usepackage{graphicx}
 \usepackage{geometry}
 \usepackage{amsthm}
+\usepackage[ruled, vlined, linesnumbered]{algorithm2e}
+\SetKwInput{KwIn}{入力}
+\SetKwInput{KwOut}{出力}
+\SetKwProg{Fn}{Function}{}{end}
 
 \newtheorem{theorem}{定理}[chapter] 
 \newtheorem{lemma}[theorem]{補題}   
@@ -136,17 +140,103 @@ $N$ 個の遺伝子集合からなるゲノム $A, B$ が $A=B$ であるため�
 さらに、この距離を達成する最適な操作手順は、線形時間 $O(N)$ で計算可能である \cite{bergeron2006}。
 \end{theorem}
 
-\section{d = ...}
+\section{(2.2)式に関する考察}
+
+(2.2)式は、$d_{DCJ}$を計算する上で、隣接グラフの初期状態さえあれば、
+それを変化させることなく、ただC, Iを数えられればよいことがわかる。
+このことから、私はアルゴリズム1を提案した。
 
 \chapter{アルゴリズム1}
 
+このアルゴリズムは、隣接グラフを構築した上で、
+その中に含まれているサイクル、および奇数長のパス
+を線形時間で探索するアルゴリズムである。
+
 \section{必要なデータ構造}
+
+Extremity
+
+Adjacency
+
+map
+
+\begin{algorithm}[H]
+    \caption{隣接グラフを用いたDCJ距離の計算}
+    \KwIn{ゲノム $A$, ゲノム $B$}
+    \KwOut{DCJ距離 $d_{DCJ}$}
+    
+    $N \leftarrow$ 遺伝子数\;
+    $AG(A, B) \leftarrow$ $A$ と $B$ の隣接集合から隣接グラフを構築\;
+    $C \leftarrow 0$ \tcp*{サイクルの数}
+    $I \leftarrow 0$ \tcp*{奇数パスの数}
+    
+    \ForEach{未訪問の隣接ノード $v \in AG(A, B)$}{
+        $v$ から始まるパスまたはサイクルをトラバースする\;
+        $L \leftarrow$ トラバースしたエッジの総数\;
+        \If{サイクルを発見}{
+            $C \leftarrow C + 1$\;
+        }
+        \ElseIf{パスを発見}{
+            \If{$L$ が奇数}{
+                $I \leftarrow I + 1$\;
+            }
+        }
+    }
+    $d_{DCJ} = N - (C + I/2)$\;
+    \Return $d_{DCJ}$\;
+\end{algorithm}
 
 \section{正当性}
 
+終了性については、サイクルでの無限ループにさえ気を遣えば、
+ただの2N回の探索なので、明らか。
+
+正当性については、明らか。
+
 \chapter{アルゴリズム2}
 
+\cite{bergeron2006}を参考にした。
+
 \section{必要なデータ構造}
+
+Extremity
+
+\begin{algorithm}[H]
+    \caption{DCJ操作によるゲノムソート手順の生成 (Implementation of \texttt{proceed})}
+    \label{alg:proceed}
+    \KwIn{現在のゲノム $A$ の端点集合 $exts$, 目標状態 $goals$}
+    \KwOut{実行されたDCJ操作のログ}
+    
+    $n \leftarrow$ 遺伝子数\;
+    $c \leftarrow 0$ \tcp*{DCJ操作のカウンター}
+    
+    \tcp{第1段階：目標が通常の端点（非null）である接続を優先的に処理}
+    \For{$i = 0$ \KwTo $2n - 1$}{
+        $src \leftarrow exts[i]$\;
+        $tar \leftarrow$ $goals[i]$ に対応する $A$ 上の目標端点\;
+        
+        \If{$tar$ が有効な端点（\texttt{nullish}でない） \textbf{and} $src$ の現在の接続相手 $\neq tar$}{
+            $src$ の現在のペアと $tar$ の現在のペアを特定し、DCJ操作を実行\;
+            $\text{DoubleCutJoin}(A, src, tar)$\;
+            $c \leftarrow c + 1$\;
+            \tcp*{この操作により $src$ と $tar$ が隣接関係になる}
+        }
+    }
+    
+    \tcp{第2段階：目標がテロメア（\texttt{nullish}）である接続を処理}
+    \For{$i = 0$ \KwTo $2n - 1$}{
+        $src \leftarrow exts[i]$\;
+        $tar \leftarrow$ $goals[i]$ に対応する $A$ 上の目標端点\;
+        
+        \If{$tar$ がテロメア（\texttt{nullish}である） \textbf{and} $src$ の現在の接続相手 $\neq tar$}{
+            $src$ の現在のペアと $tar$ の現在のペア（テロメア）を特定し、DCJ操作を実行\;
+            $\text{DoubleCutJoin}(A, src, tar)$\;
+            $c \leftarrow c + 1$\;
+        }
+    }
+    
+    \Return $c$\;
+\end{algorithm}
 
 \section{正当性}
 

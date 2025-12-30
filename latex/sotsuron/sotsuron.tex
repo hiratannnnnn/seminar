@@ -5,19 +5,35 @@
 \usepackage{graphicx}
 \usepackage{geometry}
 \usepackage{amsthm}
+\usepackage{listings} % 構造体表示用に追加
 \usepackage[ruled, vlined, linesnumbered]{algorithm2e}
+
+% 構造体表示の設定
+\lstset{
+    basicstyle=\ttfamily\small,
+    frame=single,
+    breaklines=true,
+    columns=fullflexible,
+    xleftmargin=2em,
+    xrightmargin=2em
+}
+
+% アルゴリズムの設定
 \SetKwInput{KwIn}{入力}
 \SetKwInput{KwOut}{出力}
 \SetKwProg{Fn}{Function}{}{end}
 
+% 定理環境の設定
 \newtheorem{theorem}{定理}[chapter] 
 \newtheorem{lemma}[theorem]{補題}   
 \newtheorem{definition}[theorem]{定義}
+\newtheorem{remark}[theorem]{注意}
 
 \geometry{top=30mm,bottom=30mm,left=30mm,right=30mm}
 
 \begin{document}
 
+% --- タイトルページ ---
 \begin{titlepage}
     \centering
     \vspace*{10mm}
@@ -25,7 +41,7 @@
     
     \vspace{40mm}
     
-    {\huge \bfseries Doubl-Cut-And-Join操作によるゲノム間距離に関する線形時間アルゴリズムの再実装} \\
+    {\huge \bfseries Double-Cut-And-Join操作によるゲノム間距離に関する\\線形時間アルゴリズムの再実装} \\
     
     \vspace{50mm}
     
@@ -50,115 +66,194 @@
 \tableofcontents
 
 \newpage
+% --- 論文要旨 ---
 \chapter*{論文要旨}
 \addcontentsline{toc}{chapter}{論文要旨}
 
-生物学において進化の過程を論じる際、突然変異を経て変化する世代間の影響を考慮することは不可欠である。また、生物学的背景から発生しやすい変異とそうでない変異を区別し、前者を中心に遺伝的な距離を定義することは自然なアプローチといえる。
+生物学において進化の過程を論じる際、
+突然変異を経て変化する世代間の影響を考慮することは不可欠である。
+また、生物学的背景から発生しやすい変異と
+そうでない変異を区別し、前者を中心に
+遺伝的な距離を定義し、考察することは自然なアプローチと言える。
 
-HannenhalliおよびPevzner (1995)\cite{hp1995}は、染色体に作用する操作を「転座 (translocation)」「融合 (fusion)」「分裂 (fission)」「反転 (inversion)」の4種類に制限し、遺伝的距離 $d_{\mathrm{HP}}$ を定義した。しかしながら、この $d_{\mathrm{HP}}$ および提案されたアルゴリズムには、計算上の制約や複雑性に関する課題が存在した。
+HannenhalliおよびPevzner (1995)\cite{hp1995}は、
+染色体に作用する操作を「転座」「融合」「分裂」「反転」
+の4種類に制限し、遺伝的距離 $d_{\mathrm{HP}}$ 
+を定義した。しかしながら、この手法および提案された
+アルゴリズムには、計算上の制約や複雑性に関する課題が存在した。
 
-Bergeronら (2009)\cite{bergeron2009}は、これらの問題を解決すべく、上記4種類の操作を一般化した「Double-Cut-And-Join (以下、DCJ)」という単一の操作を導入し、新たなアルゴリズムを提案した。DCJ操作に基づく距離を $d_{\mathrm{DCJ}}$ と呼ぶ。
+Bergeronら (2009)\cite{bergeron2009}は、これらの問題を解決すべく、
+上記4種類の操作を一般化した「Double-Cut-And-Join (以下、DCJ)」
+という単一の操作を導入し、新たなアルゴリズムを提案した。
+DCJ操作に基づく距離を $d_{\mathrm{DCJ}}$ と呼ぶ。
 
-Bergeronらの手法は、染色体内の8つの特定パターンを検出することで線形時間での操作手順出力を可能にしているが、その実装は極めて高度であり、直感的な理解が困難な側面がある。本論文では、DCJ理論におけるBergeronらと同様の前提条件の下、C言語を用いたより簡潔な線形時間アルゴリズムの実装について述べる。本稿の前半では $d_{\mathrm{DCJ}}$ の算出に特化したアルゴリズムを、後半では操作手順まで出力する、より汎用性の高いシンプルな実装を紹介する。
+Bergeronらの手法は、染色体内の特定パターンを検出することで
+線形時間での操作手順出力を可能にしているが、その実装は
+極めて高度であり、直感的な理解が困難な側面がある。
+本論文では、DCJ理論におけるBergeronらと同様の前提条件の下、
+C言語を用いたより簡潔な線形時間アルゴリズムの実装について述べる。
+本稿の前半では $d_{\mathrm{DCJ}}$ の算出に特化したアルゴリズムを、
+後半では操作手順も出力する、より汎用性の高いシンプルな実装を紹介する。
 
-実装においては、一部の着想をBergeronら(2009)の研究に依拠しつつも、主要なデータ構造および処理ロジックの大部分は独自に構築したものである。
+実装においては、一部の着想をBergeronら(2009)の研究に依拠しつつも、
+主要なデータ構造および処理ロジックの大部分は独自に構築したものである。
 
 \newpage
 \pagenumbering{arabic}
 
+% --- 第1章：導入 ---
 \chapter{導入}
 
 \section{背景}
-計算分子生物学において遺伝的距離をモデル化する手法には多くの変遷があるが、その基本的な枠組みは共通している。最終的な目標は、二つのゲノム間の最小変異回数を算出し、それらを比較・評価することにある。
+計算分子生物学において遺伝的距離をモデル化する手法には
+多くの変遷があるが、その基本的な枠組みは共通している。
+単純性の原理 (Principle of Parsimony) のもとでは、
+可能な限り小さい回数の変化を知ることが重要になる。つまり、
+最終的な目標は、二つのゲノム間の最小変異回数を算出し、
+それらを比較・評価することになる。
 
 \section{ゲノムおよび染色体の表現方法}
-比較対象となる二つのゲノムを、それぞれ \textit{source} および \textit{target} と呼ぶ。各ゲノムは染色体（chromosome）の集合であり、各染色体は遺伝子（gene）の配列として定義される。
+比較対象となる二つのゲノムを、それぞれ 
+\textit{source} および 
+\textit{target} と呼ぶ。
+各ゲノムは染色体 (chromosome) の集合であり、
+各染色体は遺伝子 (gene) の並びである。
 
-各遺伝子は整数値で識別する。最も単純な方法として、$n$ 個の相異なる遺伝子に対し $1$ から $n$ までの連番を割り当てる。遺伝子には向き（指向性）が存在するため、符号（正負）を用いてその向きを表現する。
-
-向きの基準は \textit{target} ゲノムに置く。 \textit{target} に含まれる遺伝子の向きを正（$+$）とし、\textit{source} において \textit{target} と逆向きである場合は負（$-$）、同一である場合は正（$+$）とする。これにより、遺伝子数 $n$ のゲノムにおいて、\textit{target} が単一の線形染色体である場合、その表現は常に $\langle 1 \ 2 \ \dots \ n \rangle$ と一意に定まる。
-
-線形染色体と環状染色体を区別するため、本論文では以下の表記を用いる。
+各遺伝子は正負の符号を持つ整数値で識別する。
+向きの基準を \textit{target} ゲノムに置き、
+絶対値の対応づけは任意であるため、 \textit{target} 
+が昇べきの順となるようにつける。すなわち、
+遺伝子数 $n$ のゲノムにおいて、\textit{target} 
+が単一の線形染色体である場合、その表現は常に 
+$\langle 1 \ 2 \ \dots \ n \rangle$ 
+と一意に定まる。線形染色体と環状染色体を区別するため、
+本論文では以下の表記を用いる。
 \begin{itemize}
-    \item \textbf{線形染色体}: $\langle \dots \rangle$ で囲む。例: $\langle 5 \ 6 \ -1 \rangle$
-    \item \textbf{環状染色体}: $( \dots )$ で囲む。例: $( 2 \ 7 \ -3 )$
+    \item \textbf{線形染色体}: $\langle \dots \rangle$ で囲む。
+    \item \textbf{環状染色体}: $( \dots )$ で囲む。
 \end{itemize}
 
-例えば、以下の遺伝子構成を持つゲノムの数値表現を考える。
-\begin{align*}
-    S: & \ \langle 5 \ 6 \ -1 \rangle \ ( 2 \ 7 \ -3 ) \ \langle -4 \rangle \\
-    T: & \ \langle 1 \ 2 \ 3 \ 4 \rangle \ ( 5 \ 6 \ 7 )
-\end{align*}
-ここで、環状染色体 $( 5 \ 6 \ 7 )$ は、要素を巡回させた $( 6 \ 7 \ 5 )$ や $( 7 \ 5 \ 6 )$ と同一の染色体を表すものとする（\textit{Remark}）。
+\begin{remark}
+環状染色体 $( 5 \ 6 \ 7 )$ は、
+要素を巡回させた $( 6 \ 7 \ 5 )$ や
+ $( 7 \ 5 \ 6 )$ と同一である。
+\end{remark}
 
 \section{端点 (Extremity) と隣接 (Adjacency)}
-上述の遺伝子配列による表現は直感的であるが、アルゴリズムの実装においては、遺伝子間の「接続関係」を直接扱う方が効率的である。遺伝子 $g$ の接続箇所を区別するため、各遺伝子に対し二つの \textbf{端点 (Extremity)} を定義する。
+アルゴリズムの実装においては、
+遺伝子間の「接続関係」を直接扱う方が効率的である。
+遺伝子 $g$ に対し、二つの \textbf{端点 (Extremity)}
+ を、右側の端点 $g$ および左側の端点 $-g$ と定義する。
+ 二つの遺伝子の接続は、これら端点の2要素の集合として表現され、
+ これを \textbf{隣接 (Adjacency)} と呼ぶ。
 
-遺伝子 $g$ に対し、
-\begin{itemize}
-    \item \textbf{右側の端点}: $g$ （遺伝子の符号と同じ番号）
-    \item \textbf{左側の端点}: $-g$ （遺伝子の符号と逆の番号）
-\end{itemize}
-とする。例えば、遺伝子 $6$ の端点は $\{6, -6\}$ であり、遺伝子 $-1$ の端点は $\{-1, 1\}$ となる。
+また、線形染色体の末端については、
+特殊なシンボル $o$ を用いて 
+\textbf{テロメア (Telomere)} との接続 
+$\{o, x\}$ として扱う。この定義により、
+ゲノムは単なる隣接関係の集合として記述でき、
+線形・環状の区別や染色体数を意識せずに
+統合的な操作が可能となる。
 
-二つの遺伝子の接続は、これら端点のペアとして表現され、これを \textbf{隣接 (Adjacency)} と呼ぶ。配列上で $5$ と $6$ が隣接している場合、それは端点 $5$（遺伝子5の右側）と $-6$（遺伝子6の左側）の結合 $\{5, -6\}$ を意味する。
+本研究での実装において、これらの概念は以下の構造体として定義される。
 
-また、線形染色体の端（末端）については、特殊なシンボル $o$ を用いて \textbf{テロメア (Telomere)} との接続 $\{o, x\}$ として扱う。この定義により、ゲノムは単なる隣接関係の集合として記述でき、線形・環状の区別や染色体数を意識せずに統合的な操作が可能となる。
+\begin{lstlisting}[caption=Extremity 構造体の定義, label=code:extremity]
+typedef struct Extremity
+{
+    int id;                     // 遺伝子ID (1 ...)
+    int sign;                   // 向き (1 or -1)
+    struct Extremity *reality;  // ゲノムAにおける接続先
+    struct Extremity *desire;   // ゲノムBにおける接続先
+} Extremity;
+\end{lstlisting}
 
-先述の例を隣接集合として表現すると以下のようになる。
-\begin{itemize}
-    \item $S = \{ \{o, -5\}, \{5, -6\}, \{6, 1\}, \{-1, o\}, \{2, -7\}, \{7, 3\}, \{-3, -2\}, \{-2, 2\}, \{o, 4\}, \{-4, o\} \}$
-    \item $T = \{ \{o, -1\}, \{1, -2\}, \{2, -3\}, \{3, -4\}, \{4, o\}, \{5, -6\}, \{6, -7\}, \{7, -5\} \}$
-\end{itemize}
-※ 環状染色体 $( 2 \ 7 \ -3 )$ の場合、末尾の $-3$ と先頭の $2$ も接続されるため、$\{ -(-3), -2 \} = \{3, -2\}$ という隣接が含まれる。
+\begin{lstlisting}[caption=Adjacency 構造体の定義, label=code:adjacency]
+typedef struct Adjacency
+{
+    Extremity *left;            // 隣接の左端点
+    Extremity *right;           // 隣接の右端点
+    struct Adjacency *left_to;  // グラフ上の左側エッジ
+    struct Adjacency *right_to; // グラフ上の右側エッジ
+    int visited;                // 探索用フラグ
+} Adjacency;
+\end{lstlisting}
 
-\chapter{必要な定理}
+% --- 第2章：必要な定理 ---
+\chapter{理論的背景}
 
-\section{Bergeron2006からの定理}
+\section{$d_{DCJ}$に関する等式}
 
-\section{DCJ理論の数学的基礎}
+Bergeronら(2006)\cite{bergeron2006}は、
+DCJ操作を用いたゲノム距離の計算において、
+以下の重要な定義および定理を示している。
 
-Bergeronら(2006)は、DCJ操作を用いたゲノム距離の計算において、以下の重要な定義および定理を示している。
+\begin{definition}[Double-Cut-And-Join]
+ゲノムの隣接関係の集合に対する操作であり、
+二つの隣接 $\{u, v\}$ と $\{x, y\}$ を切断し、
+新たに $\{u, x\}$ と $\{v, y\}$ 、
+または $\{u, y\}$ と $\{v, x\}$ 
+として再結合する操作を指す。
+テロメア $o$ を含む隣接に対しても同様に定義される。
 
-\begin{definition}[隣接グラフ $AG(A,B)$]
-2つのゲノム $A, B$ において、それぞれの隣接関係およびテロメアを頂点集合とし、共通の遺伝子端を持つ頂点間にエッジを引いたグラフを隣接グラフと呼ぶ \cite{bergeron2006}。このグラフは、サイクルとパスの集合となる。
+また、$\{o, o\}$ とのDCJも認めることで、
+単なる隣接の切断もDCJに含めるものとする。
 \end{definition}
 
+\begin{definition}[隣接グラフ $AG(A,B)$]
+2つのゲノム $A, B$ において、
+それぞれの隣接関係およびテロメアを頂点集合とし、
+共通の遺伝子端を持つ頂点間にエッジを引いたグラフを
+隣接グラフと呼ぶ。
+\end{definition}
+
+\begin{remark}
+それぞれの頂点の次数は高々2であるため、隣接グラフは
+サイクル (Cycle) とパス (Path) のみからなる。
+\end{remark}
+
 \begin{lemma}[ゲノムの一致条件]
-$N$ 個の遺伝子集合からなるゲノム $A, B$ が $A=B$ であるための必要十分条件は、次式が成り立つことである：
+$N$ 個の遺伝子集合からなるゲノム $A, B$ が 
+$A=B$ であるための必要十分条件は、
+次式が成り立つことである：
 \begin{equation}
     N = C + \frac{I}{2}
 \end{equation}
-ここで、$C$ は隣接グラフ $AG(A,B)$ におけるサイクルの数、$I$ は奇数パス（頂点数が奇数のパス）の数である \cite{bergeron2006}。
+ここで、$C$ は隣接グラフ $AG(A,B)$ 
+におけるサイクルの数、$I$ は奇数長パス
+ (辺の数が奇数のパス) の数である。
 \end{lemma}
 
-\begin{theorem}[DCJ距離公式と計算量]
-2つのゲノム $A, B$ 間の最短のDCJ操作回数（DCJ距離）$d_{DCJ}(A,B)$ は、次式で与えられる：
+\begin{theorem}[DCJ距離公式]
+2つのゲノム $A, B$ 間の最短のDCJ操作回数 (DCJ距離) 
+$d_{DCJ}(A,B)$ は、次式で与えられる：
 \begin{equation}
     d_{DCJ}(A,B) = N - \left( C + \frac{I}{2} \right)
 \end{equation}
-さらに、この距離を達成する最適な操作手順は、線形時間 $O(N)$ で計算可能である \cite{bergeron2006}。
+この距離を達成する最短の並べ替え手順は、
+線形時間 $O(N)$ で計算可能である。
 \end{theorem}
 
-\section{(2.2)式に関する考察}
+\section{距離公式に関する考察}
+(2.2)式は、$d_{DCJ}$を計算する上で、
+隣接グラフの初期状態さえ構築できれば、
+実際にグラフを物理的に変形させる手順を踏まずとも、
+グラフ内のコンポーネント (サイクルおよびパス) を走査し 
+$C, I$ を計数するだけで距離が確定することを示している。
+この知見に基づき、まずアルゴリズム1を提案する。
 
-(2.2)式は、$d_{DCJ}$を計算する上で、隣接グラフの初期状態さえあれば、
-それを変化させることなく、ただC, Iを数えられればよいことがわかる。
-このことから、私はアルゴリズム1を提案した。
+% --- 第3章：アルゴリズム1 ---
+\chapter{アルゴリズム1：距離計算の実装}
 
-\chapter{アルゴリズム1}
+本アルゴリズムは、隣接グラフを構築し、
+そこに含まれるサイクルおよび奇数長パスを線形時間で探索するものである。
 
-このアルゴリズムは、隣接グラフを構築した上で、
-その中に含まれているサイクル、および奇数長のパス
-を線形時間で探索するアルゴリズムである。
-
-\section{必要なデータ構造}
-
-Extremity
-
-Adjacency
-
-map
+\section{データ構造}
+実装においては、以下の3つの要素を中核とする。
+\begin{itemize}
+    \item \textbf{Extremity}: 遺伝子の端点を表す構造体。IDと符号を保持する。
+    \item \textbf{Adjacency}: 2つの Extremity のペア。探索を効率化するため、各隣接が $source$ と $toget$ のどちらに属するか、および訪問済みかどうかのフラグを持つ。
+    \item \textbf{Map}: 特定の端点がどの Adjacency に含まれているかを定数時間で検索するための整数値配列。
+\end{itemize}
 
 \begin{algorithm}[H]
     \caption{隣接グラフを用いたDCJ距離の計算}
@@ -167,16 +262,15 @@ map
     
     $N \leftarrow$ 遺伝子数\;
     $AG(A, B) \leftarrow$ $A$ と $B$ の隣接集合から隣接グラフを構築\;
-    $C \leftarrow 0$ \tcp*{サイクルの数}
-    $I \leftarrow 0$ \tcp*{奇数パスの数}
+    $C \leftarrow 0$, $I \leftarrow 0$\;
     
     \ForEach{未訪問の隣接ノード $v \in AG(A, B)$}{
-        $v$ から始まるパスまたはサイクルをトラバースする\;
-        $L \leftarrow$ トラバースしたエッジの総数\;
-        \If{サイクルを発見}{
+        $v$ から始まるコンポーネントをトラバースする\;
+        $L \leftarrow$ トラバースしたエッジ (隣接関係) の総数\;
+        \If{探索が開始点に戻った (サイクルを発見) }{
             $C \leftarrow C + 1$\;
         }
-        \ElseIf{パスを発見}{
+        \ElseIf{端 (テロメア) に到達した (パスを発見) }{
             \If{$L$ が奇数}{
                 $I \leftarrow I + 1$\;
             }
@@ -186,61 +280,72 @@ map
     \Return $d_{DCJ}$\;
 \end{algorithm}
 
-\section{正当性}
+\section{正当性と計算量}
+本アルゴリズムの探索部分は、
+各エッジをちょうど一度ずつ走査するため、
+計算量は $O(N)$ となる。
+終了性については、
+各 Adjacency に訪問済みフラグを設定し、
+一度の走査で全コンポーネントを網羅するため、
+有限時間内での停止が保証される。
 
-終了性については、サイクルでの無限ループにさえ気を遣えば、
-ただの2N回の探索なので、明らか。
+% --- 第4章：アルゴリズム2 ---
+\chapter{アルゴリズム2：操作手順の出力}
 
-正当性については、明らか。
+\cite{bergeron2006} の理論を基に、
+実際の変異手順を逐次的に出力するアルゴリズムを実装した。
 
-\chapter{アルゴリズム2}
-
-\cite{bergeron2006}を参考にした。
-
-\section{必要なデータ構造}
-
-Extremity
+\section{実装方針}
+本アルゴリズムでは、
+現在のゲノム状態を目標のゲノム状態へ貪欲法により近づけていく。
+具体的には、特定の接続が目標とする接続となっていない場合、
+DCJ操作を適用してその接続を確立させていく。
 
 \begin{algorithm}[H]
-    \caption{DCJ操作によるゲノムソート手順の生成 (Implementation of \texttt{proceed})}
+    \caption{DCJ操作によるゲノムソート手順の生成}
     \label{alg:proceed}
     \KwIn{現在のゲノム $A$ の端点集合 $exts$, 目標状態 $goals$}
     \KwOut{実行されたDCJ操作のログ}
     
-    $n \leftarrow$ 遺伝子数\;
-    $c \leftarrow 0$ \tcp*{DCJ操作のカウンター}
+    $n \leftarrow$ 遺伝子数, $c \leftarrow 0$\;
     
-    \tcp{第1段階：目標が通常の端点（非null）である接続を優先的に処理}
+    \tcp{第1段階：目標が通常の端点である接続を優先処理}
     \For{$i = 0$ \KwTo $2n - 1$}{
-        $src \leftarrow exts[i]$\;
-        $tar \leftarrow$ $goals[i]$ に対応する $A$ 上の目標端点\;
+        $from \leftarrow exts[i]$\;
+        $to \leftarrow$ $goals[i]$ に対応する $B$ 上の目標端点\;
         
-        \If{$tar$ が有効な端点（\texttt{nullish}でない） \textbf{and} $src$ の現在の接続相手 $\neq tar$}{
-            $src$ の現在のペアと $tar$ の現在のペアを特定し、DCJ操作を実行\;
-            $\text{DoubleCutJoin}(A, src, tar)$\;
-            $c \leftarrow c + 1$\;
-            \tcp*{この操作により $src$ と $tar$ が隣接関係になる}
-        }
-    }
-    
-    \tcp{第2段階：目標がテロメア（\texttt{nullish}）である接続を処理}
-    \For{$i = 0$ \KwTo $2n - 1$}{
-        $src \leftarrow exts[i]$\;
-        $tar \leftarrow$ $goals[i]$ に対応する $A$ 上の目標端点\;
-        
-        \If{$tar$ がテロメア（\texttt{nullish}である） \textbf{and} $src$ の現在の接続相手 $\neq tar$}{
-            $src$ の現在のペアと $tar$ の現在のペア（テロメア）を特定し、DCJ操作を実行\;
+        \If{$to$ が有効な端点 \textbf{and} $from$ の現在の接続相手 $\neq tar$}{
+            DCJ操作を実行し、$from$ と $to$ を隣接させる\;
             $\text{DoubleCutJoin}(A, src, tar)$\;
             $c \leftarrow c + 1$\;
         }
     }
     
+    \tcp{第2段階：目標がテロメアである接続を処理}
+    \For{$i = 0$ \KwTo $2n - 1$}{
+        $from \leftarrow exts[i]$\;
+        $to \leftarrow$ $goals[i]$ に対応する目標 (テロメア) \;
+        
+        \If{$to$ がテロメア \textbf{and} $from$ の現在の接続相手 $\neq tar$}{
+            DCJ操作を実行し、$from$ をテロメアにする\;
+            $\text{DoubleCutJoin}(A, src, tar)$\;
+            $c \leftarrow c + 1$\;
+        }
+    }
     \Return $c$\;
 \end{algorithm}
 
 \section{正当性}
+DCJ操作が距離 $d_{DCJ}$ に与える影響について、以下の補題が知られている。
+\begin{itemize}
+    \item 1回のDCJ操作で増加するサイクルの数は最大で1つである。
+    \item 奇数長の数は、1回のDCJ操作で $\{-2, 0, 2\}$ のいずれかの変化を示す。
+    \item 1回のDCJ操作では、サイクルと奇数長パスの数が同時に変化することはない。
+\end{itemize}
+これらの事実に基づき、(2.2)式において $d_{DCJ}$ を常に1減少させるようなDCJ操作が各ステップで存在することが証明されている。本アルゴリズムにおける「目標の接続を一つずつ確定させる」操作は、この最短経路を辿る操作に相当する。
 
 \newpage
+% --- 参考文献 ---
 \begin{thebibliography}{9}
 
     \bibitem{bergeron2009} 

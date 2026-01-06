@@ -1,6 +1,6 @@
 \documentclass[paper=a4,fontsize=11pt,report,oneside]{jlreq}
 
-\usepackage{luatexja} 
+\usepackage{luatexja}
 \usepackage{amsmath,amssymb}
 \usepackage{graphicx}
 \usepackage{geometry}
@@ -8,7 +8,6 @@
 \usepackage{listings} % 構造体表示用に追加
 \usepackage[ruled, vlined, linesnumbered]{algorithm2e}
 
-% 構造体表示の設定
 \lstset{
     basicstyle=\ttfamily\small,
     frame=single,
@@ -18,14 +17,12 @@
     xrightmargin=2em
 }
 
-% アルゴリズムの設定
 \SetKwInput{KwIn}{入力}
 \SetKwInput{KwOut}{出力}
 \SetKwProg{Fn}{Function}{}{end}
 
-% 定理環境の設定
-\newtheorem{theorem}{定理}[chapter] 
-\newtheorem{lemma}[theorem]{補題}   
+\newtheorem{theorem}{定理}[chapter]
+\newtheorem{lemma}[theorem]{補題}
 \newtheorem{definition}[theorem]{定義}
 \newtheorem{remark}[theorem]{注意}
 
@@ -33,31 +30,30 @@
 
 \begin{document}
 
-% --- タイトルページ ---
 \begin{titlepage}
     \centering
     \vspace*{10mm}
     {\Large 卒業論文 \quad 2025 年度} \\
-    
+
     \vspace{40mm}
-    
+
     {\huge \bfseries Double-Cut-And-Join操作によるゲノム間距離に関する\\線形時間アルゴリズムの再実装} \\
-    
+
     \vspace{50mm}
-    
+
     {\Large 平田 智也} \\
     {\large (学籍番号: 62216580)} \\
-    
+
     \vspace{20mm}
-    
+
     {\Large 指導教員 \quad 小田 芳彰 准教授} \\
-    
+
     \vfill
-    
+
     {\Large 2026 年 1 月} \\
-    
+
     \vspace{10mm}
-    
+
     {\Large 慶應義塾大学理工学部数理科学科 4年}\\
     {\Large 小田研究室}
 \end{titlepage}
@@ -78,7 +74,7 @@
 
 HannenhalliおよびPevzner (1995)\cite{hp1995}は、
 染色体に作用する操作を「転座」「融合」「分裂」「反転」
-の4種類に制限し、遺伝的距離 $d_{\mathrm{HP}}$ 
+の4種類に制限し、遺伝的距離 $d_{\mathrm{HP}}$
 を定義した。しかしながら、この手法および提案された
 アルゴリズムには、計算上の制約や複雑性に関する課題が存在した。
 
@@ -113,19 +109,19 @@ C言語を用いたより簡潔な線形時間アルゴリズムの実装につ�
 それらを比較・評価することになる。
 
 \section{ゲノムおよび染色体の表現方法}
-比較対象となる二つのゲノムを、それぞれ 
-\textit{source} および 
+比較対象となる二つのゲノムを、それぞれ
+\textit{source} および
 \textit{target} と呼ぶ。
 各ゲノムは染色体 (chromosome) の集合であり、
 各染色体は遺伝子 (gene) の並びである。
 
 各遺伝子は正負の符号を持つ整数値で識別する。
 向きの基準を \textit{target} ゲノムに置き、
-絶対値の対応づけは任意であるため、 \textit{target} 
+絶対値の対応づけは任意であるため、 \textit{target}
 が昇べきの順となるようにつける。すなわち、
-遺伝子数 $n$ のゲノムにおいて、\textit{target} 
-が単一の線形染色体である場合、その表現は常に 
-$\langle 1 \ 2 \ \dots \ n \rangle$ 
+遺伝子数 $n$ のゲノムにおいて、\textit{target}
+が単一の線形染色体である場合、その表現は常に
+$\langle 1 \ 2 \ \dots \ n \rangle$
 と一意に定まる。線形染色体と環状染色体を区別するため、
 本論文では以下の表記を用いる。
 \begin{itemize}
@@ -148,8 +144,8 @@ $\langle 1 \ 2 \ \dots \ n \rangle$
  これを \textbf{隣接 (Adjacency)} と呼ぶ。
 
 また、線形染色体の末端については、
-特殊なシンボル $o$ を用いて 
-\textbf{テロメア (Telomere)} との接続 
+特殊なシンボル $o$ を用いて
+\textbf{テロメア (Telomere)} との接続
 $\{o, x\}$ として扱う。この定義により、
 ゲノムは単なる隣接関係の集合として記述でき、
 線形・環状の区別や染色体数を意識せずに
@@ -191,7 +187,7 @@ DCJ操作を用いたゲノム距離の計算において、
 ゲノムの隣接関係の集合に対する操作であり、
 二つの隣接 $\{u, v\}$ と $\{x, y\}$ を切断し、
 新たに $\{u, x\}$ と $\{v, y\}$ 、
-または $\{u, y\}$ と $\{v, x\}$ 
+または $\{u, y\}$ と $\{v, x\}$
 として再結合する操作を指す。
 テロメア $o$ を含む隣接に対しても同様に定義される。
 
@@ -212,19 +208,19 @@ DCJ操作を用いたゲノム距離の計算において、
 \end{remark}
 
 \begin{lemma}[ゲノムの一致条件]
-$N$ 個の遺伝子集合からなるゲノム $A, B$ が 
+$N$ 個の遺伝子集合からなるゲノム $A, B$ が
 $A=B$ であるための必要十分条件は、
 次式が成り立つことである：
 \begin{equation}
     N = C + \frac{I}{2}
 \end{equation}
-ここで、$C$ は隣接グラフ $AG(A,B)$ 
+ここで、$C$ は隣接グラフ $AG(A,B)$
 におけるサイクルの数、$I$ は奇数長パス
  (辺の数が奇数のパス) の数である。
 \end{lemma}
 
 \begin{theorem}[DCJ距離公式]
-2つのゲノム $A, B$ 間の最短のDCJ操作回数 (DCJ距離) 
+2つのゲノム $A, B$ 間の最短のDCJ操作回数 (DCJ距離)
 $d_{DCJ}(A,B)$ は、次式で与えられる：
 \begin{equation}
     d_{DCJ}(A,B) = N - \left( C + \frac{I}{2} \right)
@@ -237,7 +233,7 @@ $d_{DCJ}(A,B)$ は、次式で与えられる：
 (2.2)式は、$d_{DCJ}$を計算する上で、
 隣接グラフの初期状態さえ構築できれば、
 実際にグラフを物理的に変形させる手順を踏まずとも、
-グラフ内のコンポーネント (サイクルおよびパス) を走査し 
+グラフ内のコンポーネント (サイクルおよびパス) を走査し
 $C, I$ を計数するだけで距離が確定することを示している。
 この知見に基づき、まずアルゴリズム1を提案する。
 
@@ -259,11 +255,11 @@ $C, I$ を計数するだけで距離が確定することを示している。
     \caption{隣接グラフを用いたDCJ距離の計算}
     \KwIn{ゲノム $A$, ゲノム $B$}
     \KwOut{DCJ距離 $d_{DCJ}$}
-    
+
     $N \leftarrow$ 遺伝子数\;
     $AG(A, B) \leftarrow$ $A$ と $B$ の隣接集合から隣接グラフを構築\;
     $C \leftarrow 0$, $I \leftarrow 0$\;
-    
+
     \ForEach{未訪問の隣接ノード $v \in AG(A, B)$}{
         $v$ から始まるコンポーネントをトラバースする\;
         $L \leftarrow$ トラバースしたエッジ (隣接関係) の総数\;
@@ -306,26 +302,26 @@ DCJ操作を適用してその接続を確立させていく。
     \label{alg:proceed}
     \KwIn{現在のゲノム $A$ の端点集合 $exts$, 目標状態 $goals$}
     \KwOut{実行されたDCJ操作のログ}
-    
+
     $n \leftarrow$ 遺伝子数, $c \leftarrow 0$\;
-    
+
     \tcp{第1段階：目標が通常の端点である接続を優先処理}
     \For{$i = 0$ \KwTo $2n - 1$}{
         $from \leftarrow exts[i]$\;
         $to \leftarrow$ $goals[i]$ に対応する $B$ 上の目標端点\;
-        
+
         \If{$to$ が有効な端点 \textbf{and} $from$ の現在の接続相手 $\neq tar$}{
             DCJ操作を実行し、$from$ と $to$ を隣接させる\;
             $\text{DoubleCutJoin}(A, src, tar)$\;
             $c \leftarrow c + 1$\;
         }
     }
-    
+
     \tcp{第2段階：目標がテロメアである接続を処理}
     \For{$i = 0$ \KwTo $2n - 1$}{
         $from \leftarrow exts[i]$\;
         $to \leftarrow$ $goals[i]$ に対応する目標 (テロメア) \;
-        
+
         \If{$to$ がテロメア \textbf{and} $from$ の現在の接続相手 $\neq tar$}{
             DCJ操作を実行し、$from$ をテロメアにする\;
             $\text{DoubleCutJoin}(A, src, tar)$\;
@@ -348,13 +344,13 @@ DCJ操作が距離 $d_{DCJ}$ に与える影響について、以下の補題が
 % --- 参考文献 ---
 \begin{thebibliography}{9}
 
-    \bibitem{bergeron2009} 
+    \bibitem{bergeron2009}
     A. Bergeron, J. Mixtacki, and J. Stoye, ``A new linear time algorithm to compute the genomic distance via the double cut and join distance,'' \textit{Theoretical Computer Science}, 410 (2009), pp. 5300--5316.
-    
-    \bibitem{hp1995} 
+
+    \bibitem{hp1995}
     S. Hannenhalli and P. A. Pevzner, ``Transforming men into mice (polynomial algorithm for genomic distance problem),'' in: \textit{Proceedings of FOCS 1995}, IEEE Press, 1995, pp. 581--592.
-    
-    \bibitem{bergeron2006} 
+
+    \bibitem{bergeron2006}
     A. Bergeron, J. Mixtacki, and J. Stoye, ``A unifying view of genome rearrangements,'' in: \textit{Proceedings of WABI 2006}, LNBI, vol. 4175, Springer Verlag, 2006, pp. 163--173.
 
 \end{thebibliography}

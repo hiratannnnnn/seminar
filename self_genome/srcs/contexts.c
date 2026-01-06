@@ -91,16 +91,6 @@ void	put_desires(Extremity **exts, Extremity *ext_l, Extremity *ext_r, int n)
 				exts[2 * (tar_id - 1) + 1] :
 				exts[2 * (tar_id - 1)];
 		}
-		/** previous */
-		// for (j = 0; j < n * 2; j++)
-		// {
-		// 	if (exts[j]->id == tar_id &&
-		// 		exts[j]->sign == tar_sign)
-		// 	{
-		// 		tar = exts[j];
-		// 		tar->desire = cur;
-		// 	}
-		// }
 		tar->desire = cur;
 	}
 }

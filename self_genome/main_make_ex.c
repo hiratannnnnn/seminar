@@ -11,7 +11,7 @@ int main(void)
 	srand((unsigned int)time(NULL));
 	proc_start = clock();
 
-	mkdir("tests", 0755);
+	// mkdir("tests", 0755);
 
 	// for generating some permutation.
 	make_example(20, "tests/ex_20.txt", 0.1);

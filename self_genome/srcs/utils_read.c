@@ -9,7 +9,8 @@ void	put_nums(int *perm, char *line, int n)
 	cur = line;
 	while (i < n)
 	{
-		while (*cur == ' ' || *cur == '\n' || *cur == '^')
+		while (*cur == ' ' || *cur == '\n' || *cur == '<' ||
+			*cur == '>' || *cur == '(' || *cur == ')')
 			cur++;
 		if (!*cur)
 			break;
@@ -19,34 +20,104 @@ void	put_nums(int *perm, char *line, int n)
 	}
 }
 
-void	cut_line(Extremity_ctx *ctx, Extremity **exts, char const *line, int n)
-{
-	int i, tmp;
-	char *cur, *endptr;
-	Extremity *ext;
+// void	cut_line(Extremity_ctx *ctx, Extremity **exts, char const *line, int n)
+// {
+// 	int i, tmp;
+// 	char *cur, *endptr;
+// 	Extremity *ext;
 
-	i = 0;
-	tmp = INT_MIN;
-	cur = (char *)line;
-	while (i < n)
-	{
-		while (*cur == ' ' || *cur == '\n')
-			cur++;
-		if (!*cur)
-			break;
-		if (*cur == '^')
-		{
-			ext = get_ext_by_value(ctx, exts, tmp);
-			cut_exts(ctx, ext, ext->reality);
-			cur++;
-		}
-		else
-		{
-			tmp = (int)strtol(cur, &endptr, 10);
-			cur = endptr;
-			i++;
-		}
-	}
+// 	i = 0;
+// 	tmp = INT_MIN;
+// 	cur = (char *)line;
+// 	while (i < n)
+// 	{
+// 		while (*cur == ' ' || *cur == '\n')
+// 			cur++;
+// 		if (!*cur)
+// 			break;
+// 		if (*cur == '^')
+// 		{
+// 			ext = get_ext_by_value(ctx, exts, tmp);
+// 			cut_exts(ctx, ext, ext->reality);
+// 			cur++;
+// 		}
+// 		else
+// 		{
+// 			tmp = (int)strtol(cur, &endptr, 10);
+// 			cur = endptr;
+// 			i++;
+// 		}
+// 	}
+// }
+
+void    cut_line(Extremity_ctx *ctx, Extremity **exts, char const *line, int n, int *n_adj)
+{
+    int i;
+    char *cur, *endptr;
+    int val;
+    Extremity *first, *last;
+
+    i = 0;
+    cur = (char *)line;
+    first = NULL;
+    while (i < n || *cur)
+    {
+        while (*cur == ' ' || *cur == '\n' || *cur == '\t')
+            cur++;
+        if (!*cur)
+            break;
+
+        if (*cur == '<')
+        {
+            cur++;
+            while (*cur == ' ' || *cur == '\t')
+                cur++;
+            val = (int)strtol(cur, &endptr, 10);
+            first = get_ext_by_value(ctx, exts, (-1) * val);
+            first->reality = ctx->ext_l;
+            ctx->ext_l->reality = first;
+			(*n_adj)++;
+            cur = endptr;
+            i++;
+        }
+        else if (*cur == '(')
+        {
+            cur++;
+            while (*cur == ' ' || *cur == '\t')
+                cur++;
+            val = (int)strtol(cur, &endptr, 10);
+            first = get_ext_by_value(ctx, exts, (-1) * val);
+            cur = endptr;
+            i++;
+        }
+        else if (*cur == '>')
+        {
+            val = ctx->perm[i - 1];
+            last = get_ext_by_value(ctx, exts, val);
+            last->reality = ctx->ext_r;
+            ctx->ext_r->reality = last;
+            cur++;
+        }
+        else if (*cur == ')')
+        {
+            val = ctx->perm[i - 1];
+            last = get_ext_by_value(ctx, exts, val);
+            last->reality = first;
+            first->reality = last;
+            cur++;
+        }
+        else
+        {
+            strtol(cur, &endptr, 10);
+            if (cur != endptr)
+            {
+                cur = endptr;
+                i++;
+            }
+            else
+                cur++;
+        }
+    }
 }
 
 int count_sentinels(char const *line)
@@ -55,52 +126,112 @@ int count_sentinels(char const *line)
 	int count;
 
 	str = (char *)line;
-	count = 1;
+	count = 0;
 	while (*str)
 	{
-		if (*str == '^')
+		if (*str == '<' || *str == '(')
 			count++;
 		str++;
 	}
 	return (count);
 }
 
-void	put_nums_sentinels(int *perm, int *perm_sent, int *sigma_sent, char const *line, int n)
-{
-	int i, j;
-	char *cur, *endptr;
+// void	put_nums_sentinels(int *perm, int *perm_sent, int *sigma_sent, char const *line, int n)
+// {
+// 	int i, j;
+// 	char *cur, *endptr;
 
-	i = 0;
-	j = 0;
-	cur = (char *)line;
-	perm_sent[j] = 0;
-	sigma_sent[j] = 1;
-	j++;
-	while (i < n)
-	{
-		while (*cur == ' ' || *cur == '\n')
-			cur++;
-		if (!*cur)
-			break;
-		if (*cur == '^')
-		{
-			perm_sent[j] = n + 1;
-			sigma_sent[j] = 1;
-			j++;
-			perm_sent[j] = 0;
-			sigma_sent[j] = 1;
-			j++;
-			cur = cur + 1;
-		}
-		strtol(cur, &endptr, 10);
-		perm_sent[j] = abs(perm[i]);
-		sigma_sent[j] = abs(perm[i]) / perm[i];
-		i++;
-		j++;
-		cur = endptr;
-	}
-	perm_sent[j] = n + 1;
-	sigma_sent[j] = 1;
+// 	i = 0;
+// 	j = 0;
+// 	cur = (char *)line;
+// 	perm_sent[j] = 0;
+// 	sigma_sent[j] = 1;
+// 	j++;
+// 	while (i < n)
+// 	{
+// 		while (*cur == ' ' || *cur == '\n')
+// 			cur++;
+// 		if (!*cur)
+// 			break;
+// 		if (*cur == '^')
+// 		{
+// 			perm_sent[j] = n + 1;
+// 			sigma_sent[j] = 1;
+// 			j++;
+// 			perm_sent[j] = 0;
+// 			sigma_sent[j] = 1;
+// 			j++;
+// 			cur = cur + 1;
+// 		}
+// 		strtol(cur, &endptr, 10);
+// 		perm_sent[j] = abs(perm[i]);
+// 		sigma_sent[j] = abs(perm[i]) / perm[i];
+// 		i++;
+// 		j++;
+// 		cur = endptr;
+// 	}
+// 	perm_sent[j] = n + 1;
+// 	sigma_sent[j] = 1;
+// }
+
+void    put_nums_sentinels(int *perm, int *perm_sent, int *sigma_sent, char const *line, int n)
+{
+    int i, j;
+    char *cur, *endptr;
+
+    i = 0;
+    j = 0;
+    cur = (char *)line;
+    while (i < n)
+    {
+        while (*cur == ' ' || *cur == '\n' || *cur == '\t')
+            cur++;
+        if (*cur == '<')
+        {
+            perm_sent[j] = 0;
+            sigma_sent[j] = 1;
+            j++;
+            cur++;
+        }
+        else if (*cur == '(')
+        {
+            perm_sent[j] = -1;
+            sigma_sent[j] = 1;
+            j++;
+            cur++;
+        }
+        while (i < n)
+        {
+            while (*cur == ' ' || *cur == '\t')
+                cur++;
+            if (*cur == '>' || *cur == ')')
+                break;
+            strtol(cur, &endptr, 10);
+            if (cur == endptr)
+                break;
+            perm_sent[j] = abs(perm[i]);
+            sigma_sent[j] = abs(perm[i]) / perm[i];
+            i++;
+            j++;
+            cur = endptr;
+        }
+        while (*cur == ' ' || *cur == '\t')
+            cur++;
+        if (*cur == '>')
+        {
+            perm_sent[j] = n + 1;
+            sigma_sent[j] = 1;
+            j++;
+            cur++;
+        }
+        else if (*cur == ')')
+        {
+            perm_sent[j] = n + 2;
+            sigma_sent[j] = 1;
+            j++;
+            cur++;
+        }
+    }
 }
 
 int read_first_line(int fd, Extremity_ctx *ctx, int *n)
@@ -151,7 +282,8 @@ int read_second_line(int fd, Extremity_ctx *ctx)
 		return (-1);
 	put_realities(ctx, ctx->exts, ctx->ext_l, ctx->ext_r, perm, n);
 	put_desires(ctx->exts, ctx->ext_l, ctx->ext_r, n);
-	cut_line(ctx, ctx->exts, line, n);
+	ctx->n_adj_a = ctx->n;
+	cut_line(ctx, ctx->exts, line, n, &(ctx->n_adj_a));
 	free(line);
 	return (1);
 }
@@ -185,7 +317,8 @@ int read_third_line(int fd, Extremity_ctx *ctx)
 		return (-1);
 	put_realities(ctx, ctx->goals, ctx->goal_l, ctx->goal_r, id_perm, n);
 	put_desires(ctx->goals, ctx->goal_l, ctx->goal_r, n);
-	cut_line(ctx, ctx->goals, line, n);
+	ctx->n_adj_b = ctx->n;
+	cut_line(ctx, ctx->goals, line, n, &(ctx->n_adj_b));
 	free(line);
 	free_array_int(id_perm, n);
 	return (1);

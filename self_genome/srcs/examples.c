@@ -9,28 +9,61 @@
 int write_perm_ext(int *perm, int n, double cut_prob, char const *filename)
 {
     FILE *fp;
-    int i;
+    int i, start;
+    int is_circular;
 
     if (!perm || n <= 0)
         return (-2);
     fp = fopen(filename, "w");
     if (!fp)
         return (printf("Failed to open file %s\n", filename), -1);
+
     fprintf(fp, "%d\n", n);
-    for (i = 0; i < n; i++)
-	{
-        fprintf(fp, "%d%c", perm[i], (i == n - 1) ? '\n' : ' ');
-		if (i < n - 1)
-			if ((double)rand() / RAND_MAX < cut_prob)
-				fprintf(fp, "^ ");
-	}
-	for (i = 0; i < n; i++)
-	{
-		fprintf(fp, "%d%c", i+1, (i == n - 1) ? '\n' : ' ');
-		if (i < n - 1)
-			if ((double)rand() / RAND_MAX < cut_prob)
-				fprintf(fp, "^ ");
-	}
+
+    // 1行目: perm 配列の内容をランダムな染色体に分割して出力
+    start = 0;
+    while (start < n)
+    {
+        is_circular = rand() % 2; // 0: 線形, 1: 円形
+        fprintf(fp, "%c ", is_circular ? '(' : '<');
+
+        for (i = start; i < n; i++)
+        {
+            fprintf(fp, "%d ", perm[i]);
+            // 次の遺伝子との間で「切断（染色体の終わり）」を行うか判定
+            // ただし最後の遺伝子の場合は必ず終了させる
+            if (i == n - 1 || (double)rand() / RAND_MAX < cut_prob)
+            {
+                fprintf(fp, "%c", is_circular ? ')' : '>');
+                start = i + 1;
+                break;
+            }
+        }
+        if (start < n) fprintf(fp, " ");
+    }
+    fprintf(fp, "\n");
+
+    // 2行目: 恒等置換 (1 2 ... n) をランダムな染色体に分割して出力
+    start = 0;
+    while (start < n)
+    {
+        is_circular = rand() % 2;
+        fprintf(fp, "%c ", is_circular ? '(' : '<');
+
+        for (i = start; i < n; i++)
+        {
+            fprintf(fp, "%d ", i + 1);
+            if (i == n - 1 || (double)rand() / RAND_MAX < cut_prob)
+            {
+                fprintf(fp, "%c", is_circular ? ')' : '>');
+                start = i + 1;
+                break;
+            }
+        }
+        if (start < n) fprintf(fp, " ");
+    }
+    fprintf(fp, "\n");
+
     fclose(fp);
     return (0);
 }

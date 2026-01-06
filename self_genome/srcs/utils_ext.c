@@ -82,6 +82,7 @@ Extremity *get_ext_by_value(Extremity_ctx *ctx, Extremity **exts, int value)
 		return (ctx->ext_l);
 	if (id == n + 1)
 		return (ctx->ext_r);
+	
 	sign = (value > 0) ? 1 : 0;
 	return (exts[2 * (id - 1) + sign]);
 }

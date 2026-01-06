@@ -6,7 +6,7 @@
 # include <stdlib.h>
 # include <fcntl.h>
 # include <time.h>
-# include <sys/stat.h>
+// # include <sys/stat.h>
 # include <errno.h>
 
 # include "lib.h"
@@ -41,6 +41,8 @@ typedef struct Extremity_ctx
 	int *sigma;
 	int n_sent;
 	int nb_sent;
+	int n_adj_a;
+	int n_adj_b;
 	int *perm_sent;
 	int *sigma_sent;
 	int *pb_sent;
@@ -94,7 +96,7 @@ void		print_chromosomes	(Extremity_ctx *ctx, int n);
 
 // utils_read.c
 void		put_nums			(int *perm, char *line, int n);
-void		cut_line			(Extremity_ctx *ctx, Extremity **exts, char const *line, int n);
+void		cut_line			(Extremity_ctx *ctx, Extremity **exts, char const *line, int n, int *n_adj);
 int		 	count_sentinels		(char const *line);
 void		put_nums_sentinels	(int *perm, int *perm_sent, int *sigma_sent, char const *line, int n);
 int 		read_first_line		(int fd, Extremity_ctx *ctx, int *n);

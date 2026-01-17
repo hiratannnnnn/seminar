@@ -18,4 +18,5 @@ rainbow/
 *.fdb_latexmk
 *.fls
 *.log
+*.toc
 *.synctex.gz

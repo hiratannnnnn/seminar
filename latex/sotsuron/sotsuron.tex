@@ -1,3 +1,4 @@
+% !TeX program = lualatex
 \documentclass[paper=a4,fontsize=11pt,report,oneside]{jlreq}
 
 \usepackage{luatexja}
@@ -110,6 +111,19 @@ C言語を用いたより簡潔な線形時間アルゴリズムの実装につ�
 可能な限り小さい回数の変化を知ることが重要になる．つまり，
 最終的な目標は，二つのゲノム間の最小変異回数を算出し，
 それらを比較・評価することになる．
+
+本研究に着手するにあたり，Oliveiraらによるサーベイ論文
+「Rearrangement Distance Problems: An Updated Survey」
+\cite{oliveira2024}を参照した．
+この文献を通じて，ゲノムの再編成距離問題
+（Rearrangement Distance Problems）の
+近年の動向に興味を持ち，
+特に初学者にとって適した入門的なトピックとして
+紹介されていた DCJ (Double-Cut-And-Join) 操作に
+着目することとした．
+本論文で実装の対象とした Bergeron らの論文は，
+この文脈において選定したものである．
+
 
 \section{ゲノムおよび染色体の表現方法}
 比較対象となる二つのゲノムを，それぞれ
@@ -735,7 +749,7 @@ DCJ操作を適用してその接続を確立させていく．
     \Return $c$\;
 \end{algorithm}
 
-\section{正当性}
+\section{正当性と計算量}
 本アルゴリズムの正当性は，前述の補題\ref{lem:comp_change}（成分数の変化）および補題\ref{lem:odd_path_change}（奇数長パス数の変化）から直接的に導かれる．
 これらの補題により，1回のDCJ操作で $C + I/2$ が増加する最大量は $1$ であることが示されている（補題\ref{lem:lower_bound}）．
 
@@ -746,6 +760,13 @@ DCJ操作を適用してその接続を確立させていく．
 $C + I/2$ を常に 1 ずつ増加させる効果を持つ．
 したがって，各ステップごとに距離 $d_{\mathrm{DCJ}}$（(2.3)式）は $1$ ずつ減少し，
 最終的に $A=B$ となるまで最短回数でのソート手順を与えることが保証される．
+
+また，計算量について述べると，本アルゴリズムが行う操作回数は
+$d_{\mathrm{DCJ}}(A, B)$ に一致する．
+補題\ref{lem:lower_bound}より，これは最大でも $N$ 回である．
+各ステップにおける端点の参照やDCJ操作は定数時間で実行でき，
+アルゴリズム全体での繰り返しの回数も遺伝子数 $N$ に
+比例するため，全体の時間計算量は $O(N)$ となる．
 
 % --- 第5章：評価 ---
 
@@ -849,14 +870,17 @@ $O(N \log N)$ で増加する．
 
 \begin{thebibliography}{9}
 
+    \bibitem{bergeron2006}
+    A. Bergeron, J. Mixtacki, and J. Stoye, ``A unifying view of genome rearrangements,'' in: \textit{Proceedings of WABI 2006}, LNBI, vol. 4175, Springer Verlag, 2006, pp. 163--173.
+
     \bibitem{bergeron2009}
     A. Bergeron, J. Mixtacki, and J. Stoye, ``A new linear time algorithm to compute the genomic distance via the double cut and join distance,'' \textit{Theoretical Computer Science}, 410 (2009), pp. 5300--5316.
 
     \bibitem{hp1995}
     S. Hannenhalli and P. A. Pevzner, ``Transforming men into mice (polynomial algorithm for genomic distance problem),'' in: \textit{Proceedings of FOCS 1995}, IEEE Press, 1995, pp. 581--592.
 
-    \bibitem{bergeron2006}
-    A. Bergeron, J. Mixtacki, and J. Stoye, ``A unifying view of genome rearrangements,'' in: \textit{Proceedings of WABI 2006}, LNBI, vol. 4175, Springer Verlag, 2006, pp. 163--173.
+    \bibitem{oliveira2024}
+    A. R. Oliveira, K. L. Brito, A. O. Alexandrino, G. Siqueira, U. Dias, and Z. Dias, ``Rearrangement Distance Problems: An Updated Survey,'' \textit{CSUR}, 2024.
 
 \end{thebibliography}
 

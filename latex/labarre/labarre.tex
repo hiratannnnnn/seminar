@@ -1,0 +1,510 @@
+% !TeX program = lualatex
+\documentclass[paper=a4,fontsize=11pt,report,oneside]{jlreq}
+
+\usepackage{luatexja}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{amsthm}
+\usepackage{listings}
+\usepackage{float}
+\usepackage[ruled, vlined, linesnumbered]{algorithm2e}
+\usepackage{tikz}
+\usetikzlibrary{shapes, positioning, calc}
+
+\lstset{
+    basicstyle=\ttfamily\small,
+    frame=single,
+    breaklines=true,
+    columns=fullflexible,
+    xleftmargin=2em,
+    xrightmargin=2em
+}
+
+\SetKwInput{KwIn}{入力}
+\SetKwInput{KwOut}{出力}
+\SetKwProg{Fn}{Function}{}{end}
+
+\newtheorem{theorem}{定理}[chapter]
+\newtheorem{lemma}[theorem]{補題}
+\newtheorem{definition}[theorem]{定義}
+\newtheorem{remark}[theorem]{注意}
+\newtheorem{example}[theorem]{例}
+\newtheorem{proposition}[theorem]{命題}
+\newtheorem{corollary}[theorem]{系}
+
+\geometry{top=30mm,bottom=30mm,left=30mm,right=30mm}
+
+\begin{document}
+
+% \begin{titlepage}
+%     \centering
+%     \vspace*{10mm}
+%     {\Large タイトル} \\
+
+%     \vspace{40mm}
+
+%     {\huge \bfseries メインタイトル} \\
+
+%     \vspace{50mm}
+
+%     {\Large 氏名} \\
+%     {\large（学籍番号: ）} \\
+
+%     \vspace{20mm}
+
+%     {\Large 指導教員 \quad 小田 芳彰 准教授} \\
+
+%     \vfill
+
+%     {\Large 202X 年 X 月} \\
+
+%     \vspace{10mm}
+
+%     {\Large 慶應義塾大学理工学部数理科学科 4年}\\
+%     {\Large 小田研究室}
+% \end{titlepage}
+
+\pagenumbering{roman}
+\tableofcontents
+
+\newpage
+
+\newpage
+\pagenumbering{arabic}
+
+\chapter{はじめに}
+
+配列の並び替え問題は，計算機科学や生物学の分野で長年注目されてきた．
+特に，計算生物学においては genome rearrangements として，
+interconnection network の設計においては network topology の観点から
+研究されている．順列 $\pi$ と生成集合 $S$ が与えられたとき，
+$\pi$ を恒等順列に変換するための $S$ の要素による最短列を見つけることが目的となる．
+
+一般にこの並び替え問題は NP-hard であるが，操作の種類によっては
+多項式時間で解けるものも知られている．例えば，exchange,
+block-interchange, signed reversal などは多項式時間で解ける．
+一方で，reversal や block-transposition などは NP-hard であり，
+approximation algorithm の研究が進められている．
+
+近年，これらの操作に prefix constraint を加えた問題が，
+interconnection network 設計の観点から注目されている．
+prefix constraint とは，操作の対象を順列の先頭部分 (prefix) に
+限定するものである．最も有名な例として，pancake flipping がある．
+
+しかし，表 \ref{tab:complexity} に示すように，
+prefix constraint 下での並び替え問題の計算複雑性は未解決な部分が多い．
+
+\begin{table}[H]
+    \centering
+    \caption{順列に対する並び替え問題の計算複雑性}
+    \label{tab:complexity}
+    \begin{tabular}{|l|l|l|}
+    \hline
+    Operation & Unrestricted & Prefix constraint \\ \hline
+    Reversal & NP-hard & NP-hard \\
+    Signed reversal & P & Open \\
+    Double cut-and-join & NP-hard & Open \\
+    Signed double cut-and-join & P & Open \\
+    Exchange & P & P \\
+    Block-transposition & NP-hard & Open \\
+    Block-interchange & P & Open \\ \hline
+    \end{tabular}
+\end{table}
+
+本研究では，prefix block-interchange に焦点を当てる．
+この操作は double cut-and-join と並んで最も一般的な操作の一つであり，
+exchange や block-transposition を特殊ケースとして含む．
+制約なしの block-interchange は多項式時間で解けることが知られているため，
+prefix constraint 下でも効率的なアルゴリズムの存在が期待される．
+また，prefix 設定での知識は，より一般的な文字列上の再編問題への応用にも不可欠である．
+
+本研究の目的は，prefix block-interchange distance に関する上下界を改善し，
+approximation algorithm を提案するとともに，その最大距離を決定することである．
+
+\chapter{Breakpoint Graph に基づく 2-Approximation}
+
+本章では，sbpbi に対する breakpoint graph に基づく 2-approximation algorithm を与える．
+まず Subsection 3.1 で breakpoint graph を用いて pbid の upper bound を導出し，
+アルゴリズムを提示する．
+次に Subsection 3.2 で lower bound を導出し，
+アルゴリズムの性能保証を証明する．
+Breakpoint graph は，cycle graph [2] と呼ばれる別の構造と等価であることが知られており [18]，
+どちらのグラフに基づく結果も区別なく使用できる．
+
+\begin{definition}[Breakpoint graph] \cite{hannenhalli1999transforming}
+    $S_n$ の任意の $\pi$ に対し，$\pi'$ を $\{0, 1, 2, \dots, 2n+1\}$ 上の
+    permutation とし，$\pi'_0 = 0$, $\pi'_{2n+1} = 2n + 1$，
+    そして $1 \le i \le n$ に対して $(\pi'_{2i-1}, \pi'_{2i}) = (2\pi_i - 1, 2\pi_i)$
+    で定義する．
+    $\pi$ の breakpoint graph とは，無向の辺彩色グラフ $G(\pi) = (V, E_b \cup E_g)$ であり，
+    その頂点集合 $V$ は位置順に並べられた $\pi'$ の要素からなり，
+    辺集合は以下で構成される．
+    \begin{itemize}
+        \item $E_b = \{\{\pi'_{2i}, \pi'_{2i+1}\} \mid 0 \le i \le n\}$，これを black edges の集合と呼ぶ．
+        \item $E_g = \{\{2i, 2i + 1\} \mid 0 \le i \le n\}$，これを grey edges の集合と呼ぶ．
+    \end{itemize}
+\end{definition}
+
+図 \ref{fig:breakpoint_graph} に breakpoint graph の例を示す．
+$G(\pi)$ は 2-regular であるため，black edge と grey edge が交互に現れる
+edge-disjoint cycles に一意に分解される．
+$G(\pi)$ における cycle の長さ (length) は，その cycle に含まれる black edges の数である．
+長さ $k$ の cycle を $k$-cycle と呼ぶ．
+$c(G(\pi))$ ($c_k(G(\pi))$) で $G(\pi)$ における cycle (resp. $k$-cycle) の数を表し，
+長さ 1 の cycle を trivial cycle と呼ぶ．
+
+Breakpoint graph に基づく戦略の重要な洞察は，
+適用する変換が grey edges には決して影響を与えず，
+black edges を「切断 (cut)」して新しい black edges に置き換えるという点にある．
+この観点から，block-interchanges をそれが作用する black edges によって定義することができる．
+Black edge を $b_i = \{\pi'_{2i-2}, \pi'_{2i-1}\}$ と表記すると，
+black edges の quadruplet $(b_i, b_j, b_k, b_\ell)$ ($i < j \le k < \ell$) は，
+block-interchange $\beta(i, j, k, \ell)$ を自然に定義し，逆もまた然りである．
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics{figure1.pdf} % Figure 1
+%     \caption{The breakpoint graph of $\langle 7 1 4 5 3 2 6 \rangle$.}
+%     \label{fig:breakpoint_graph}
+% \end{figure}
+
+\section{An upper bound based on the breakpoint graph}
+
+$S_n$ の任意の $\pi$ に対する以下の量は，
+prefix block-transposition distance の tight な lower bound であることが示されている [19]．
+\begin{equation}
+    g(\pi) = n + 1 + \frac{c(G(\pi))}{2} - c_1(G(\pi)) -
+    \begin{cases}
+        0 & \text{if } \pi_1 = 1, \\
+        1 & \text{otherwise}.
+    \end{cases}
+    \label{eq:g_pi}
+\end{equation}
+
+Theorem 5 において，この量が prefix block-interchange distance の upper bound でもあることを証明する．
+そのために，[2] で導入された記法に基づき，以下の記法を用いる．
+任意の 2 つの permutations $\pi$ と $\sigma$ に対し，以下のように定義する：
+\begin{align*}
+    \Delta c(\pi, \sigma) &= c(G(\sigma)) - c(G(\pi)), \\
+    \Delta c_1(\pi, \sigma) &= c_1(G(\sigma)) - c_1(G(\pi)), \\
+    \Delta f(\pi, \sigma) &= f(\sigma) - f(\pi), \text{ where } f(\pi) = 0 \text{ if } \pi \text{ fixes } 1 \text{ (i.e. } \pi_1 = 1\text{) and } 1 \text{ otherwise, and} \\
+    \Delta g(\pi, \sigma) &= g(\sigma) - g(\pi).
+\end{align*}
+これらのパラメータを用いることで，以下の式が得られ，証明において有用となる：
+\begin{equation}
+    \Delta g(\pi, \sigma) = \Delta c(\pi, \sigma)/2 - \Delta c_1(\pi, \sigma) - \Delta f(\pi, \sigma).
+    \label{eq:delta_g}
+\end{equation}
+
+まず Lemma 4 において，$\pi_1 \neq 1$ の場合に $g(\pi)$ を少なくとも 1 減少させる
+prefix block-interchange の存在を証明する．
+証明には以下の構造的な結果を用いる．
+
+\begin{lemma}[参考文献14] \label{lem:intersect}
+    任意の permutation $\pi$ に対し，$G(\pi)$ の nontrivial cycle 内の grey edge $e$ には，
+    それと交差 (intersect) する $G(\pi)$ の grey edge $e'$ が存在する．
+    ここで，grey edges $\{\pi'_a, \pi'_b\}$ と $\{\pi'_c, \pi'_d\}$ ($a < b, c < d$) が
+    交差するとは，$a < c < b < d$ または $c < a < d < b$ を満たすことである．
+\end{lemma}
+
+$\pi'_1$ を含む $G(\pi)$ の grey edge を first grey edge，
+0 を含む cycle を leftmost cycle と呼ぶ．
+以下の Lemma は，$\pi_1 \neq 1$ の場合に適切な prefix block-interchange によって
+$g(\pi)$ を減少させることができることを示している．
+
+\begin{lemma} \label{lem:reduction}
+    $S_n$ の任意の $\pi$ に対し，$\pi_1 \neq 1$ ならば，
+    $\Delta c(\pi, \pi\beta) = 2$, $\Delta c_1(\pi, \pi\beta) \ge 2$,
+    および $\Delta g(\pi, \pi\beta) \le -1$ を満たす
+    prefix block-interchange $\beta$ が存在する．
+\end{lemma}
+
+
+以上の準備の下，本章の主結果である Upper bound の定理を示す．
+
+\begin{theorem} \label{thm:upperbound_main}
+    任意の $\pi \in S_n$ に対し，$pbid(\pi) \le g(\pi)$ が成り立つ．
+\end{theorem}
+
+
+Theorem \ref{thm:upperbound_main} の不等式が strict になる最小の permutation の例は
+$\pi = \langle 3 2 1 \rangle$ であり，$pbid(\pi) = 1 < g(\pi) = 2$ となる．
+Algorithm \ref{algo:approx} は Theorem \ref{thm:upperbound_main} で記述された戦略を実装したものである．
+次の Subsection で，Algorithm \ref{algo:approx} が 2-approximation であることを証明する．
+
+\begin{algorithm}[H]
+\caption{ApproximateSbpbi($\pi$)}
+\label{algo:approx}
+\KwIn{A permutation $\pi$ of $[n]$.}
+\KwOut{A sorting sequence of prefix block-interchanges for $\pi$.}
+$S \leftarrow$ empty sequence\;
+\While{$\pi \neq \iota$}{
+    \eIf{$\pi_1 \neq 1$}{
+        $j \leftarrow$ the position of $\pi_1 - 1$\;
+        \eIf{there exists a pair $(\pi_i, \pi_k = \pi_i + 1)$ such that $i \le j \le k$ and the corresponding grey arc belongs to the leftmost cycle of $G(\pi)$}{
+            $\sigma \leftarrow \beta(1, i, j, k)$ \tcp*{Lemma \ref{lem:reduction} cases 1--3}
+        }{
+            Let $i, k$ be positions such that $i \le j \le k$ and $\pi_k = \pi_i - 1$\;
+            $\sigma \leftarrow \beta(1, i, j, k)$ \tcp*{Lemma \ref{lem:reduction} case 4}
+        }
+    }{
+        $i \leftarrow$ smallest index such that $\pi_{i+1} \neq \pi_i + 1$\;
+        $j \leftarrow$ the position of $\pi_i + 1$\;
+        $\sigma \leftarrow \beta(1, i, i, j)$ \tcp*{Theorem \ref{thm:upperbound_main}}
+    }
+    $\pi \leftarrow \pi\sigma$\;
+    $S$.append($\sigma$)\;
+}
+\Return $S$\;
+\end{algorithm}
+
+\section{A lower bound based on the breakpoint graph}
+
+本節では，Algorithm \ref{algo:approx} が sbpbi の 2-approximation であることを示すため，
+pbid の lower bound を証明する．
+そのために，[19] で導入された枠組みを用いる．
+出発点となるのは以下の写像 $\psi$ である．
+ここで，$S_{n+1}$ は $\{0\} \cup [n]$ 上の symmetric group と同一視され，
+$A_n$ は $S_n$ の偶置換 (even permutations) の全体からなる部分群である．
+\begin{equation}
+    \psi : S_n \to A_{n+1} : \pi \mapsto \overline{\pi} = (0, 1, 2, \dots, n)(0, \pi_n, \pi_{n-1}, \dots, \pi_1).
+    \label{eq:psi}
+\end{equation}
+この写像は，各 permutation $\pi$ に対し，その disjoint cycles が
+$G(\pi)$ の cycles と一対一に対応するような別の permutation $\overline{\pi}$ を対応させる．
+したがって，$\pi$ の disjoint cycle decomposition に基づく用語と
+$G(\pi)$ の alternating cycle decomposition に基づく用語は，
+Section 3 の冒頭で導入した記法を含め，区別なく使用できる
+(例：$c(\overline{\pi}) = c(G(\pi))$，したがって
+$\Delta c(\overline{\pi}, \overline{\pi\sigma}) = c(\overline{\pi\sigma}) - c(\overline{\pi})
+= c(G(\pi\sigma)) - c(G(\pi)) = \Delta c(\pi, \pi\sigma)$)．
+
+以下の定理は，lower bound を証明するための主要なツールとなる．
+
+\begin{theorem}[\cite{labarre2013lower}] \label{thm:factorisation}
+    $S \subseteq S_n$ を，その要素が $\psi(\cdot)$ によって $S' \subseteq A_{n+1}$ に写されるような集合とする．
+    さらに，$C$ を $S'$ と交わる ($S_{n+1}$ の) conjugacy classes の和集合とする．
+    このとき，任意の $\pi \in S_n$ に対し，$\pi$ の $S$ の要素 $t$ 個への分解は，
+    $\overline{\pi}$ の $C$ の要素 $t$ 個への分解をもたらす．
+\end{theorem}
+
+結果として，$d_S(\sigma)$ を「$S$ の要素のみからなる $\sigma$ の最短ソーティング列の長さ」とすると，
+Theorem \ref{thm:factorisation} は任意の $\pi \in S_n$ と任意の $S \subseteq S_n$ の選択に対して
+$d_S(\pi) \ge d_{S'}(\overline{\pi})$ であることを意味する．
+Theorem \ref{thm:factorisation} を利用するためには，$\pi$ 上の操作の影響を
+$\overline{\pi}$ 上の変換として解釈し直す必要があり，
+また，写像 $\psi$ による prefix block-interchange の像を正確に特徴付ける必要がある．
+これらは以下の結果によって与えられる．
+
+\begin{lemma}[\cite{labarre2013lower}] \label{lem:psi_conjugate}
+    全ての $\pi, \sigma \in S_n$ に対し，$\overline{\pi\sigma} = \overline{\pi}\overline{\sigma}^{\pi}$ が成り立つ．
+\end{lemma}
+
+\begin{lemma}[\cite{labarre2013lower}] \label{lem:psi_bi}
+    $S_n$ における任意の block-interchange $\beta(i, j, k, \ell)$ に対し，
+    $\overline{\beta(i, j, k, \ell)} = (j, \ell)(i, k)$ が成り立つ．
+\end{lemma}
+
+よく知られているように，permutation $\sigma$ における 2-cycle が
+permutation $\pi$ の異なる cycles の要素を含む場合，それらの cycles は $\pi\sigma$ においてマージされる．
+一方，$\sigma$ の 2-cycle が $\pi$ の同じ cycle 内の要素を含む場合，その cycle は $\pi\sigma$ において 2 つに分割される．
+したがって，Lemma \ref{lem:psi_conjugate} と Lemma \ref{lem:psi_bi} は，
+block-interchange の影響を解析する非常に単純な方法を提供する．
+$\beta$ が $G(\pi)$ の cycles に与える影響は，
+$\overline{\beta}^{\overline{\pi}}$ が $\overline{\pi}$ の cycles に与える影響と同じである．
+したがって，$\pi$ の (prefix) block-interchange distance の bounds は，
+$\overline{\pi}$ 上での 2-cycles のペアの影響を調べることで得られる．
+
+以下の Lemma は，lower bound (Theorem \ref{thm:lowerbound_strict}) の証明においてケース数を減らすのに有用である．
+
+\begin{lemma} \label{lem:delta_c_cases}
+    任意の $\pi \in S_n$ と任意の block-interchange $\beta$ に対し，
+    $\Delta c(\pi, \pi\beta) \in \{-2, 0, 2\}$ である．
+\end{lemma}
+
+
+最後に，以下の技術的な観察により，$\Delta f(\pi, \sigma)$ の不可能な値を排除できる．
+制限がない場合，$\Delta f(\pi, \sigma)$ の取り得る値の集合は $\{-1, 0, 1\}$ である．
+
+\begin{lemma} \label{lem:delta_f_restriction}
+    任意の $\pi \in S_n$ と任意の prefix block-interchange $\beta$ に対し，
+    $\Delta c_1(\pi, \pi\beta) \ge 2$ ならば，$\Delta f(\pi, \pi\beta) \neq 1$ である．
+\end{lemma}
+
+
+これで，$pbid$ の lower bound を証明する準備が整った．
+
+\begin{theorem} \label{thm:lowerbound_strict}
+    任意の $\pi \in S_n$ に対し，$pbid(\pi) \ge g(\pi)/2$ が成り立つ．
+\end{theorem}
+
+
+Theorem \ref{thm:lowerbound_strict} は，Algorithm \ref{algo:approx} が sbpbi に対する 2-approximation であることを意味する．
+
+
+\chapter{Tightening the bounds}
+
+Sbpbi に対するより良い近似保証を得ることは，他の prefix sorting 問題と同様に自明ではないと思われるが，
+前節で得られた bounds は改善することができる．
+本章では，それらをより厳密にする方法を示し，
+次章でそれらの改善された結果を用いて，距離が到達できる最大値を計算する．
+
+\section{A tighter upper bound}
+
+Theorem \ref{thm:lowerbound_strict} により，単一の prefix block-interchange で
+Theorem \ref{thm:upperbound_main} の upper bound が減少し得る最大値は 2 である．
+本節では，そのような prefix block-interchange を許容する全ての permutations を特徴付ける．
+"Tight" でない permutations は他にも存在するが (例：Proposition \ref{prop:eventual_tightness})，
+それらは最適ソーティング列の最初のステップとしてそのような操作を許容しない．
+結果として，Theorem \ref{thm:improved_upperbound} において pbid の改善された upper bound を得る．
+
+\begin{lemma} \label{lem:2cycle_intersect_grey}
+    任意の $\pi \in S_n$ に対し，もし $G(\pi)$ が first grey edge と交差する 2-cycle を含むならば，
+    $\Delta g(\pi, \pi\beta) = -2$ となる prefix block-interchange $\beta$ が存在する．
+\end{lemma}
+
+
+[2] に倣い，cycle $C$ が black edges $b_i$ と $b_k$ ($i$ と $k$ はそれぞれ最小および最大のインデックス) を持つとき，
+もし $i < j < k$ ならば，$C$ は black edge $b_j$ を「スパンする (spans)」と言う．
+
+\begin{lemma} \label{lem:2cycle_spans_other}
+    任意の $\pi \in S_n$ に対し，もし $G(\pi)$ が leftmost cycle 以外の 2-cycle を含み，
+    かつその 2-cycle が leftmost cycle とは異なる nontrivial cycle に属する black edge をスパンしているならば，
+    $\Delta g(\pi, \pi\beta) = -2$ となる prefix block-interchange $\beta$ が存在する．
+\end{lemma}
+
+
+Leftmost cycle 以外であり，かつ我々の特徴付けとは異なる配置にある 2-cycles もまた有用である．
+それらは直ちに $g(\cdot)$ を 2 減少させる prefix block-interchange を許容しないかもしれないが，
+最終的にそのような操作を得ることを可能にすることを示す．
+
+\begin{proposition} \label{prop:eventual_tightness}
+    任意の $\pi \in S_n$ に対し，もし $G(\pi)$ が leftmost cycle ではない 2-cycle を含むならば，
+    $\pi$ は prefix block-interchanges の列 $S$ を許容し，
+    $\pi$ を $\sigma$ に変換する．
+    ここで $\Delta g(\pi, \sigma) = -|S|$ であり，
+    かつ $\sigma$ は $\Delta g(\sigma, \sigma\beta) = -2$ となる prefix block-interchange $\beta$ を許容する．
+\end{proposition}
+
+
+上記の結果により，Theorem \ref{thm:upperbound_main} に関して "nontight" な他の permutations
+(その breakpoint graph が 2-cycle を含まないもの) を容易に識別できる．
+例えば，もし first grey edge が 3-cycle $C$ と交差する場合，
+Lemma \ref{lem:2cycle_intersect_grey} に従って選択された prefix block-interchange を適用すると，
+leftmost cycle と $C$ の両方の長さが減少し，$C$ は 2-cycle となる．
+したがって，Proposition \ref{prop:eventual_tightness} により，
+最終的に $g(\cdot)$ を 2 減少させる prefix block-interchange が可能となる．
+
+2-cycles 間の相互作用のため，単に $G(\pi)$ の 2-cycles の数だけ
+Theorem \ref{thm:upperbound_main} の upper bound を減らすことはできない．
+実際，Lemma \ref{lem:2cycle_spans_other} で記述された 2-cycle がスパンする black edge は，
+結果として得られる permutation において長さが増加するような別の 2-cycle に属している可能性がある．
+したがって，結論できるのは以下のみである．
+
+\begin{theorem} \label{thm:improved_upperbound}
+    任意の $\pi \in S_n$ に対し，$pbid(\pi) \le g(\pi) - \lceil c^\emptyset_2(G(\pi))/2 \rceil$ が成り立つ．
+    ここで $c^\emptyset_2(G(\pi))$ は，$G(\pi)$ の 2-cycles の数 (leftmost cycle を除く) を表す．
+\end{theorem}
+
+
+Theorem \ref{thm:improved_upperbound} は再び tight な upper bound を与える．
+例えば permutation $\langle 1\ 4\ 3\ 2 \rangle$ に対して，
+改善された upper bound の値はその距離と一致する．
+
+\section{A tighter lower bound}
+
+Pbid の自明な lower bound は block-interchange distance (これは $bid(\pi)$ と表記される) の値によって与えられる．
+これは以下の結果のおかげで $O(n)$ 時間で計算できる．
+
+\begin{theorem}[\cite{labarre2013lower}] \label{thm:bid_formula}
+    任意の $\pi \in S_n$ に対し，$bid(\pi) = (n + 1 - c(G(\pi)))/2$ である．
+\end{theorem}
+
+この lower bound はしばしば Theorem \ref{thm:lowerbound_strict} のものよりも優れているが，
+逆が成り立つケースも存在する ($\langle 1\ 4\ 3\ 2 \rangle$ は最小の例である)．
+以下に示すように，この自明な lower bound に基づいて，
+より良く有用な lower bound を得ることが可能である．
+結果として得られる lower bound は，次章で扱う問題である prefix block-interchange が到達し得る最大値を計算することも可能にする．
+
+\begin{definition}[\cite{lin2005polynomial}] \label{def:components}
+    $\pi$ を permutation とする．$G(\pi)$ の 2 つの cycles $C$ と $D$ が「交差する (intersect)」とは，
+    $C$ が grey edge $e$ を含み，それが $D$ の grey edge $f$ と交差することを言う．
+    $G(\pi)$ の component とは，$G(\pi)$ の nontrivial cycles の intersection graph の連結成分のことである．
+\end{definition}
+
+例えば，Section \ref{ch:definitions} の図 (Figure 1 page 4) の breakpoint graph は 2 つの components を持つ：
+leftmost cycle と，交差する 2-cycles のペアである．
+$CC(G(\pi))$ で $G(\pi)$ の components の数を表す．
+まず，breakpoint graph の components をマージする prefix block-interchanges は，
+それが含む cycles の数を減少させることはできないことを示す (証明は Appendix A [19] を参照)．
+
+\begin{lemma} \label{lem:merge_components}
+    任意の $\pi \in S_n$ に対し，$\beta$ を $CC(G(\pi\beta)) < CC(G(\pi))$ となる
+    prefix block-interchange とする．このとき $\Delta c(G(\pi, \pi\beta)) \in \{-2, 0\}$ である．
+\end{lemma}
+
+\begin{theorem} \label{thm:improved_lowerbound}
+    任意の $\pi \in S_n$ に対し，$pbid(\pi) \ge bid(\pi) + CC(G(\pi)) - \delta$ が成り立つ．
+    ここで $\delta$ は，$\pi_1 = 1$ のとき 0，そうでないとき 1 である．
+\end{theorem}
+
+
+\chapter{The maximum value of the prefix block-interchange distance}
+
+$S_n$ の diameter とは，特定の操作族に対して距離が到達し得る最大値のことである．
+本章では，我々の結果を用いて prefix block-interchanges の場合の正確な値を計算し，
+その過程で，breakpoint graph に基づく我々の 2-approximation algorithm が，
+以下の概念に関しても 2-approximation であることを示す．
+
+\begin{definition}[\cite{labarre2011edit}] \label{def:breakpoints}
+    $\pi$ を $\{0, 1, 2, \dots, n + 1\}$ 上の permutation で $\pi_0 = 0$ かつ $\pi_{n+1} = n + 1$ とする．
+    ペア $(\pi_i, \pi_{i+1})$ ($0 \le i \le n$) は，$i = 0$ または $\pi_{i+1} - \pi_i \neq 1$ のとき breakpoint であり，
+    そうでないとき adjacency である．
+    Permutation $\pi$ における breakpoints の数を $b(\pi)$ で表す．
+\end{definition}
+
+読みやすさのため，$\pi \in S_n$ に対して $b(\pi)$ という表記を少し濫用するが，
+これは $b(\langle 0\ \pi_1\ \pi_2\ \dots\ \pi_n\ n + 1 \rangle)$ を指すものと理解されたい．
+$\Delta b(\pi, \sigma) = b(\sigma) - b(\pi)$ とし，
+$\Delta b(\pi, \pi\beta) < 0$ となる prefix block-interchange $\beta$ は
+breakpoints を取り除く，あるいは adjacencies を作ると言う．
+
+\begin{lemma} \label{lem:delta_b_bound}
+    任意の $\pi \in S_n$ と任意の prefix block-interchange $\beta$ に対し，
+    $|\Delta b(\pi, \pi\beta)| \le 3$ が成り立つ．
+\end{lemma}
+
+
+$\iota$ は正確に 1 つの breakpoint を持つ唯一の permutation なので，
+Lemma \ref{lem:delta_b_bound} は直ちに以下の系を導く．
+
+\begin{corollary} \label{cor:lowerbound_breakpoints}
+    任意の $\pi \in S_n$ に対し，$pbid(\pi) \ge \lceil (b(\pi) - 1) / 3 \rceil$ が成り立つ．
+\end{corollary}
+
+\begin{lemma} \label{lem:upperbound_breakpoints}
+    任意の $\pi \in S_n$ に対し，$pbid(\pi) \le 2 \lceil (b(\pi) - 1) / 3 \rceil$ が成り立つ．
+\end{lemma}
+
+
+全ての $\pi \in S_n$ に対して $b(\pi) \le n + 1$ なので，直ちに以下が得られる．
+
+\begin{corollary} \label{cor:upperbound_n}
+    任意の $\pi \in S_n$ に対し，$pbid(\pi) \le 2n/3$ が成り立つ．
+\end{corollary}
+
+\begin{theorem} \label{thm:diameter}
+    Prefix block-interchanges における $S_n$ の diameter は $\lfloor 2n/3 \rfloor$ である．
+\end{theorem}
+
+
+$n \not\equiv 0 \pmod 3$ のときは多くの permutations が diameter に到達するが，
+$n \equiv 0 \pmod 3$ のときは permutation $\langle 1\ 3\ 2\ 4\ 6\ 5\ \dots\ n - 2\ n\ n - 1 \rangle$
+が唯一の tight permutation であると思われる．
+
+\bibliographystyle{plain}
+\nocite{*}
+\bibliography{references}
+
+\end{document}

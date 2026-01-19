@@ -1,0 +1,113 @@
+\begin{thebibliography}{10}
+
+\bibitem{akers1987star}
+Sheldon~B Akers, Balakrishnan Krishnamurthy, and Dov Harel.
+\newblock The star graph: An attractive alternative to the n-cube.
+\newblock In {\em Proceedings of the Fourth International Conference on Parallel Processing}, pages 393--400. Pennsylvania State University Press, 1987.
+
+\bibitem{bafna1998sorting}
+Vineet Bafna and Pavel~A Pevzner.
+\newblock Sorting by transpositions.
+\newblock {\em SIAM Journal on Discrete Mathematics}, 11(2):224--240, 1998.
+
+\bibitem{berman20021}
+Piotr Berman, Sridhar Hannenhalli, and Marek Karpinski.
+\newblock 1.375-approximation algorithm for sorting by reversals.
+\newblock In {\em Proceedings of the 10th Annual European Symposium on Algorithms}, pages 200--210. Springer, 2002.
+
+\bibitem{bulteau2012sorting}
+Laurent Bulteau, Guillaume Fertin, and Irena Rusu.
+\newblock Sorting by transpositions is difficult.
+\newblock {\em SIAM Journal on Discrete Mathematics}, 26(3):1148--1180, 2012.
+
+\bibitem{bulteau2015pancake}
+Laurent Bulteau, Guillaume Fertin, and Irena Rusu.
+\newblock Pancake flipping is hard.
+\newblock {\em Journal of Computer and System Sciences}, 81(8):1556--1574, 2015.
+
+\bibitem{cai1997parameterized}
+Liming Cai, Jianer Chen, Rodney~G Downey, and Michael~R Fellows.
+\newblock On the parameterized complexity of short computation and factorization.
+\newblock {\em Archive for Mathematical Logic}, 36(4-5):321--337, 1997.
+
+\bibitem{caprara1999sorting}
+Alberto Caprara.
+\newblock Sorting permutations by reversals and eulerian cycle decompositions.
+\newblock {\em SIAM Journal on Discrete Mathematics}, 12(1):91--110, 1999.
+
+\bibitem{chen2013sorting}
+Xin Chen.
+\newblock On sorting unsigned permutations by double-cut-and-joins.
+\newblock {\em Journal of Combinatorial Optimization}, 25(3):339--351, 2013.
+
+\bibitem{chou2014prefix}
+Shih-Wen Chou, Chung-Han Yang, Kun-Tze Chen, and Chin~Lung Lu.
+\newblock Prefix block-interchanges on binary strings.
+\newblock In {\em Proceedings of the International Computer Symposium on Intelligent Systems and Applications}, pages 1960--1969. IOS Press, 2014.
+
+\bibitem{christie1996sorting}
+David~A Christie.
+\newblock Sorting permutations by block-interchanges.
+\newblock {\em Information Processing Letters}, 60(4):165--169, 1996.
+
+\bibitem{dias2002sorting}
+Zanoni Dias and Joao Meidanis.
+\newblock Sorting by prefix transpositions.
+\newblock In {\em Proceedings of the Ninth International Symposium on String Processing and Information Retrieval}, pages 65--76. Springer-Verlag, 2002.
+
+\bibitem{elias20061}
+Isaac Elias and Tzvika Hartman.
+\newblock A 1.375-approximation algorithm for sorting by transpositions.
+\newblock {\em IEEE/ACM Transactions on Computational Biology and Bioinformatics}, 3(4):369--379, 2006.
+
+\bibitem{fertin2009combinatorics}
+Guillaume Fertin, Anthony Labarre, Irena Rusu, Eric Tannier, and Stephane Vialette.
+\newblock {\em Combinatorics of Genome Rearrangements}.
+\newblock The MIT Press, 2009.
+
+\bibitem{hannenhalli1999transforming}
+Sridhar Hannenhalli and Pavel~A Pevzner.
+\newblock Transforming cabbage into turnip: Polynomial algorithm for sorting signed permutations by reversals.
+\newblock {\em Journal of the ACM}, 46(1):1--27, 1999.
+
+\bibitem{jerrum1985complexity}
+Mark~R Jerrum.
+\newblock The complexity of finding minimum-length generator sequences.
+\newblock {\em Theoretical Computer Science}, 36(2-3):265--289, 1985.
+
+\bibitem{kleitman1975elementary}
+DJ~Kleitman, Edvard Kramer, JH~Conway, Stroughton Bell, and Harry Dweighter.
+\newblock Elementary problems: E2564-e2569.
+\newblock {\em The American Mathematical Monthly}, 82(10):1009--1010, 1975.
+
+\bibitem{knuth1995sorting}
+Donald~E Knuth.
+\newblock {\em Sorting and Searching}, volume~3 of {\em The Art of Computer Programming}.
+\newblock Addison-Wesley, 1995.
+
+\bibitem{labarre2006new}
+Anthony Labarre.
+\newblock New bounds and tractable instances for the transposition distance.
+\newblock {\em IEEE/ACM Transactions on Computational Biology and Bioinformatics}, 3(4):380--394, 2006.
+
+\bibitem{labarre2013lower}
+Anthony Labarre.
+\newblock Lower bounding edit distances between permutations.
+\newblock {\em SIAM Journal on Discrete Mathematics}, 27(3):1410--1428, 2013.
+
+\bibitem{labarre2011polynomial}
+Anthony Labarre and Josef Cibulka.
+\newblock Polynomial-time sortable stacks of burnt pancakes.
+\newblock {\em Theoretical Computer Science}, 412(8-10):695--702, 2011.
+
+\bibitem{lakshmivarahan1993symmetry}
+S~Lakshmivarahan, Jung-Sing Jwo, and SK~Dhall.
+\newblock Symmetry in interconnection networks based on cayley graphs of permutation groups: A survey.
+\newblock {\em Parallel Computing}, 19(4):361--407, 1993.
+
+\bibitem{yancopoulos2005efficient}
+Sophia Yancopoulos, Oliver Attie, and Richard Friedberg.
+\newblock Efficient sorting of genomic permutations by translocation, inversion and block interchange.
+\newblock {\em Bioinformatics}, 21(16):3340--3346, 2005.
+
+\end{thebibliography}

@@ -1,0 +1,309 @@
+
+% \chapter{定理と証明} \label{ch:theorems}
+
+% 本章では，前章までに省略した証明の詳細を記述する．
+
+% \section*{Proof of Lemma \ref{lem:reduction}}
+
+% \noindent
+% \textbf{Lemma \ref{lem:reduction}}
+% \textit{
+%     $S_n$ の任意の $\pi$ に対し，$\pi_1 \neq 1$ ならば，
+%     $\Delta c(\pi, \pi\beta) = 2$, $\Delta c_1(\pi, \pi\beta) \ge 2$,
+%     および $\Delta g(\pi, \pi\beta) \le -1$ を満たす
+%     prefix block-interchange $\beta$ が存在する．
+% }
+
+% \begin{proof}
+% Lemma \ref{lem:intersect} により，first grey edge と交差する grey edge $e'$ が存在する．
+% その配置に応じて，以下のケースに分けて考える．
+% いずれのケースでも，2つの 1-cycles を抽出する prefix block-interchange を適用することで，
+% $\Delta c(\pi, \pi\beta) = 2$ かつ $\Delta c_1(\pi, \pi\beta) \ge 2$ となることが示される．
+% 式 (\ref{eq:delta_g}) を用いて $\Delta g(\pi, \pi\beta)$ を計算すると，
+% 全てのケースにおいて $-1$ 以下となる．
+% (詳細な図やケース分けは省略するが，元の論文の図1のような4つのケースが存在する)
+% \end{proof}
+
+% \section*{Proof of Theorem \ref{thm:upperbound_main}}
+
+% \noindent
+% \textbf{Theorem \ref{thm:upperbound_main}}
+% \textit{
+%     任意の $\pi \in S_n$ に対し，$pbid(\pi) \le g(\pi)$ が成り立つ．
+% }
+
+% \begin{proof}
+% もし $\pi_1 \neq 1$ ならば，Lemma \ref{lem:reduction} を適用して $g(\pi)$ を少なくとも 1 減少させることができる．
+% $\pi_1 = 1$ の場合，$\{\pi'_0, \pi'_1\}$ は $G(\pi)$ における 1-cycle であり，$f(\pi) = 0$ である．
+% $\pi \neq \iota$ と仮定すると，$G(\pi)$ は nontrivial cycle を含む．
+% その cycle から grey edge $\{\pi'_{2i-2}, \pi'_{2j-1}\}$ ($j > i$) を選ぶ．
+% ここで prefix block-interchange $\beta(1, i, i, j)$ を適用すると，
+% $\pi_i$ と $\pi_i + 1$ が $\pi\beta$ において隣接し，新しい 1-cycle となる．
+% 一方で，この操作 $\beta$ は $G(\pi)$ の 1-cycle $\{\pi'_0, \pi'_1\}$ と
+% 選んだ grey edge を含む cycle をマージする．
+% したがって，$\Delta c(\pi, \pi\beta) = 0 = \Delta c_1(\pi, \pi\beta)$ であり，
+% $\Delta f(\pi, \pi\beta) = 1$ となる．
+% 式 (\ref{eq:delta_g}) より，$\Delta g(\pi, \pi\beta) = 0/2 - 0 - 1 = -1$ となる．
+% \end{proof}
+
+% \section*{Proof of Lemma \ref{lem:delta_c_cases}}
+
+% \noindent
+% \textbf{Lemma \ref{lem:delta_c_cases}}
+% \textit{
+%     任意の $\pi \in S_n$ と任意の block-interchange $\beta$ に対し，
+%     $\Delta c(\pi, \pi\beta) \in \{-2, 0, 2\}$ である．
+% }
+
+% \begin{proof}
+%     Lemma \ref{lem:psi_bi} より，$\overline{\beta}$ は 2 つの 2-cycles からなり，
+%     それぞれが cycle を 2 つに分割するか，2 つの cycles を 1 つにマージする (Lemma \ref{lem:psi_conjugate})．
+%     全ての可能なケースを組み合わせると，possible values として $\{-2, 0, 2\}$ が得られる．
+% \end{proof}
+
+% \section*{Proof of Lemma \ref{lem:delta_f_restriction}}
+
+% \noindent
+% \textbf{Lemma \ref{lem:delta_f_restriction}}
+% \textit{
+%     任意の $\pi \in S_n$ と任意の prefix block-interchange $\beta$ に対し，
+%     $\Delta c_1(\pi, \pi\beta) \ge 2$ ならば，$\Delta f(\pi, \pi\beta) \neq 1$ である．
+% }
+
+% \begin{proof}
+%     もし $\Delta c_1(\pi, \pi\beta) \ge 2$ ならば，新しい 1-cycles は以下のいずれかの方法で得られる：
+%     \begin{enumerate}
+%         \item もし少なくとも 1 つが $G(\pi)$ の leftmost cycle の分割によって生じたならば，
+%               その cycle は nontrivial であり，したがって $f(\pi) = 1$ である．
+%               これにより $\Delta f(\pi, \pi\beta) = 1$ という値は禁止される ($f(\pi)=1$ なので $f$ は増加できない)．
+%         \item そうでなければ，全ての新しい 1-cycles は $G(\pi)$ の leftmost cycle 以外の cycle から抽出されたものである．
+%               その cycle は高々 2 つの新しい cycles にしか分割されないため (Lemma \ref{lem:psi_conjugate} and Lemma \ref{lem:psi_bi})，
+%               この場合 $\Delta c_1(\pi, \pi\beta) \le 2$ である．
+%               さらに，この場合 $\pi_1 = 1$ でなければならない．
+%               そうでなければ (つまり $\pi_1 \neq 1$ ならば)，$\pi_1$ を含む 1-cycle (leftmost cycle) は $G(\pi\beta)$ において消失してしまい (訳注: $\beta$ の作用でマージされるか形が変わるため)，
+%               $\Delta c_1(\pi, \pi\beta) \ge 2$ という仮定に矛盾するからである．
+%               したがって，$\pi_1 = 1$ であり $f(\pi)=0$ となるが，
+%               この場合においても $\Delta f(\pi, \pi\beta) = 1$ は除外される．
+%     \end{enumerate}
+% \end{proof}
+
+% \section*{Proof of Theorem \ref{thm:lowerbound_strict}}
+
+% \noindent
+% \textbf{Theorem \ref{thm:lowerbound_strict}}
+% \textit{
+%     任意の $\pi \in S_n$ に対し，$pbid(\pi) \ge g(\pi)/2$ が成り立つ．
+% }
+
+% \begin{proof}
+%     Theorem \ref{thm:factorisation} と Lemma \ref{lem:psi_bi} により，$pbid(\pi) \ge d(\pi)$ が成り立つ．
+%     ここで $d(\pi)$ は，$\pi$ に対する最短ソーティング列の長さであり，
+%     その各変換の nontrivial cycles は 2 つの 2-cycles であり，
+%     かつそのうちの片方のみが 1 を含むようなものである．
+%     結果として，$d(\pi)$ に対する lower bound は $pbid(\pi)$ に対する lower bound となる．
+%     したがって，ここで記述した種類の変換が $g(\pi)$ の値を最大でも 2 しか減少させないことを示せば十分である．
+
+%     $\beta = (1, a)(b, c)$ を，写像 $\psi(\cdot)$ による prefix block-interchange の像とする．
+%     Lemma \ref{lem:delta_c_cases} により，以下の3つのケースに区別するだけで十分である．
+%     各状況において，$\Delta g(\pi, \pi\beta)$ の値を最小化することを目指す．
+
+%     \begin{enumerate}
+%         \item もし $\Delta c(\pi, \pi\beta) = -2$ ならば，明らかに $\Delta c_1(\pi, \pi\beta) \le 0$ である．
+%         式 (\ref{eq:delta_g}) より，$\Delta g(\pi, \pi\beta) \ge -1 - 0 - 1 = -2$ と結論付けられる．
+
+%         \item もし $\Delta c(\pi, \pi\beta) = 0$ ならば，$\beta$ の一方の 2-cycle は 2 つの cycles をマージし，
+%         もう一方は 1 つの cycle を 2 つに分割する．
+%         $\pi$ および $\pi\beta$ における関係する cycles の長さは変化し得るが，
+%         この観察から $\Delta c_1(\pi, \pi\beta) \le 2$ であることが導かれる．
+%         $\Delta g(\pi, \pi\beta)$ の最小値は以下のいずれかの場合に得られる．
+%         一つは $\Delta c_1(\pi, \pi\beta) = 2$ の場合で，
+%         このとき式 (\ref{eq:delta_g}) と Lemma \ref{lem:delta_f_restriction} より $\Delta g(\pi, \pi\beta) \ge 0 - 2 - 0 = -2$ となる．
+%         もう一つは $\Delta c_1(\pi, \pi\beta) = 1$ の場合で，
+%         このとき式 (\ref{eq:delta_g}) より $\Delta g(\pi, \pi\beta) \ge 0 - 1 - 1 = -2$ となる．
+
+%         \item もし $\Delta c(\pi, \pi\beta) = 2$ ならば，$\beta$ の両方の要素 (2-cycles) はそれぞれ 1 つの cycle を 2 つの cycles に分割する．
+%         前のケースと同様に，$\pi$ および $\pi\beta$ における関係する cycles の長さは変化し得るが，
+%         この観察から $\Delta c_1(\pi, \pi\beta) \le 4$ であることが導かれ，
+%         結果として $\Delta f(\pi, \pi\beta) \in \{-1, 0\}$ となる (Lemma \ref{lem:delta_f_restriction} より，$\Delta c_1 \ge 2$ なので $\Delta f \neq 1$)．
+%         $\Delta g(\pi, \pi\beta)$ の最小値は以下の2つの場合に得られる：
+%         \begin{enumerate}
+%             \item[(a)] $\Delta c_1(\pi, \pi\beta) = 4$ のとき．この場合，$\pi$ の leftmost cycle が 2 つの 1-cycles に分割される．
+%             したがって $\Delta f(\pi, \pi\beta) = -1$ であり，式 (\ref{eq:delta_g}) より $\Delta g(\pi, \pi\beta) \ge 1 - 4 + 1 = -2$ となる．
+
+%             \item[(b)] または $\Delta c_1(\pi, \pi\beta) = 3$ のとき．この場合，式 (\ref{eq:delta_g}) と Lemma \ref{lem:delta_f_restriction} より $\Delta g(\pi, \pi\beta) \ge 1 - 3 + 0 = -2$ となる．
+%         \end{enumerate}
+%     \end{enumerate}
+% \end{proof}
+
+% \section*{Proof of Lemma \ref{lem:2cycle_intersect_grey}}
+
+% \noindent
+% \textbf{Lemma \ref{lem:2cycle_intersect_grey}}
+% \textit{
+%     任意の $\pi \in S_n$ に対し，もし $G(\pi)$ が first grey edge と交差する 2-cycle を含むならば，
+%     $\Delta g(\pi, \pi\beta) = -2$ となる prefix block-interchange $\beta$ が存在する．
+% }
+
+% \begin{proof}
+%     Lemma \ref{lem:reduction} の証明におけるケース 4b および 4c より，
+%     grey edge $f$ を含む cycle が長さ 2 を持つ場合に結果が従う．
+% \end{proof}
+
+% \section*{Proof of Lemma \ref{lem:2cycle_spans_other}}
+
+% \noindent
+% \textbf{Lemma \ref{lem:2cycle_spans_other}}
+% \textit{
+%     任意の $\pi \in S_n$ に対し，もし $G(\pi)$ が leftmost cycle 以外の 2-cycle を含み，
+%     かつその 2-cycle が leftmost cycle とは異なる nontrivial cycle に属する black edge をスパンしているならば，
+%     $\Delta g(\pi, \pi\beta) = -2$ となる prefix block-interchange $\beta$ が存在する．
+% \end{lemma}
+
+% \begin{proof}
+%     first black edge，2-cycle の両方の black edges，および 2-cycle によってスパンされる任意の black edge
+%     によって定義される prefix block-interchange を適用する：
+%     \par\noindent\centering
+%     0 $\pi'_1$ $\dots$ $\pi'_{2i-2}$ $\pi'_{2i-1}$ $\dots$ $\pi'_{2j-2}$ $\pi'_{2j-1}$ $\dots$ $\pi'_{2k-2}$ $\pi'_{2k-1}$ $\dots$
+%     \par
+%     $\downarrow$
+%     \par
+%     0 $\pi'_1$ $\dots$ $\pi'_{2i-2}$ $\pi'_{2i-1}$ $\dots$ $\pi'_{2j-2}$ $\pi'_{2j-1}$ $\dots$ $\pi'_{2k-2}$ $\pi'_{2k-1}$ $\dots$
+
+%     (注：詳細な置換図は省略)
+
+%     Cycles の数は変化しないので，$\Delta c(\pi, \pi\beta) = 0$ である．
+%     $\pi_1 = 1$ の場合，$\Delta c_1(\pi, \pi\beta) = 1$ かつ $\Delta f(\pi, \pi\beta) = 1$ となる．
+%     $\pi_1 \neq 1$ の場合，$\Delta c_1(\pi, \pi\beta) = 2$ かつ $\Delta f(\pi, \pi\beta) = 0$ となる．
+%     いずれの場合も，式 (\ref{eq:delta_g}) より $\Delta g(\pi, \pi\beta) = -2$ となる．
+% \end{proof}
+
+% \section*{Proof of Proposition \ref{prop:eventual_tightness}}
+
+% \noindent
+% \textbf{Proposition \ref{prop:eventual_tightness}}
+% \textit{
+%     任意の $\pi \in S_n$ に対し，もし $G(\pi)$ が leftmost cycle ではない 2-cycle を含むならば，
+%     $\pi$ は prefix block-interchanges の列 $S$ を許容し，
+%     $\pi$ を $\sigma$ に変換する．
+%     ここで $\Delta g(\pi, \sigma) = -|S|$ であり，
+%     かつ $\sigma$ は $\Delta g(\sigma, \sigma\beta) = -2$ となる prefix block-interchange $\beta$ を許容する．
+% }
+
+% \begin{proof}
+%     $C$ を対象の 2-cycle とする．もし $C$ が first grey edge または leftmost cycle とは異なる cycle と交差しているならば，
+%     結論は得られる (それぞれ Lemma \ref{lem:2cycle_intersect_grey} および Lemma \ref{lem:2cycle_spans_other} を参照)．
+%     そうでない場合，$C$ は leftmost cycle の別の grey edge と交差しており，
+%     Lemma \ref{lem:reduction} により，$C$ に影響を与えることなく，
+%     $g(\pi)$ を 1 減少させつつ leftmost cycle の長さを減少させることができる．
+%     Lemma \ref{lem:reduction} を繰り返し適用することで，最終的に以下のいずれかの条件を満たす
+%     permutation $\sigma$ が得られる：
+%     \begin{enumerate}
+%         \item $\sigma_1 = 1$ の場合．このとき $C$ は必然的に leftmost cycle に属さない black edge をスパンするため，
+%         Lemma \ref{lem:2cycle_spans_other} を適用できる；
+%         \item $\sigma_1 \neq 1$ かつ $C$ が leftmost cycle 以外の cycle と交差する場合．
+%         このとき再び Lemma \ref{lem:2cycle_spans_other} を適用できる；
+%         \item $\sigma_1 \neq 1$ かつ $C$ が first grey edge と交差する場合．
+%         このとき Lemma \ref{lem:2cycle_intersect_grey} を適用できる．
+%     \end{enumerate}
+% \end{proof}
+
+% \section*{Proof of Theorem \ref{thm:improved_upperbound}}
+
+% \noindent
+% \textbf{Theorem \ref{thm:improved_upperbound}}
+% \textit{
+%     任意の $\pi \in S_n$ に対し，$pbid(\pi) \le g(\pi) - \lceil c^\emptyset_2(G(\pi))/2 \rceil$ が成り立つ．
+%     ここで $c^\emptyset_2(G(\pi))$ は，$G(\pi)$ の 2-cycles の数 (leftmost cycle を除く) を表す．
+% }
+
+% \begin{proof}
+%     Proposition \ref{prop:eventual_tightness} を繰り返し適用して，適切な 2-cycles を利用する．
+%     使用する各 prefix block-interchange は，
+%     Lemma \ref{lem:2cycle_spans_other} の場合 (注目している 2-cycle がスパンする edge が別の 2-cycle に属する場合) を除き，
+%     他の 2-cycles に影響を与えることなく 1 つの 2-cycle を 2 つの 1-cycles に変換する．
+%     最悪の場合，分割しようとする全ての 2-cycle が，交差する別の 2-cycle の長さを増加させることを強制する．
+%     そのため，Theorem \ref{thm:upperbound_main} からの改善は $\lceil c^\emptyset_2(G(\pi))/2 \rceil$ に留まる．
+% \end{proof}
+
+% \section*{Proof of Theorem \ref{thm:improved_lowerbound}}
+
+% \noindent
+% \textbf{Theorem \ref{thm:improved_lowerbound}}
+% \textit{
+%     任意の $\pi \in S_n$ に対し，$pbid(\pi) \ge bid(\pi) + CC(G(\pi)) - \delta$ が成り立つ．
+%     ここで $\delta$ は，$\pi_1 = 1$ のとき 0，そうでないとき 1 である．
+% }
+
+% \begin{proof}
+%     Lower bound の式は以下の戦略に対応する：
+%     $G(\pi)$ の各 component $C$ に対し，$C$ が 0 を含めば対応する subpermutation をソートし，
+%     そうでなければ prefix block-interchange を用いて 0 を含むようにしてからソートする．
+%     自明なことだが，ソーティング段階のステップ数は，それが要求する無制限の block-interchanges の数より少なくなることはない．
+%     他のいかなる戦略も components をマージしなければならない；
+%     しかしながら，Lemma \ref{lem:merge_components} により，connected components をマージする
+%     prefix block-interchange $\beta$ は cycles の数を増加させることはできず，
+%     したがって任意の permutation $\pi$ とそのような任意の prefix block-interchange に対して
+%     $bid(\pi\beta) \ge bid(\pi)$ となる．
+% \end{proof}
+
+% \section*{Proof of Lemma \ref{lem:delta_b_bound}}
+
+% \noindent
+% \textbf{Lemma \ref{lem:delta_b_bound}}
+% \textit{
+%     任意の $\pi \in S_n$ と任意の prefix block-interchange $\beta$ に対し，
+%     $|\Delta b(\pi, \pi\beta)| \le 3$ が成り立つ．
+% \end{lemma}
+
+% \begin{proof}
+%     Prefix block-interchange $\beta$ は，常に breakpoint としてカウントされるペア $(0, \pi_1)$ を含め，
+%     最大で 4 つの隣接要素ペアに作用する．
+%     したがって，$\beta$ が取り除くまたは生成できる breakpoints の数は，集合 $\{0, 1, 2, 3\}$ に含まれる．
+% \end{proof}
+
+% \section*{Proof of Lemma \ref{lem:upperbound_breakpoints}}
+
+% \noindent
+% \textbf{Lemma \ref{lem:upperbound_breakpoints}}
+% \textit{
+%     任意の $\pi \in S_n$ に対し，$pbid(\pi) \le 2 \lceil (b(\pi) - 1) / 3 \rceil$ が成り立つ．
+% \end{lemma}
+
+% \begin{proof}
+%     自明なケースを避けるため $\pi \neq \iota$ と仮定する．
+%     $\langle 0\ \pi_1\ \pi_2\ \dots\ \pi_n\ n+1 \rangle$ における adjacencies は，
+%     $G(\pi)$ における trivial cycles と一対一に対応する (ただし $(0, \pi_1)$ は除く．Definition \ref{def:breakpoints} によりこれは常に breakpoint である)．
+%     もし $\pi_1 \neq 1$ ならば，Lemma \ref{lem:reduction} は $\Delta c_1(\pi, \pi\beta) \ge 2$ となる
+%     prefix block-interchange $\beta$ の存在を保証し，これは $\Delta b(\pi, \pi\beta) \ge 2$ を意味する．
+%     もし $\pi_1 = 1$ ならば，Theorem \ref{thm:upperbound_main} の証明のように $\beta$ を選択すると，
+%     $G(\pi\beta)$ に新しい trivial cycle が生成され，これは $\pi\beta$ における新しい adjacency に対応する．
+%     $\pi\beta_1 \neq 1$ であるため，次の操作は前のケースによって提供され，
+%     2 回の prefix block-interchanges を用いて breakpoints の数は少なくとも 3 減少する．
+% \end{proof}
+
+% \section*{Proof of Theorem \ref{thm:diameter}}
+
+% \noindent
+% \textbf{Theorem \ref{thm:diameter}}
+% \textit{
+%     Prefix block-interchanges における $S_n$ の diameter は $\lfloor 2n/3 \rfloor$ である．
+% }
+
+% \begin{proof}
+%     $n \le 2$ の場合は容易に確認できる．$n \ge 3$ に対して，
+%     $n, n - 1, n - 2$ が 3 の倍数である場合の base cases として，
+%     それぞれ permutations $\pi = \langle 1\ 3\ 2 \rangle$, $\sigma = \langle 1\ 4\ 3\ 2 \rangle$, $\tau = \langle 1\ 3\ 2\ 5\ 4 \rangle$ を用いて
+%     tight families of permutations を構築する．
+%     Theorem \ref{thm:improved_lowerbound} により $pbid(\pi) \ge 2$, $pbid(\sigma) \ge 2$, $pbid(\tau) \ge 3$ が得られ，
+%     一方 Corollary \ref{cor:upperbound_n} により $pbid(\pi) \le 2$, $pbid(\sigma) < 3$, $pbid(\tau) < 4$ が得られるため，
+%     lower bounds と一致する．
+
+%     より大きな $n$ に対して tight permutations を得るために，
+%     $\pi, \sigma$ または $\tau$ に列 $\langle n + 1\ n + 3\ n + 2 \rangle$ を連結し，
+%     必要な回数だけこのプロセスを繰り返す．
+%     各連結は $n$ の合同性を保存し，$G(\cdot)$ に孤立した 3-cycle からなる新しい component を追加する．
+%     これにより Theorem \ref{thm:improved_lowerbound} の lower bound は連結ごとに 2 ずつ増加し，
+%     Corollary \ref{cor:upperbound_n} の upper bound も同様に増加する．
+%     結果として，任意の $n \in \mathbb{N}$ に対して prefix block-interchange distance が
+%     $\lfloor 2n/3 \rfloor$ となる permutation が存在する．
+% \end{proof}

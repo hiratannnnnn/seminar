@@ -19,7 +19,7 @@
 \title[DCJアルゴリズムの再実装]{Double-Cut-And-Join操作による\\ゲノム間距離に関する\\線形時間アルゴリズムの再実装}
 \subtitle{2025年度 卒業論文}
 \author{平田 智也}
-\institute[慶應大・数理]{慶應義塾大学 理工学部 数理科学科\\小田研究室}
+\institute[小田研]{慶應義塾大学 理工学部 数理科学科\\小田研究室}
 \date{2026年1月27日}
 
 \begin{document}
@@ -32,105 +32,222 @@
 % 3. 中身のスライド例
 \section{はじめに}
 \begin{frame}{研究背景と主な成果}
+    \textbf{2つのゲノム間の近さ（距離）に関する研究について}
+
     \structure{研究の経緯}
     \begin{itemize}
-        \item Oliveiraらのサーベイ論文\cite{oliveira2024}を調査
+        \item Oliveiraらのサーベイ論文（2024）を調査
         \item 特に研究成果が豊富な \textbf{DCJ (Double Cut and Join)} に着目
-        \item Bergeronら (2009)\cite{bergeron2009} の線形時間アルゴリズムを参照
+        \item Bergeronら(2009)の線形時間アルゴリズムを参照
     \end{itemize}
 
     \vspace{1em}
     \structure{本研究の動機}
     \begin{itemize}
-        \item 既存のアルゴリズム\cite{bergeron2009}は記述が\textbf{過度に複雑}であり，
+        \item 既存のアルゴリズム（Bergeronら(2009)）は記述が\textbf{過度に複雑}であり，
         \textbf{より簡素で分かりやすいアルゴリズム}を自分で実装することを目指した．
     \end{itemize}
 
     \vspace{1em}
     \structure{主な成果}
     \begin{itemize}
-        \item DCJ距離および操作手順を$O(N)$で出力するアルゴリズムを，C言語で独自に実装した．
+        \item DCJ距離および操作手順を，遺伝子数 $N$ に対して線形時間 $O(N)$ で出力するアルゴリズムを，C言語で概ね独力により実装した．
     \end{itemize}
 \end{frame}
 
 \section{理論的背景}
 
 \begin{frame}{ゲノムの表現方法}
-    \structure{ゲノムと染色体}
-    \begin{itemize}
-        \item ゲノムは\textbf{染色体}の集合であり，染色体は\textbf{遺伝子}の並び．
-        \item 遺伝子は正負の整数で識別（$target$ ゲノムにおいて昇順）．
-        \item 線形染色体 $\langle \dots \rangle$ と環状染色体 $( \dots )$．
-    \end{itemize}
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}{0.55\textwidth}
+            \structure{ゲノムと染色体}
+            \begin{itemize}
+                \item ゲノムは\textbf{染色体}の集合であり，染色体は\textbf{遺伝子}の並び．
+                \item 遺伝子は正負の整数で識別（$target$ ゲノムにおいて昇順）．
+                \item 線形染色体 $\langle \dots \rangle$ と環状染色体 $( \dots )$ の二つに
+                区別して考える．
+            \end{itemize}
 
-    \structure{端点 (extremity) と 隣接 (adjacency)}
-    \begin{itemize}
-        \item \textbf{端点}: 遺伝子 $g$ の右端 ($g$) と左端 ($-g$)．
-        \item \textbf{隣接}: 接続された2つの端点の集合 $\{u, v\}$．
-        \item 線形染色体の末端は\textbf{テロメア}\footnote{生物学において染色体の末端を保護する構造体に由来する名称} $o$との隣接 $\{o, x\}$ で表現．
-    \end{itemize}
+            $N=5$ の場合のゲノム表現の例:
+            \begin{itemize}
+                \item $A: \langle 1 \ -4 \rangle \ ( 3 \ -2 ) \ \langle 5 \rangle$
+                \item $B: \langle 1 \ 2 \ 3 \rangle \ ( 4 \ 5 )$
+            \end{itemize}
+
+            % \structure{端点 (extremity) と 隣接 (adjacency)}
+            % \begin{itemize}
+            %     \item \textbf{端点}: 遺伝子 $g$ の右端 ($g$) と左端 ($-g$)．
+            %     \item \textbf{隣接}: 接続された2つの端点の集合 $\{u, v\}$．
+            %     \item 線形染色体の末端は\textbf{テロメア}\footnote{生物学において染色体の末端を保護する構造体に由来する名称} $o$との隣接 $\{o, x\}$ で表現．
+            % \end{itemize}
+        \end{column}
+        \begin{column}{0.45\textwidth}
+            \centering
+            \vspace*{1.5em} % 上部に空白を追加
+            % 線形染色体の図（具体例ページに近い大きめ・隣接配置）
+            \begin{tikzpicture}[scale=1.2, baseline=(current bounding box.center)]
+                % テロメア記号
+                \node (tel1) at (0,0) {\Large $\circ$};
+                \node[below=0.12cm] at (tel1) {\scriptsize テロメア};
+                % Gene 1
+                \node[rectangle, draw, minimum width=1.2cm, minimum height=0.6cm, fill=orange!10] (g1) at (1.1,0) {\Large $1$};
+                % Gene -4
+                \node[rectangle, draw, minimum width=1.2cm, minimum height=0.6cm, fill=orange!10] (g2) at (2.3,0) {\Large $-4$};
+                % テロメア記号
+                \node (tel2) at (3.4,0) {\Large $\circ$};
+                \node[below=0.12cm] at (tel2) {\scriptsize テロメア};
+                % ラベル
+                \node[below=0.2cm] at (1.7,-0.3) {\scriptsize 線形染色体 $\langle 1\ -4 \rangle$};
+            \end{tikzpicture}
+
+            \vspace{1.2em}
+            \vspace*{1.5em} % 上部に空白を追加
+            % 環状染色体の図（外側楕円を内側に近づけ，ラベルも明示的に指定）
+            \begin{tikzpicture}[scale=1.2, baseline=(current bounding box.center)]
+                % 内側楕円（輪郭）
+                \def\a{1.2}
+                \def\b{0.6}
+                \draw[thick] plot [smooth, domain=0:360, samples=100] ({\a*cos(\x)}, {\b*sin(\x)});
+                % 外側楕円（ノード配置用，内側に近づける）
+                \def\A{1.32}
+                \def\B{0.7}
+                % ノード配置（外側楕円上，ラベル明示）
+                \node[rectangle, draw, minimum width=0.8cm, minimum height=0.5cm, fill=orange!10] (g0) at ({\A*cos(0)},{\B*sin(0)}) {\large $1$};
+                \node[rectangle, draw, minimum width=0.8cm, minimum height=0.5cm, fill=orange!10] (g1) at ({\A*cos(60)},{\B*sin(60)}) {\large $-2$};
+                \node[rectangle, draw, minimum width=0.8cm, minimum height=0.5cm, fill=orange!10] (g2) at ({\A*cos(120)},{\B*sin(120)}) {\large $3$};
+                \node[rectangle, draw, minimum width=0.8cm, minimum height=0.5cm, fill=orange!10] (g3) at ({\A*cos(180)},{\B*sin(180)}) {\large $-4$};
+                \node[rectangle, draw, minimum width=0.8cm, minimum height=0.5cm, fill=orange!10] (g4) at ({\A*cos(240)},{\B*sin(240)}) {\large $5$};
+                \node[rectangle, draw, minimum width=0.8cm, minimum height=0.5cm, fill=orange!10] (g5) at ({\A*cos(300)},{\B*sin(300)}) {\large $-6$};
+                % （ノード間の線分は描画しない）
+                % ラベル
+                \node[below=0.1cm] at (0,-1.1) {\scriptsize 環状染色体 $( 1\ -2\ 3\ -4\ 5\ -6 )$};
+            \end{tikzpicture}
+        \end{column}
+    \end{columns}
 \end{frame}
 
-\begin{frame}{具体例}
-    $N=5$ の場合のゲノム表現:
+\begin{frame}{端点と隣接}
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}{0.48\textwidth}
+            \structure{端点 (extremity) と 隣接 (adjacency)}
+            \begin{itemize}
+                \item \textbf{端点}: 遺伝子 $g$ の右端 ($g$) と左端 ($-g$)．
+                \item \textbf{隣接}: 接続された2つの端点の集合 $\{u, v\}$．
+                \item 線形染色体の末端は\textbf{テロメア}\footnote{生物学において染色体の末端を保護する構造体に由来する名称} $o$との隣接 $\{o, x\}$ で表現．
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.52\textwidth}
+            \begin{center}
+            % 線形染色体 <1 -4> の例
+            \scalebox{0.8}{
+            \begin{tikzpicture}[
+                gene/.style={draw, rectangle, minimum height=1.0cm, minimum width=2.5cm, fill=orange!10, thick},
+                lbl/.style={font=\small\bfseries}
+            ]
+                % Telomere 1
+                \node (t1) at (0,0) {$\circ$};
+                \node[below=0.1cm] at (t1) {\scriptsize テロメア};
+
+                % Gene 1 [ -1 ... 1 ]
+                \node[gene, right=0.3cm of t1] (g1) {};
+                \node at (g1.west) [anchor=west, xshift=0.1cm] {$-1$};
+                \node at (g1.center) {\Large\bfseries 1};
+                \node at (g1.east) [anchor=east, xshift=-0.1cm] {$1$};
+
+                % Connection 1
+                \draw[thick] (t1) -- (g1);
+                \node[blue, font=\Large, below=0.5cm] at ($(t1)!0.5!(g1.west)$) {$\{o, -1\}$};
+
+                % Gene -4 [ 4 ... -4 ]
+                \node[gene, right=0.3cm of g1] (g4) {};
+                \node at (g4.west) [anchor=west, xshift=0.1cm] {$4$};
+                \node at (g4.center) {\Large\bfseries -4};
+                \node at (g4.east) [anchor=east, xshift=-0.1cm] {$-4$};
+
+                % Connection 2
+                \draw[thick] (g1) -- (g4);
+                \node[blue, font=\Large, below=0.5cm] at ($(g1.east)!0.5!(g4.west)$) {$\{1, 4\}$};
+
+                % Telomere 2
+                \node[right=0.3cm of g4] (t2) {$\circ$};
+                \node[below=0.1cm] at (t2) {\scriptsize テロメア};
+                \draw[thick] (g4) -- (t2);
+                \node[blue, font=\Large, below=0.5cm] at ($(g4.east)!0.5!(t2)$) {$\{-4, o\}$};
+            \end{tikzpicture}
+            }
+
+            % 環状染色体 (3 -2) の例
+            \vspace{1.2em}
+            \scalebox{0.8}{
+            \begin{tikzpicture}[
+                gene/.style={draw, rectangle, minimum height=1.0cm, minimum width=2.5cm, fill=orange!10, thick},
+                lbl/.style={font=\small\bfseries}
+            ]
+                % Gene 3
+                \node[gene] (g3) at (0,0) {};
+                \node at (g3.west) [anchor=west, xshift=0.1cm] {$-3$};
+                \node at (g3.center) {\Large\bfseries 3};
+                \node at (g3.east) [anchor=east, xshift=-0.1cm] {$3$};
+
+                % Gene -2
+                \node[gene, right=0.3cm of g3] (g2) {};
+                \node at (g2.west) [anchor=west, xshift=0.1cm] {$2$};
+                \node at (g2.center) {\Large\bfseries -2};
+                \node at (g2.east) [anchor=east, xshift=-0.1cm] {$-2$};
+
+                % Connection (3, 2)
+                \draw[thick] (g3) -- (g2);
+                \node[blue, font=\Large, below=0.5cm] at ($(g3.east)!0.5!(g2.west)$) {$\{3, 2\}$};
+
+                % Connection (-3, -2) 上側で大きく回避して結ぶ
+                \coordinate (g3west) at (g3.west);
+                \coordinate (g2east) at (g2.east);
+                \coordinate (ctrl1) at ($(g3west)+(-1.2,1.5)$);
+                \coordinate (ctrl2) at ($(g2east)+(1.2,1.5)$);
+                \draw[thick] (g3west) .. controls (ctrl1) and (ctrl2) .. (g2east);
+                \node[blue, font=\Large, above=0cm] at ($(g3west)!0.5!(g2east)+(0,1.2)$) {$\{-3, -2\}$};
+            \end{tikzpicture}
+            }
+            \end{center}
+        \end{column}
+    \end{columns}
+
+    % \vspace{0.5em}
+    % \structure{隣接集合による表現}
+    % \begin{itemize}
+    %     \item $A = \{ \{ o, -1 \}, \{ 1, 4 \}, \{ -4, o \}, \{ 3, 2 \}, \{ -2, -3 \}, \{ o, -5 \}, \{ 5, o \} \}$
+    %     \item $B = \{ \{ o, -1 \}, \{ 1, -2 \}, \{ 2, -3 \}, \{ 3, o \}, \{ 4, -5 \}, \{ 5, -4 \} \}$
+    % \end{itemize}
+
+    % \vspace{0.5em}
+    % \small
+    % 隣接集合による表現を用いることにより，
+    % 線形であろうが環状であろうが統一的に染
+    % 色体を扱うことができるようになる．
+    % また，DCJ操作も隣接に対する操作として扱うことができる．
+\end{frame}
+
+\begin{frame}{ゲノムの隣接集合による表現}
+
+    $N=5$ の場合のゲノム表現の例:
     \begin{itemize}
         \item $A: \langle 1 \ -4 \rangle \ ( 3 \ -2 ) \ \langle 5 \rangle$
         \item $B: \langle 1 \ 2 \ 3 \rangle \ ( 4 \ 5 )$
     \end{itemize}
 
-    \begin{center}
-    \scalebox{0.8}{
-    \begin{tikzpicture}[
-        gene/.style={draw, rectangle, minimum height=1.0cm, minimum width=2.5cm, fill=orange!10, thick},
-        lbl/.style={font=\small\bfseries}
-    ]
-        % Telomere 1
-        \node (t1) at (0,0) {$\circ$};
-        \node[below=0.1cm] at (t1) {\scriptsize テロメア};
-
-        % Gene 1 [ -1 ... 1 ]
-        \node[gene, right=0.3cm of t1] (g1) {};
-        \node at (g1.west) [anchor=west, xshift=0.1cm] {$-1$};
-        \node at (g1.center) {\Large\bfseries 1};
-        \node at (g1.east) [anchor=east, xshift=-0.1cm] {$1$};
-
-        % Connection 1
-        \draw[thick] (t1) -- (g1);
-        \node[blue, font=\Large, below=0.5cm] at ($(t1)!0.5!(g1.west)$) {$\{o, -1\}$};
-
-        % Gene -4 [ 4 ... -4 ]
-        \node[gene, right=0.3cm of g1] (g4) {};
-        \node at (g4.west) [anchor=west, xshift=0.1cm] {$4$};
-        \node at (g4.center) {\Large\bfseries -4};
-        \node at (g4.east) [anchor=east, xshift=-0.1cm] {$-4$};
-
-        % Connection 2
-        \draw[thick] (g1) -- (g4);
-        \node[blue, font=\Large, below=0.5cm] at ($(g1.east)!0.5!(g4.west)$) {$\{1, 4\}$};
-
-        % Telomere 2
-        \node[right=0.3cm of g4] (t2) {$\circ$};
-        \node[below=0.1cm] at (t2) {\scriptsize テロメア};
-        \draw[thick] (g4) -- (t2);
-        \node[blue, font=\Large, below=0.5cm] at ($(g4.east)!0.5!(t2)$) {$\{-4, o\}$};
-
-
-    \end{tikzpicture}
-    }
-    \end{center}
-
-    隣接集合による表現:
+    \structure{隣接集合による表現}
     \begin{itemize}
         \item $A = \{ \{ o, -1 \}, \{ 1, 4 \}, \{ -4, o \}, \{ 3, 2 \}, \{ -2, -3 \}, \{ o, -5 \}, \{ 5, o \} \}$
         \item $B = \{ \{ o, -1 \}, \{ 1, -2 \}, \{ 2, -3 \}, \{ 3, o \}, \{ 4, -5 \}, \{ 5, -4 \} \}$
     \end{itemize}
 
     \vspace{0.5em}
-    \small
-    隣接集合による表現を用いることにより，
-    線形であろうが円形であろうが統一的に染
-    色体を扱うことができるようになる．
-    また，DCJ操作も隣接に対する操作として扱うことができる．
+    \begin{alertblock}{ゲノムを隣接の集合として表す利点}
+        隣接集合による表現を用いることにより，
+        \textbf{染色体の種類，及び本数に関係なく}，統一的にゲノム
+        を扱うことができるようになる．
+        また，DCJ操作も隣接に作用する操作として扱うことができるようになる．
+    \end{alertblock}
 \end{frame}
 
 \begin{frame}{隣接グラフと例}
@@ -261,48 +378,18 @@
     本研究の主題は，任意の2つのゲノム $A, B$ に対して，この $d_{\mathrm{DCJ}}(A,B)$ を効率的に計算・出力するアルゴリズムを設計・実装することである．
 \end{frame}
 
-\begin{frame}{DCJ距離の下限}
-    \begin{lemma}[DCJ距離の下限\cite{bergeron2006}]
-        任意の2つのゲノム $A, B$ について，DCJ距離は以下を満たす：
-        \[
-            d_{\mathrm{DCJ}}(A,B) \ge N - \left( C + \frac{I}{2} \right)
-        \]
-    \end{lemma}
-    \begin{alertblock}{成分の変化量に関する性質\cite{bergeron2006}}
-        \begin{itemize}
-            \item DCJ操作によってサイクル数 $C$ と奇数長パス数 $I$ が\textbf{同時に増減することはない}．
-            \item サイクル数 $C$ が増減するときは，最大で $1$ しか変わらない ($\Delta C \in \{0, \pm 1\}$)．
-            \item 奇数長パス数 $I$ が変化するときは，$2, 0, -2$ しか変わらない ($\Delta I \in \{0, \pm 2\}$)．
-        \end{itemize}
-    \end{alertblock}
-\end{frame}
-
-% --- アルゴリズムの正当性 ---
-
-\begin{frame}{アルゴリズムの正当性の根拠}
-    \begin{block}{整数性\cite{bergeron2006}}
-        $C + I/2$ の変化量は常に $0$ または $\pm 1$ であり，DCJ操作ごとに距離 $d$ も整数として保たれる．
-    \end{block}
-
-    \begin{block}{最適性の保証\cite{bergeron2006}}
-        任意の $A \neq B$ に対し，必ず $d$ を $1$ 減少させるDCJ操作が存在する．
-        したがって，距離公式の下限値は実際に達成可能である．
-    \end{block}
-
-    したがって，Lemma 3と以上の議論より，次の定理が導かれる．
-\end{frame}
 
 \begin{frame}{DCJ距離公式とそれに基づく実装アプローチ1}
 
     {
     \setbeamercolor{block title}{bg=green!60!black,fg=white}
     \setbeamercolor{block body}{bg=green!10,fg=black}
-    \begin{theorem}[DCJ距離公式\cite{bergeron2006}]
+    \begin{theorem}[DCJ距離公式 (Bergeron, 2006) ]
         2つのゲノム $A, B$ 間の最短のDCJ操作回数 $d_{\mathrm{DCJ}}(A,B)$ は，次式で与えられる：
         \[
             d_{\mathrm{DCJ}}(A,B) = N - \left( C + \frac{I}{2} \right)
         \]
-        ここで $N$ は遺伝子数，$C$ はサイクル数，$I$ は奇数長パスの数である．
+        ここで $N$ は遺伝子数，$C$ は隣接グラフ上のサイクル数，$I$ は奇数長パスの数である．
     \end{theorem}
     }
     \begin{block}{アプローチ1（距離公式に基づく実装）}
@@ -321,7 +408,7 @@
 % \end{frame}
 
 % \begin{frame}{実装アプローチ2：操作手順の導出}
-    \begin{block}{アプローチ2（Bergeronら (2006)\cite{bergeron2006}に基づく貪欲法）}
+    \begin{block}{アプローチ2（Bergeronら (2006)に基づく貪欲法）}
         距離を $1$ 減少させる（$C + I/2$ を $1$ 増加させる）DCJ操作をGreedyに選択していき，グラフを動的に書き換えていく．
         その過程で操作手順も出力することができる．
     \end{block}
@@ -379,5 +466,7 @@
 
 \end{thebibliography}
 \end{frame}
+
+\input{appendix.tex}
 
 \end{document}

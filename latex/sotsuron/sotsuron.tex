@@ -55,11 +55,11 @@
 
     \vfill
 
-    {\Large 2026 年 1 月} \\
+    {\Large 2026 年 2 月 2 日} \\
 
     \vspace{10mm}
 
-    {\Large 慶應義塾大学理工学部数理科学科 4年}\\
+    {\Large 慶應義塾大学 理工学部 数理科学科 4年}\\
     {\Large 小田研究室}
 \end{titlepage}
 
@@ -93,8 +93,8 @@ Bergeronらの手法は，染色体内の特定パターンを検出すること
 高度であり，直感的な理解が困難な側面がある．
 本論文では，DCJ理論におけるBergeronらと同様の前提条件の下，
 C言語を用いたより簡潔な線形時間アルゴリズムの実装について述べる．
-本稿の前半では $d_{\mathrm{DCJ}}$ の算出に特化したアルゴリズムを，
-後半では操作手順も出力する，より汎用性の高いシンプルな実装を紹介する．
+本稿の前半では $d_{\mathrm{DCJ}}$ の算出に特化したものを，
+後半では操作手順も出力する，より汎用性の高いシンプルなものを紹介する．
 
 実装においては，一部の着想をBergeronら(2009)の研究に依拠しつつも，
 主要なデータ構造および処理ロジックの大部分は独自に構築したものである．
@@ -113,46 +113,95 @@ C言語を用いたより簡潔な線形時間アルゴリズムの実装につ�
 それらを比較・評価することになる．
 
 本研究に着手するにあたり，Oliveiraらによるサーベイ論文
-「Rearrangement Distance Problems: An Updated Survey」
 \cite{oliveira2024}を参照した．
-この文献を通じて，ゲノムの再編成距離問題
-（Rearrangement Distance Problems）の
+この文献を通じて，ゲノムの再編成距離問題の
 近年の動向に興味を持ち，
 特に初学者にとって適した入門的なトピックとして
-紹介されていた DCJ (Double-Cut-And-Join) 操作に
+紹介されていたDCJ操作に
 着目することとした．
 本論文で実装の対象とした Bergeron らの論文は，
 この文脈において選定したものである．
 
 
 \section{ゲノムおよび染色体の表現方法}
-比較対象となる二つのゲノムを，それぞれ
-\textit{source} および
-\textit{target} と呼ぶ．
-各ゲノムは染色体（chromosome）の集合であり，
-各染色体は遺伝子（gene）の並びである．
+
+比較対象となる二つのゲノムを，それぞれ\textit{source} および\textit{target} と呼ぶ．各ゲノムは染色体（chromosome）の集合であり，各染色体は遺伝子（gene）の並びである．
 
 各遺伝子は正負の符号を持つ整数値で識別する．
 向きの基準を \textit{target} ゲノムに置き，
-絶対値の対応づけは任意であるため， \textit{target}
-が昇べきの順となるようにつける．すなわち，
-遺伝子数 $n$ のゲノムにおいて，\textit{target}
-が単一の線形染色体である場合，その表現は常に
-$\langle 1, \ 2, \ \dots, \ n \rangle$
-と一意に定まる．線形染色体と環状染色体を区別するため，
-本論文では以下の表記を用いる．
+絶対値の対応づけは任意であるため， \textit{target} が
+昇べきの順となるようにつける．
+\footnote{
+    実は，3章にてこれから紹介する二つのアルゴリズムは，target（B）
+    における遺伝子の番号
+    が昇順に並んでいることが高速化や正しさに本質的に関係していない．
+    そのため，AとBの両方が任意の状態であっても，
+    問題なく適用できる．
+}
+
+線形染色体と環状染色体を区別するため，本論文では以下の表記を用いる．
 \begin{itemize}
     \item \textbf{線形染色体}: $\langle \dots \rangle$ で囲む．
     \item \textbf{環状染色体}: $( \dots )$ で囲む．
 \end{itemize}
 
 \begin{remark}
-環状染色体 $( 5, \ 6, \ 7 )$ は，
-要素を巡回させた $( 6, \ 7, \ 5 )$ や
- $( 7, \ 5, \ 6 )$ と同一である．
+環状染色体は，その要素を巡回させたものと同一である．
+例えば，$(5,\,6,\,7)$，$(6,\,7,\,5)$，$(7,\,5,\,6)$はすべて同じ環状染色体である．
 \end{remark}
 
+\begin{remark}
+重複した遺伝子の存在，向きを考慮するか否か，\textit{source} と \textit{target}
+で存在する遺伝子が異なる（削除，挿入が発生する）か否か，環状染色体を考えるか，
+染色体の本数は単一か複数かなど，
+前提条件で様々なバリエーションがある．
+今回の前提条件では，複数染色体を認める点と環状染色体も認める点が
+比較的難しいと言える．
+\end{remark}
+
+\begin{figure}[H]
+    \centering
+    % 線形染色体の図
+    \begin{tikzpicture}[scale=1.2, baseline=(current bounding box.center)]
+        % テロメア記号
+        \node (tel1) at (0,0) {\Large $\circ$};
+        \node[below=0.12cm] at (tel1) {\scriptsize テロメア};
+        % Gene 1
+        \node[rectangle, draw, minimum width=1.2cm, minimum height=0.6cm, fill=orange!10] (g1) at (1.1,0) {\Large $1$};
+        % Gene -4
+        \node[rectangle, draw, minimum width=1.2cm, minimum height=0.6cm, fill=orange!10] (g2) at (2.3,0) {\Large $-4$};
+        % テロメア記号
+        \node (tel2) at (3.4,0) {\Large $\circ$};
+        \node[below=0.12cm] at (tel2) {\scriptsize テロメア};
+        % ラベル
+        \node[below=0.2cm] at (1.7,-0.3) {\scriptsize 線形染色体 $\langle 1\ -4 \rangle$};
+    \end{tikzpicture}
+    \hspace{2em}
+    % 環状染色体の図
+    \begin{tikzpicture}[scale=1.2, baseline=(current bounding box.center)]
+        % 内側楕円（輪郭）
+        \def\a{1.2}
+        \def\b{0.6}
+        \draw[thick] plot [smooth, domain=0:360, samples=100] ({\a*cos(\x)}, {\b*sin(\x)});
+        % 外側楕円（ノード配置用，内側に近づける）
+        \def\A{1.32}
+        \def\B{0.7}
+        % ノード配置（外側楕円上，ラベル明示）
+        \node[rectangle, draw, minimum width=0.8cm, minimum height=0.5cm, fill=orange!10] (g0) at ({\A*cos(0)},{\B*sin(0)}) {\large $1$};
+        \node[rectangle, draw, minimum width=0.8cm, minimum height=0.5cm, fill=orange!10] (g1) at ({\A*cos(60)},{\B*sin(60)}) {\large $-2$};
+        \node[rectangle, draw, minimum width=0.8cm, minimum height=0.5cm, fill=orange!10] (g2) at ({\A*cos(120)},{\B*sin(120)}) {\large $3$};
+        \node[rectangle, draw, minimum width=0.8cm, minimum height=0.5cm, fill=orange!10] (g3) at ({\A*cos(180)},{\B*sin(180)}) {\large $-4$};
+        \node[rectangle, draw, minimum width=0.8cm, minimum height=0.5cm, fill=orange!10] (g4) at ({\A*cos(240)},{\B*sin(240)}) {\large $5$};
+        \node[rectangle, draw, minimum width=0.8cm, minimum height=0.5cm, fill=orange!10] (g5) at ({\A*cos(300)},{\B*sin(300)}) {\large $-6$};
+        % ラベル
+        \node[below=0.1cm] at (0,-1.1) {\scriptsize 環状染色体 $( 1\ -2\ 3\ -4\ 5\ -6 )$};
+    \end{tikzpicture}
+    \caption{線形染色体と環状染色体の例（左：線形，右：環状）}
+    \label{fig:chromosome_examples}
+\end{figure}
+
 \section{端点（extremity）と隣接（adjacency）}
+
 アルゴリズムの実装においては，
 遺伝子間の「接続関係」を直接扱う方が効率的である．
 遺伝子 $g$ に対し，二つの \textbf{端点（extremity）}
@@ -166,7 +215,7 @@ $\langle 1, \ 2, \ \dots, \ n \rangle$
 特殊なシンボル $o$ を用いて
 \textbf{テロメア（Telomere）}\footnote{生物学において染色体の末端を保護する構造体に由来する名称である．}
 との接続 $\{o, x\}$ として扱う．この定義により，
-ゲノムは単なる隣接関係の集合として記述でき，
+ゲノムは単なる隣接の集合として記述でき，
 線形・環状の区別や染色体数を意識せずに
 統合的な操作が可能となる．
 
@@ -176,7 +225,7 @@ $\langle 1, \ 2, \ \dots, \ n \rangle$
 いずれのアルゴリズムでも基礎的なデータとして
 \textbf{extremity} が必要となるが，
 主な操作対象には違いがある．
-第3章のアルゴリズム1（距離計算）では隣接グラフの構造を調べるため、
+第3章のアルゴリズム1（距離計算）では隣接グラフの構造を調べるため，
 \textbf{adjacency} の走査が行われるが，
 第4章のアルゴリズム2（操作手順出力）では接続替えの操作を行うため
 \textbf{extremity} を直接操作する．
@@ -204,7 +253,109 @@ typedef struct adjacency
 } adjacency;
 \end{lstlisting}
 
-% --- 第2章：必要な定理 ---
+\section{隣接グラフの定義と例}
+
+\begin{definition}[隣接グラフ $AG(A,B)$]
+2つのゲノム $A, B$ において，
+それぞれの隣接を頂点集合とし，
+共通の遺伝子端を持つ頂点間にエッジを引いたグラフを
+隣接グラフと呼ぶ．
+
+ただし，共通の要素がテロメア $o$ である
+場合はエッジを引かないものとする．
+また，2つの頂点間で2つの遺伝子端が共通する場合，
+それぞれの端点に対応する計2本のエッジを引くこととする．
+したがって，隣接グラフは多重グラフとなり得る．
+
+\end{definition}
+
+\begin{remark}
+それぞれの頂点の次数は高々2であるため，隣接グラフは
+サイクル（Cycle）とパス（Path）のみからなる．
+また，本論文においてパスやサイクルの「長さ」とは，
+それを構成する辺の本数を指すものとする．
+\end{remark}
+
+\begin{example}
+以下のゲノム $A, B$ を考える （$N=5$）．
+
+\begin{verbatim}
+A: < 1 -4 > ( 3 -2 ) < 5 >
+B: < 1 2 3 > ( 4 5 )
+\end{verbatim}
+
+これらのゲノムは， 以下のような隣接の集合としても表現できる
+\footnote{ゲノムを単なる隣接の集合として表現することで，
+染色体の種類（線形・環状），本数によらず，
+統一的に操作することができるようになる．}．
+\[
+    A = \{ \{ o, -1 \}, \{ 1, 4 \}, \{ -4, o \}, \{ 3, 2 \}, \{ -2, -3 \}, \{ o, -5 \}, \{ 5, o \} \}
+\]
+\[
+    B = \{ \{ o, -1 \}, \{ 1, -2 \}, \{ 2, -3 \}, \{ 3, o \}, \{ 4, -5 \}, \{ 5, -4 \} \}
+\]
+
+また，これらに基づく隣接グラフの成分は以下のようになる（円形のノードは，青色がゲノム $A$ の隣接，赤色がゲノム $B$ の隣接を表す）．
+\begin{figure}[H]
+    \centering
+    \scalebox{0.8}{
+    \begin{tikzpicture}[
+        x = 2.0cm, y = 3.0cm,
+        every node/.style={circle, draw, minimum size=1.62cm, inner sep=0pt, font=\large},
+        adjA/.style={fill=blue!10},
+        adjB/.style={fill=red!10},
+        edge/.style={-, ultra thick}
+    ]
+        % Genome A nodes (top row)
+        \node[adjA] (a1) at (0, 0) {$\{ o, -1 \}$};
+        \node[adjA] (a2) at (1, 0) {$\{ 1, 4 \}$};
+        \node[adjA] (a3) at (2, 0) {$\{ -4, o \}$};
+        \node[adjA] (a4) at (3, 0) {$\{ 3, 2 \}$};
+        \node[adjA] (a5) at (4, 0) {$\{ -2, -3 \}$};
+        \node[adjA] (a6) at (5, 0) {$\{ o, -5 \}$};
+        \node[adjA] (a7) at (6, 0) {$\{ 5, o \}$};
+
+        % Genome B nodes (bottom row)
+        \node[adjB] (b1) at (0, -1) {$\{ o, -1 \}$};
+        \node[adjB] (b2) at (1, -1) {$\{ 1, -2 \}$};
+        \node[adjB] (b3) at (2, -1) {$\{ 2, -3 \}$};
+        \node[adjB] (b4) at (3, -1) {$\{ 3, o \}$};
+        \node[adjB] (b5) at (4, -1) {$\{ 4, -5 \}$};
+        \node[adjB] (b6) at (5, -1) {$\{ 5, -4 \}$};
+
+        % Edges
+        \draw[edge] (a1) -- (b1); % -1
+        \draw[edge] (a2) -- (b2); % 1
+        \draw[edge] (a2) -- (b5); % 4
+        \draw[edge] (a3) -- (b6); % -4
+        \draw[edge] (a4) -- (b4); % 3
+        \draw[edge] (a4) -- (b3); % 2
+        \draw[edge] (a5) -- (b2); % -2
+        \draw[edge] (a5) -- (b3); % -3
+        \draw[edge] (a6) -- (b5); % -5
+        \draw[edge] (a7) -- (b6); % 5
+    \end{tikzpicture}
+    }
+    \caption{隣接グラフ $AG(A,B)$ の例（上段：ゲノム$A$，下段：ゲノム$B$）}
+    \label{fig:adjacency_graph}
+\end{figure}
+
+\end{example}
+
+% このとき， 以下の4回のDCJ操作により $A$ は $B$ へと変換される．
+% \begin{verbatim}
+% DCJ(G): { 1, 4 } { -2, -3 } -> { 1, -2 } { 4, -3 }
+% DCJ(G): { 2, 3 } { -3, 4 } -> { 2, -3 } { 3, 4 }
+% DCJ(G): { -4, o } { 5, o } -> { -4, 5 } { o, o }
+% DCJ(G): { 4, 3 } { -5, o } -> { 4, -5 } { 3, o }
+% \end{verbatim}
+
+% --- ヒント・観察 ---
+
+% --- 1章末：DCJ操作の逐次適用例 ---
+
+
+
 \chapter{理論的背景}
 
 \section{$d_{\mathrm{DCJ}}$に関する等式}
@@ -214,127 +365,310 @@ DCJ操作を用いたゲノム距離の計算において，
 以下の重要な定義および定理を示している．
 
 \begin{definition}[Double-Cut-And-Join]
-ゲノムの隣接関係の集合に対する操作であり，
+ゲノムの隣接の集合に対する操作であり，
 二つの隣接 $\{u, v\}$ と $\{x, y\}$ を切断し，
-新たに $\{u, x\}$ と $\{v, y\}$ ,
-または $\{u, y\}$ と $\{v, x\}$
-として再結合する操作を指す．
+新たに $\{u, x\}$ と $\{v, y\}$ ，または $\{u, y\}$ と $\{v, x\}$ として再結合する操作を指す．
 テロメア $o$ を含む隣接に対しても同様に定義される．
 
-また，$\{o, o\}$ とのDCJも認めることで，
-単なる隣接の切断もDCJに含めるものとする．
+また，$\{o, o\}$ とのDCJも認めることで，単なる隣接の切断もDCJに含めるものとする．
+
+% \begin{figure}[H]
+%     \centering
+%     \scalebox{0.7}{
+%     \begin{tikzpicture}[
+%         x = 2.0cm, y = 3.0cm,
+%         every node/.style={circle, draw, minimum size=1.62cm, inner sep=0pt, font=\large},
+%         adjA/.style={fill=blue!10},
+%         adjB/.style={fill=red!10},
+%         adjNew/.style={fill=green!20, draw=green!50!black, thick},
+%         edge/.style={-, ultra thick},
+%         edgeNew/.style={-, ultra thick, green!50!black}
+%     ]
+%         % Genome A nodes (top row)
+%         \node[adjA] (a1) at (0, 0) {$\{ o, -1 \}$};
+%         \node[adjNew] (a2) at (1, 0) {$\{ 1, -2 \}$};
+%         \node[adjA] (a3) at (2, 0) {$\{ -4, o \}$};
+%         \node[adjA] (a4) at (3, 0) {$\{ 3, 2 \}$};
+%         \node[adjNew] (a5) at (4, 0) {$\{ 4, -3 \}$};
+%         \node[adjA] (a6) at (5, 0) {$\{ o, -5 \}$};
+%         \node[adjA] (a7) at (6, 0) {$\{ 5, o \}$};
+
+%         % Genome B nodes (bottom row)
+%         \node[adjB] (b1) at (0, -1) {$\{ o, -1 \}$};
+%         \node[adjB] (b2) at (1, -1) {$\{ 1, -2 \}$};
+%         \node[adjB] (b3) at (2, -1) {$\{ 2, -3 \}$};
+%         \node[adjB] (b4) at (3, -1) {$\{ 3, o \}$};
+%         \node[adjB] (b5) at (4, -1) {$\{ 4, -5 \}$};
+%         \node[adjB] (b6) at (5, -1) {$\{ 5, -4 \}$};
+
+%         % Edges
+%         \draw[edge] (a1) -- (b1); % -1
+
+%         % Changed edges from a2 {1, -2}
+%         \draw[edge] (a2) to[bend right=10] (b2); % 1 in {1, -2}
+%         \draw[edgeNew] (a2) to[bend left=10] (b2);  % -2 in {1, -2}
+
+%         \draw[edge] (a3) -- (b6);
+
+%         \draw[edge] (a4) -- (b4); % 3
+%         \draw[edge] (a4) -- (b3); % 2
+
+%         % Changed edges from a5 {4, -3}
+%         \draw[edgeNew] (a5) -- (b5); % 4 in {4, -5}
+%         \draw[edge] (a5) -- (b3); % -3 in {2, -3}
+
+%         \draw[edge] (a6) -- (b5); % -5
+%         \draw[edge] (a7) -- (b6); % 5
+
+%         % --- Old connections (dotted) ---
+%         \draw[edge, dotted, gray] (a2) -- (b5);
+%         \draw[edge, dotted, gray] (a5) -- (b2);
+%     \end{tikzpicture}
+%     }
+%     \caption{DCJ操作の適用例：$\{1,4\}$と$\{-2,-3\}$を$\{1,-2\}$と$\{4,-3\}$に組み替える}
+%     \label{fig:dcj_example}
+
+% \end{figure}
 \end{definition}
 
-\begin{definition}[隣接グラフ $AG(A,B)$]\label{def:adj_graph}
-2つのゲノム $A, B$ において，
-それぞれの隣接関係およびテロメアを頂点集合とし，
-共通の遺伝子端を持つ頂点間にエッジを引いたグラフを
-隣接グラフと呼ぶ．
+\section{DCJ操作の逐次適用例}
 
-ただし，共通の要素がテロメア $o$ である
-場合はエッジを引かないものとする．
-また，2つの頂点間で2つの遺伝子端が共通する場合，
-それぞれの端点に対応する計2本のエッジを引くこととする．
-したがって，隣接グラフは多重グラフとなり得る．
-\end{definition}
+以下に，例1.5における隣接グラフ $AG(A,B)$ に対し，
+最適なDCJ操作を順に適用していく様子を図示する．
+
+\begin{figure}[H]
+    \centering
+    \scalebox{0.7}{
+    \begin{tikzpicture}[
+        x = 2.0cm, y = 3.0cm,
+        every node/.style={circle, draw, minimum size=1.62cm, inner sep=0pt, font=\large},
+        adjA/.style={fill=blue!10},
+        adjB/.style={fill=red!10},
+        adjNew/.style={fill=green!20, draw=green!50!black, thick},
+        edge/.style={-, ultra thick},
+        edgeNew/.style={-, ultra thick, green!50!black}
+    ]
+        % Genome A nodes (top row)
+        \node[adjA] (a1) at (0, 0) {$\{ o, -1 \}$};
+        \node[adjNew] (a2) at (1, 0) {$\{ 1, -2 \}$};
+        \node[adjA] (a3) at (2, 0) {$\{ -4, o \}$};
+        \node[adjA] (a4) at (3, 0) {$\{ 3, 2 \}$};
+        \node[adjNew] (a5) at (4, 0) {$\{ 4, -3 \}$};
+        \node[adjA] (a6) at (5, 0) {$\{ o, -5 \}$};
+        \node[adjA] (a7) at (6, 0) {$\{ 5, o \}$};
+
+        % Genome B nodes (bottom row)
+        \node[adjB] (b1) at (0, -1) {$\{ o, -1 \}$};
+        \node[adjB] (b2) at (1, -1) {$\{ 1, -2 \}$};
+        \node[adjB] (b3) at (2, -1) {$\{ 2, -3 \}$};
+        \node[adjB] (b4) at (3, -1) {$\{ 3, o \}$};
+        \node[adjB] (b5) at (4, -1) {$\{ 4, -5 \}$};
+        \node[adjB] (b6) at (5, -1) {$\{ 5, -4 \}$};
+
+        % Edges
+        \draw[edge] (a1) -- (b1); % -1
+
+        % Changed edges from a2 {1, -2}
+        \draw[edge] (a2) to[bend right=10] (b2); % 1 in {1, -2}
+        \draw[edgeNew] (a2) to[bend left=10] (b2);  % -2 in {1, -2}
+
+        \draw[edge] (a3) -- (b6);
+
+        \draw[edge] (a4) -- (b4); % 3
+        \draw[edge] (a4) -- (b3); % 2
+
+        % Changed edges from a5 {4, -3}
+        \draw[edgeNew] (a5) -- (b5); % 4 in {4, -5}
+        \draw[edge] (a5) -- (b3); % -3 in {2, -3}
+
+        \draw[edge] (a6) -- (b5); % -5
+        \draw[edge] (a7) -- (b6); % 5
+
+        % --- Old connections (dotted) ---
+        \draw[edge, dotted, gray] (a2) -- (b5);
+        \draw[edge, dotted, gray] (a5) -- (b2);
+    \end{tikzpicture}
+    }
+    \caption{1回目のDCJ操作：$\{1,4\},\ \{-2,-3\}\ \rightarrow\ \{1,-2\},\ \{4,-3\}$}
+\end{figure}
+
+% 2手順目
+\begin{figure}[H]
+    \centering
+    \scalebox{0.7}{
+    \begin{tikzpicture}[
+        x = 2.0cm, y = 3.0cm,
+        every node/.style={circle, draw, minimum size=1.62cm, inner sep=0pt, font=\large},
+        adjA/.style={fill=blue!10},
+        adjB/.style={fill=red!10},
+        adjNew/.style={fill=green!20, draw=green!50!black, thick},
+        edge/.style={-, ultra thick},
+        edgeNew/.style={-, ultra thick, green!50!black}
+    ]
+        % Genome A nodes (top row)
+        \node[adjA] (a1) at (0, 0) {$\{ o, -1 \}$};
+        \node[adjA] (a2) at (1, 0) {$\{ 1, -2 \}$};
+        \node[adjA] (a3) at (2, 0) {$\{ -4, o \}$};
+        \node[adjNew] (a4) at (3, 0) {$\{ 2, -3 \}$};
+        \node[adjNew] (a5) at (4, 0) {$\{ 3, 4 \}$};
+        \node[adjA] (a6) at (5, 0) {$\{ o, -5 \}$};
+        \node[adjA] (a7) at (6, 0) {$\{ 5, o \}$};
+
+        % Genome B nodes (bottom row)
+        \node[adjB] (b1) at (0, -1) {$\{ o, -1 \}$};
+        \node[adjB] (b2) at (1, -1) {$\{ 1, -2 \}$};
+        \node[adjB] (b3) at (2, -1) {$\{ 2, -3 \}$};
+        \node[adjB] (b4) at (3, -1) {$\{ 3, o \}$};
+        \node[adjB] (b5) at (4, -1) {$\{ 4, -5 \}$};
+        \node[adjB] (b6) at (5, -1) {$\{ 5, -4 \}$};
+
+        % Edges
+        \draw[edge] (a1) -- (b1); % -1
+        \draw[edge] (a2) to[bend right=10] (b2); % 1 in {1, -2}
+        \draw[edge] (a2) to[bend left=10] (b2);  % -2 in {1, -2}
+        \draw[edge] (a3) -- (b6); % -4
+        \draw[edge] (a4) to[bend right=10] (b3); % 2,-3 (1本目, 緑)
+        \draw[edgeNew] (a4) to[bend left=10] (b3);  % 2,-3 (2本目, 緑)
+        \draw[edgeNew] (a5) -- (b4); % 3,4
+        \draw[edge] (a5) -- (b5); % 4 in {4, -5}
+        \draw[edge] (a6) -- (b5); % -5
+        \draw[edge] (a7) -- (b6); % 5
+
+        % --- Old connections (dotted) ---
+        \draw[edge, dotted, gray] (a4) -- (b4);
+        \draw[edge, dotted, gray] (a5) -- (b3);
+    \end{tikzpicture}
+    }
+    \caption{2回目のDCJ操作：$\{2,3\},\ \{-3,4\}\ \rightarrow\ \{2,-3\},\ \{3,4\}$}
+\end{figure}
+
+% 3手順目
+\begin{figure}[H]
+    \centering
+    \scalebox{0.7}{
+    \begin{tikzpicture}[
+        x = 2.0cm, y = 3.0cm,
+        every node/.style={circle, draw, minimum size=1.62cm, inner sep=0pt, font=\large},
+        adjA/.style={fill=blue!10},
+        adjB/.style={fill=red!10},
+        adjNew/.style={fill=green!20, draw=green!50!black, thick},
+        edge/.style={-, ultra thick},
+        edgeNew/.style={-, ultra thick, green!50!black}
+    ]
+        % Genome A nodes (top row)
+        \node[adjA] (a1) at (0, 0) {$\{ o, -1 \}$};
+        \node[adjA] (a2) at (1, 0) {$\{ 1, -2 \}$};
+        \node[adjA] (a3) at (2, 0) {$\{ o, o \}$};
+        \node[adjA] (a4) at (3, 0) {$\{ 2, -3 \}$};
+        \node[adjA] (a5) at (4, 0) {$\{ 3, 4 \}$};
+        \node[adjA] (a6) at (5, 0) {$\{ o, -5 \}$};
+        \node[adjNew] (a7) at (6, 0) {$\{ -4, 5 \}$};
+
+        % Genome B nodes (bottom row)
+        \node[adjB] (b1) at (0, -1) {$\{ o, -1 \}$};
+        \node[adjB] (b2) at (1, -1) {$\{ 1, -2 \}$};
+        \node[adjB] (b3) at (2, -1) {$\{ 2, -3 \}$};
+        \node[adjB] (b4) at (3, -1) {$\{ 3, o \}$};
+        \node[adjB] (b5) at (4, -1) {$\{ 4, -5 \}$};
+        \node[adjB] (b6) at (5, -1) {$\{ 5, -4 \}$};
+
+        % Edges
+        \draw[edge] (a1) -- (b1); % -1
+        \draw[edge] (a2) to[bend right=10] (b2); % 1 in {1, -2}
+        \draw[edge] (a2) to[bend left=10] (b2);  % -2 in {1, -2}
+        \draw[edge] (a4) to[bend right=10] (b3); % 2,-3 (1本目, 緑)
+        \draw[edge] (a4) to[bend left=10] (b3);  % 2,-3 (2本目, 緑)
+        \draw[edge] (a5) -- (b4); % 3,4
+        \draw[edge] (a5) -- (b5); % 4 in {4, -5}
+        \draw[edge] (a6) -- (b5); % -5
+        \draw[edgeNew] (a7) to[bend right=10] (b6); % -4,5 (1本目, 緑)
+        \draw[edge] (a7) to[bend left=10] (b6);  % -4,5 (2本目, 緑)
+
+        % --- Old connections (dotted) ---
+        \draw[edge, dotted, gray] (a3) -- (b6);
+    \end{tikzpicture}
+    }
+    \caption{3回目のDCJ操作：$\{-4,o\},\ \{5,o\}\ \rightarrow\ \{-4,5\},\ \{o,o\}$}
+\end{figure}
+
+% 4手順目
+\begin{figure}[H]
+    \centering
+    \scalebox{0.7}{
+    \begin{tikzpicture}[
+        x = 2.0cm, y = 3.0cm,
+        every node/.style={circle, draw, minimum size=1.62cm, inner sep=0pt, font=\large},
+        adjA/.style={fill=blue!10},
+        adjB/.style={fill=red!10},
+        adjNew/.style={fill=green!20, draw=green!50!black, thick},
+        edge/.style={-, ultra thick},
+        edgeNew/.style={-, ultra thick, green!50!black}
+    ]
+        % Genome A nodes (top row)
+        \node[adjA] (a1) at (0, 0) {$\{ o, -1 \}$};
+        \node[adjA] (a2) at (1, 0) {$\{ 1, -2 \}$};
+        % \node[adjA] (a3) at (2, 0) {$\{ o, o \}$};
+        \node[adjA] (a4) at (2, 0) {$\{ 2, -3 \}$};
+        \node[adjNew] (a5) at (3, 0) {$\{ 3, o \}$};
+        \node[adjNew] (a6) at (4, 0) {$\{ 4, -5 \}$};
+        \node[adjA] (a7) at (5, 0) {$\{ -4, 5 \}$};
+
+        % Genome B nodes (bottom row)
+        \node[adjB] (b1) at (0, -1) {$\{ o, -1 \}$};
+        \node[adjB] (b2) at (1, -1) {$\{ 1, -2 \}$};
+        \node[adjB] (b3) at (2, -1) {$\{ 2, -3 \}$};
+        \node[adjB] (b4) at (3, -1) {$\{ 3, o \}$};
+        \node[adjB] (b5) at (4, -1) {$\{ 4, -5 \}$};
+        \node[adjB] (b6) at (5, -1) {$\{ 5, -4 \}$};
+
+        % Edges
+        \draw[edge] (a1) -- (b1); % -1
+        \draw[edge] (a2) to[bend right=10] (b2); % 1 in {1, -2}
+        \draw[edge] (a2) to[bend left=10] (b2);  % -2 in {1, -2}
+        \draw[edge] (a4) to[bend right=10] (b3); % 2,-3 (1本目, 緑)
+        \draw[edge] (a4) to[bend left=10] (b3);  % 2,-3 (2本目, 緑)
+        \draw[edge] (a5) -- (b4); % 3, o
+        \draw[edgeNew] (a6) to[bend right=10] (b5); % 4,-5 (1本目, 緑)
+        \draw[edge] (a6) to[bend left=10] (b5);  % 4,-5 (2本目, 緑)
+        \draw[edge] (a7) to[bend right=10] (b6); % -4,5 (1本目, 緑)
+        \draw[edge] (a7) to[bend left=10] (b6);  % -4,5 (2本目, 緑)
+
+        % --- Old connections (dotted) ---
+        \draw[edge, dotted, gray] (a5) -- (b5);
+    \end{tikzpicture}
+    }
+    \caption{4回目のDCJ操作：$\{4,3\},\ \{-5,o\}\ \rightarrow\ \{4,-5\},\ \{3,o\}$}
+\end{figure}
 
 \begin{remark}
-それぞれの頂点の次数は高々2であるため，隣接グラフは
-サイクル（Cycle）とパス（Path）のみからなる．
+    $d_{\mathrm{DCJ}} = 0 $のとき，
+    テロメア $o$ を含む隣接同士は長さ1の奇数長パス，
+    テロメアを含まない隣接同士は長さ2のサイクルに揃う．
 \end{remark}
-
-\begin{example}
-以下のゲノム $A, B$ を考える （$N=5$）．
-\begin{verbatim}
-A: < 1 -4 > ( 3 -2 ) < 5 >
-B: < 1 2 3 > ( 4 5 )
-\end{verbatim}
-
-これらのゲノムは， 以下のような隣接の集合としても表現できる．
-\[
-    A = \{ \{ o, -1 \}, \{ 1, 4 \}, \{ -4, o \}, \{ 3, 2 \}, \{ -2, -3 \}, \{ o, -5 \}, \{ 5, o \} \}
-\]
-\[
-    B = \{ \{ o, -1 \}, \{ 1, -2 \}, \{ 2, -3 \}, \{ 3, o \}, \{ 4, -5 \}, \{ 5, -4 \} \}
-\]
-
-また， これらに基づく隣接グラフ（定義\ref{def:adj_graph}参照）の成分は以下のようになる（円形のノードは， 青色がゲノム $A$ の隣接， 赤色がゲノム $B$ の隣接を表す）．
-
-\begin{center}
-\scalebox{0.8}{
-\begin{tikzpicture}[
-    x = 1.8cm, y = 3.5cm,
-    every node/.style={circle, draw, minimum size=1.4cm, inner sep=0pt, font=\small},
-    adjA/.style={fill=blue!10},
-    adjB/.style={fill=red!10},
-    edge/.style={-, thick}
-]
-    % Genome A nodes (top row)
-    % Order: {o,-1}, {1,4}, {-4,o}, {3,2}, {-2,-3}, {o,-5}, {5,o}
-    \node[adjA] (a1) at (0, 0) {$\{ o, -1 \}$};
-    \node[adjA] (a2) at (1, 0) {$\{ 1, 4 \}$};
-    \node[adjA] (a3) at (2, 0) {$\{ -4, o \}$};
-    \node[adjA] (a4) at (3, 0) {$\{ 3, 2 \}$};
-    \node[adjA] (a5) at (4, 0) {$\{ -2, -3 \}$};
-    \node[adjA] (a6) at (5, 0) {$\{ o, -5 \}$};
-    \node[adjA] (a7) at (6, 0) {$\{ 5, o \}$};
-
-    % Genome B nodes (bottom row)
-    % Order: {o,-1}, {1,-2}, {2,-3}, {3,o}, {4,-5}, {5,-4}
-    \node[adjB] (b1) at (0, -1) {$\{ o, -1 \}$};
-    \node[adjB] (b2) at (1, -1) {$\{ 1, -2 \}$};
-    \node[adjB] (b3) at (2, -1) {$\{ 2, -3 \}$};
-    \node[adjB] (b4) at (3, -1) {$\{ 3, o \}$};
-    \node[adjB] (b5) at (4, -1) {$\{ 4, -5 \}$};
-    \node[adjB] (b6) at (5, -1) {$\{ 5, -4 \}$};
-
-    % Edges (connecting shared extremities)
-    \draw[edge] (a1) -- (b1); % -1
-    \draw[edge] (a2) -- (b2); % 1
-    \draw[edge] (a2) -- (b5); % 4
-    \draw[edge] (a3) -- (b6); % -4
-    \draw[edge] (a4) -- (b4); % 3
-    \draw[edge] (a4) -- (b3); % 2
-    \draw[edge] (a5) -- (b2); % -2
-    \draw[edge] (a5) -- (b3); % -3
-    \draw[edge] (a6) -- (b5); % -5
-    \draw[edge] (a7) -- (b6); % 5
-
-    % Labels
-    \node[draw=none, fill=none] at (-1.2, 0) {\textbf{Genome A}};
-    \node[draw=none, fill=none] at (-1.2, -1) {\textbf{Genome B}};
-\end{tikzpicture}
-}
-\end{center}
-
-このとき， 以下の4回のDCJ操作により $A$ は $B$ へと変換される．
-\begin{verbatim}
-DCJ(G): { 1, 4 } { -2, -3 } -> { 1, -2 } { 4, -3 }
-DCJ(G): { 2, 3 } { -3, 4 } -> { 2, -3 } { 3, 4 }
-DCJ(G): { -4, o } { 5, o } -> { -4, 5 } { o, o }
-DCJ(G): { 4, 3 } { -5, o } -> { 4, -5 } { 3, o }
-\end{verbatim}
-
-\end{example}
 
 \begin{lemma}[成分数の変化]
 \label{lem:comp_change}
-隣接グラフG(A, B)に対する1回のDCJ操作により，
+隣接グラフ $AG(A, B)$ に対する1回のDCJ操作により，
 連結成分（サイクルまたはパス）の総数は最大で1つ増減する．
 \end{lemma}
 
 \begin{proof}
 DCJ操作は，グラフ上の高々2つの頂点に対して行われる局所的なつなぎ替えである．
-操作対象となる頂点が属する連結成分（コンポーネント）の種類（パスまたはサイクル）とその数によって，
+操作対象となる頂点が属する連結成分の種類（パスまたはサイクル）とその数によって，
 以下の全てのケースに分類できる．それぞれのケースにおける成分数の変化量 $\Delta$ を列挙する．
+\footnote{
+    のちにパスの偶奇が重要になるが，この補題はあくまで
+    連結成分の数のみについての主張であり，偶奇性は問題としていない
+    ことに注意されたい．
+}
 
 \begin{enumerate}
 \item \textbf{パスのみに関わる操作}（図\ref{fig:dcj_paths}）\\
 2つのパス間，あるいは1つのパス内での操作．
 \begin{itemize}
     \item (a) 2つのパスの末端または内部をつなぎ替えるケース: 異なるパス間での交換が起きるが，成分数は不変 ($\Delta=0$)．
-    \item (b) 2つのパスを結合して1つのパスにするケース: 成分数は1減少 ($\Delta=-1$)．
-    \item (c) 1つのパスを切断して2つのパスにするケース: 成分数は1増加 ($\Delta=+1$)．
+    \item (b) 2つのパスの一部を切断・再結合して2本のパスに分かれるケース: 成分数は不変 ($\Delta=0$)．
+    \item (c) 1つのパスを切断して2つのパスにするケース: 成分数の変化は1 ($\Delta=\pm 1$)．
 \end{itemize}
 
 \begin{figure}[H]
@@ -359,17 +693,25 @@ DCJ操作は，グラフ上の高々2つの頂点に対して行われる局所�
         % (b)
         \begin{scope}[xshift=5.5cm]
         \node at (0, 1.5) {(b)};
-        % Before: 2 paths end-to-end (separated)
-        \draw (-1.5, 0) -- (-0.2, 0); \draw (0.2, 0) -- (1.5, 0);
-        \fill (-0.2, 0) circle (2pt); \fill (0.2, 0) circle (2pt);
+        % Before: 3 paths (one with a middle cut, one with left endpoint, one with right endpoint)
+        % Main path with a middle cut
+        \draw (-1.5, 0.5) -- (0, 0.5) -- (1.5, 0.5);
+        \fill (0, 0.5) circle (2pt);
+        % Right path with endpoint
+        \draw (0, -0.5) -- (1.5, -0.5);
+        \fill (0, -0.5) circle (2pt);
 
         \draw[<->] (0, -1.0) -- (0, -2.0);
 
         \begin{scope}[yshift=-3.0cm]
-            % After: Joined path
-            \draw (-1.5, 0) -- (1.5, 0);
+            % After: Main path with a middle cut (same as above)
+            \draw (-1.5, 0.5) -- (0, 0.5) -- (1.5, 0.5);
+            \fill (0, 0.5) circle (2pt);
+            % Left path with endpoint (now at bottom)
+            \draw (-1.5, -0.5) -- (-0, -0.5);
+            \fill (0, -0.5) circle (2pt);
         \end{scope}
-        \node at (0, -4.5) {$\Delta=-1$};
+        \node at (0, -4.5) {$\Delta=0$};
         \end{scope}
 
         % (c)
@@ -385,7 +727,7 @@ DCJ操作は，グラフ上の高々2つの頂点に対して行われる局所�
             % After: 2 separated paths
             \draw (-1.5, 0) -- (-0.2, 0); \draw (0.2, 0) -- (1.5, 0);
         \end{scope}
-        \node at (0, -4.5) {$\Delta=+1$};
+        \node at (0, -4.5) {$\Delta=\pm 1$};
         \end{scope}
     \end{tikzpicture}
     }
@@ -394,9 +736,9 @@ DCJ操作は，グラフ上の高々2つの頂点に対して行われる局所�
 \end{figure}
 
 \item \textbf{パスとサイクルが関わる操作}（図\ref{fig:dcj_mixed}）\\
-パスとサイクル間，あるいはパスがサイクルを生じる（吸収する）操作．
+パスとサイクル間の操作．
 \begin{itemize}
-    \item (a) パスから一部を切り出しサイクルとする，あるいは逆にサイクルをパスの一部に組み込むケース: 成分数は1増減 ($\Delta=\pm 1$)．
+    \item (a) パスから一部を切り出しサイクルとする，あるいは逆にサイクルをパスの一部に組み込むケース: 成分数の変化は1 ($\Delta=\pm 1$)．
     \item (b) パスの両端をつなぎサイクルとする，あるいは逆にサイクルを切断しパスとするケース: 成分総数はパスが減りサイクルが増える（またはその逆）ため不変 ($\Delta=0$)．
     \item (c) パス内の一部の向きを反転させるケース: 成分数は不変 ($\Delta=0$)．
 \end{itemize}
@@ -450,7 +792,7 @@ DCJ操作は，グラフ上の高々2つの頂点に対して行われる局所�
 
 \item \textbf{サイクルのみに関わる操作}（図\ref{fig:dcj_cycles}）\\
 \begin{itemize}
-    \item (a) 2つのサイクルを結合する，あるいは1つのサイクルを分割するケース: 成分数は1増減 ($\Delta=\pm 1$)．
+    \item (a) 2つのサイクルを結合する，あるいは1つのサイクルを分割するケース: 成分数の変化は1 ($\Delta=\pm 1$)．
     \item (b) サイクル内の一部の向きを反転させるケース: 成分数は不変 ($\Delta=0$)．
 \end{itemize}
 
@@ -497,36 +839,36 @@ DCJ操作は，グラフ上の高々2つの頂点に対して行われる局所�
     \item \textbf{奇数長パス}: 両端点が異なるゲノムに属する．
     \item \textbf{偶数長パス}: 両端点が同じゲノムに属する．
 \end{itemize}
-DCJ操作は単一のゲノム内の隣接関係に対して作用するため，操作に関与する頂点は同一のゲノムに属する．
+DCJ操作は単一のゲノム内の隣接に対して作用するため，操作に関与する頂点は同一のゲノムに属する．
 一般性を失わず，ゲノムAに対して操作を行うものとする．
 
-\paragraph{1. パス同士の結合・分割（1-b, 1-c）}
-2つのパスを結合する場合，結合点となる2つの端点は共にゲノムAに属する．各パスのもう一方の端点をそれぞれ$x, y$とすると，結合後の新たなパスの両端点は$x, y$となる．
-\begin{enumerate}
-    \item \textbf{2つの奇数長パスの結合}:
-    結合前のパスは奇数長であるため，$x$および$y$は共にゲノムBに属する．
-    結合後のパスは両端点$x, y$が共にゲノムBに属するため，偶数長となる．
-    したがって，奇数長パスは2つ減少し，偶数長パスが1つ増加するため，$\Delta I = -2$．
-    \item \textbf{2つの偶数長パスの結合}:
-    結合前のパスは偶数長であるため，$x$および$y$は共にゲノムAに属する．
-    結合後のパスは両端点が共にゲノムAに属するため，偶数長となる．
-    したがって，$\Delta I = 0$．
-    \item \textbf{奇数長パスと偶数長パスの結合}:
-    一方の端点はゲノムBに，もう一方はゲノムAに属する．
-    結合後のパスの両端点は異なるゲノムに属するため，奇数長となる．
-    したがって，奇数長パスの総数は変わらないため，$\Delta I = 0$．
-\end{enumerate}
-1つのパスを2つに分割する操作（1-c）は上記結合操作の逆であり，$\Delta I$ は$2, 0, 0$のいずれかとなる．
+\paragraph{1. パス同士の結合・分割（1-a, 1-b, 1-c）}
+
+まず，1-c（1本のパスを2本に分割）については，
+分割後の2本のパスの長さが偶数か奇数かで次のように場合分けできる：
+\begin{itemize}
+  \item 両方偶数長パスになる場合
+  \item 片方が偶数長，片方が奇数長パスになる場合
+  \item 両方奇数長パスになる場合
+\end{itemize}
+それぞれの場合で奇数長パスの数の変化量$\Delta I$は異なるが，$2, 0, -2$のいずれかとなる．
+
+1-a, 1-bについても同様に場合分けをすれば容易だが，
+煩雑になるためここでは省略する．同様に，$2, 0, -2$のいずれかとなることが
+確認できる．
 
 \paragraph{2. パスとサイクルの操作（2-a, 2-b, 2-c）}
-\begin{enumerate}
+
+隣接グラフ上のDCJ操作であることに注意する．
+
+\begin{itemize}
     \item \textbf{パスからのサイクルの切り出し・組込み（2-a）}:
     パスの内部で自己交差的に接続を組み替えてサイクルを分離する場合，残ったパスの両端点は変更されない．したがってパスの長さの偶奇性も維持され，$\Delta I = 0$．
     \item \textbf{パスの閉路化・サイクルの開路（2-b）}:
-    パスの両端を結合してサイクルにするには，両端が同じゲノム（A）に属する必要がある．これは偶数長パスに対してのみ可能であり，このとき偶数長パスが1つ減少しサイクルが増える．奇数長パスの数$I$には影響しない（$\Delta I = 0$）．
+    パスの両端を結合してサイクルにするには，両端が同じゲノムに属する必要がある．これは偶数長パスに対してのみ可能であり，このとき偶数長パスが1つ減少しサイクルが増える．奇数長パスの数$I$には影響しない（$\Delta I = 0$）．
     \item \textbf{パス内部の反転（2-c）}:
     パスの両端点は不変であるため，$\Delta I = 0$．
-\end{enumerate}
+\end{itemize}
 
 \paragraph{3. サイクルのみの操作（3-a, 3-b）}
 サイクルのみに関わる操作においてはパスは関与しないため，奇数長パスの数は変化しない（$\Delta I = 0$）．
@@ -550,29 +892,57 @@ $A=B$ であるための必要十分条件は，
 \end{lemma}
 
 \begin{proof}
-ゲノム $A$ における隣接の数を $a$，テロメアの数を $t$ とおくと，遺伝子の総数は $N = a + t/2$ と表される．
+ゲノム $A$ におけるテロメアを含まない隣接の数を $a$，
+テロメアを含む隣接の数を $t$ とおくと，$2N = 2a + t$ より，
+ $N = a + t/2$ である．
 
 まず必要性 ($A=B \implies N = C + I/2$) を示す．
-$A$ と $B$ が同一であれば，任意の隣接 $\{u, v\} \in A$ は $B$ における同一の隣接と，共有する2つの遺伝子端を介して2重に結合されるため，長さ2のサイクルを形成する．したがって，サイクルの総数は $C=a$ となる．
-同様に，各テロメア $\{u\} \in A$ は $B$ の対応するテロメアと単一のエッジで結ばれ，長さ1のパス（奇数長パス）となることから，$I=t$ が従う．
+$A$ と $B$ が同一であれば，すべての隣接は一致する．
+任意のテロメアを含まない隣接
+ $\{u, v\} \in A$ は
+$B$ における同一の隣接と，
+共有する2つの端点を介して2重に結合されるため，隣接グラフにおいて
+長さ2のサイクルを形成する．したがって，サイクルの総数は
+ $C=a$ となる．
+同様に，テロメアを含む隣接
+$\{o, u\} \in A$ は $B$ の対応するテロメアと1本の辺で結ばれ，
+長さ1のパスとなることから，$I=t$ が従う．
 ゆえに，$C + I/2 = a + t/2 = N$ が成立する．
 
 次に十分性 ($N = C + I/2 \implies A=B$) を示す．
-隣接グラフにおけ辺の総数に着目する．各遺伝子は2つの端点を持ち，これらがゲノム $A$ および $B$ の頂点間で共有されるため，グラフ全体のエッジ数は $2N$ 本となる．
-また，本グラフは二部グラフであることから奇数長サイクルは存在せず，頂点の次数が高々2であることから偶数長パスも構成され得ない．
 
-仮定より $2N = 2C + I$ が成り立つが，これはグラフ内の全エッジがサイクルまたは奇数長パスのみによって構成されていることを意味する．
-ここで，サイクルの最小長は2，奇数長パスの最小長は1である．
-エッジ総数の制約と等式 $2C + I = 2N$ を考慮すれば，$C$ 個のサイクルはすべて長さ2であり，$I$ 本のパスはすべて長さ1でなければならないことが導かれる．
+ゲノム $A$ の隣接数を $a$，テロメア数を $t$ とする．
+隣接グラフのサイクル数を $C$，奇数長パス数を $I$ とする．
+各隣接はサイクルまたはパスの一部となるため $a \leq C$，各テロメアは奇数長パスの端点となるため $t \leq I$ が成り立つ．
+また，$N = a + t/2$，仮定より $N = C + I/2$ なので，
+\begin{align*}
+    a + \frac{t}{2} = C + \frac{I}{2}
+\end{align*}
 
-長さ2のサイクルはテロメアを含まない隣接関係の一致を，長さ1のパスはテロメアの一致をそれぞれ意味する．
-以上より，全ての隣接関係およびテロメアが完全に一致するため，$A=B$ が示された．
+が成り立つ．$a \leq C$，$t \leq I$ かつ両辺が等しいので，$a = C$，$t = I$ が従う．
+
+ここで，隣接グラフの辺の総数は $2N$ 本であり，サイクルは最小長2，奇数長パスは最小長1である．
+また，サイクルとパスの長さをそれぞれ $l_1, \ldots, l_C$（サイクル），$m_1, \ldots, m_I$（奇数長パス）とすると，
+\begin{align*}
+    2N = \sum_{i=1}^{C} l_i + \sum_{j=1}^{I} m_j
+\end{align*}
+が成り立つ．
+仮定より $2C + I = 2N$ であるから，
+\begin{align*}
+    \sum_{i=1}^{C} l_i + \sum_{j=1}^{I} m_j = 2C + I = 2N
+\end{align*}
+が成り立つ．
+ここで，すべての $i$ および $j$ について $l_i = 2$，$m_j = 1$ でなければこの等式は成立しない．
+よって，長さ3以上のサイクル，および長さ2以上のパスは存在しない．
+
+長さ2のサイクルはテロメアを含まない隣接の一致を，
+長さ1のパスはテロメアを含む隣接の一致をそれぞれ意味する．
+以上より，すべての隣接が完全に一致するため，$A=B$ が示された．
 \end{proof}
 
 \begin{lemma}[DCJ距離の下限]
 \label{lem:lower_bound}
 任意の2つのゲノム $A, B$ について，DCJ距離は以下を満たす：
-
 
 \begin{equation}
     d_{\mathrm{DCJ}}(A,B) \ge N - \left( C + \frac{I}{2} \right)
@@ -587,6 +957,7 @@ $A$ と $B$ が同一であれば，任意の隣接 $\{u, v\} \in A$ は $B$ に
 \end{proof}
 
 \begin{theorem}[DCJ距離公式]
+\label{thm:dcj_distance}
 2つのゲノム $A, B$ 間の最短のDCJ操作回数（DCJ距離）
 $d_{\mathrm{DCJ}}(A,B)$ は，次式で与えられる：
 \begin{equation}
@@ -597,10 +968,17 @@ $d_{\mathrm{DCJ}}(A,B)$ は，次式で与えられる：
 \end{theorem}
 
 \begin{proof}
-補題\ref{lem:lower_bound} により下限が示されているため，この回数でソートを行う手順が存在することを示せばよい．
-まず，$A \neq B$ である限り，$B$ に存在して $A$ に存在しない隣接（2つの端点の接続），あるいはテロメアとの接続が必ず存在する（$A$ と $B$ が一致せず，かつこれら全てが一致している状況は存在しない）．
-第4章で詳述する貪欲法アルゴリズムは，そのような不一致箇所を解消するように操作を行うことで，
-常に $C + I/2$ を $1$ ずつ増加させる操作（$C$ を1つ増加させる，あるいは $I$ を2つ増加させる操作）を選択し続けることができる．
+補題\ref{lem:lower_bound} により下限が示されているため，
+この回数でソートを行う手順が存在することを示せばよい．
+まず，$A \neq B$ である限り，$B$ に存在して
+$A$ に存在しない隣接が必ず存在する
+（\because $A$ と $B$ が一致せず，かつ全ての隣接が一致している
+状況は存在しない）．
+第4章で詳述するアルゴリズムは，そのような不一致箇所を
+解消するように操作を行うことで，
+常に $C + I/2$ を $1$ ずつ増加させる操作
+（$C$ を1つ増加させる，あるいは $I$ を2つ増加させる操作）
+を選択し続けることができる．
 したがって，下限値でのソートが可能であり，これが最短距離となる．
 \end{proof}
 
@@ -608,8 +986,9 @@ $d_{\mathrm{DCJ}}(A,B)$ は，次式で与えられる：
 (2.3)式は，$d_{\mathrm{DCJ}}$を計算する上で，
 隣接グラフの初期状態さえ構築できれば，
 実際にグラフを物理的に変形させる手順を踏まずとも，
-グラフ内のコンポーネント（サイクルおよびパス）を走査し
+グラフ内の連結成分（サイクルおよびパス）を走査し
 $C, I$ を計数するだけで距離が確定することを示している．
+
 この知見に基づき，まずアルゴリズム1を提案する．
 
 % --- 第3章：アルゴリズム1 ---
@@ -623,6 +1002,7 @@ $C, I$ を計数するだけで距離が確定することを示している．
 \section{入力形式}
 本実装では，以下のフォーマットに従うテキストファイルを入力とする．
 1行目に遺伝子数 $N$，2行目にゲノム $A$，3行目にゲノム $B$ を記述する．
+以下はその例である：
 
 \begin{verbatim}
 5
@@ -632,39 +1012,64 @@ $C, I$ を計数するだけで距離が確定することを示している．
 
 ここで \texttt{< ... >} は線形染色体，\texttt{( ... )} は環状染色体を表し，
 内部の数字は遺伝子IDおよびその符号（向き）を示す．
+\footnote{
+    あくまで私の実装の例であり，適切な処理がなされる限り入力形式
+    には特に制約はない．
+}
 
 \section{データ構造}
 実装においては，以下の3つの要素を中核とする．
 \begin{itemize}
     \item \textbf{extremity}: 遺伝子の端点を表す構造体．IDと符号を保持する．
-    \item \textbf{adjacency}: 2つの extremity のペア．探索を効率化するため，各隣接が $source$ と $toget$ のどちらに属するか，および訪問済みかどうかのフラグを持つ．
+    \item \textbf{adjacency}: 2つの extremity のペア．探索を効率化するため，
+    各隣接が $source$ と $target$ のどちらに属するか，および訪問済みかどうかのフラグを持つ．
     \item \textbf{Map}: 特定の端点がどの adjacency に含まれているかを定数時間で検索するための整数値配列．
+    \footnote{
+        実行時間を $O(N)$ に収めるための工夫である．
+    }
 \end{itemize}
 
 これらのデータ構造は，以下の手順によって入力から構築される．
 
+
+% --- EXT配列の構成 ---
 \begin{algorithm}[H]
-    \caption{入力からのデータ構造構築}
-    \KwIn{入力ファイル}
-    \KwOut{EXT配列（extremity集合）, ADJリスト（adjacency集合）}
+    \caption{EXT配列（端点配列）の構築}
+    \KwIn{入力ファイルの1行目・2行目}
+    \KwOut{EXT: サイズ$2N$のextremity配列}
 
     $N \leftarrow$ 1行目から読み込む\;
     $EXT \leftarrow$ サイズ $2N$ の配列を初期化\;
+    2行目をパースし，Aの遺伝子ID・符号ごとに，
+    \ForEach{遺伝子 $g$}{
+        $EXT[2(g-1)] \leftarrow$ $g$ の左端点, $EXT[2(g-1)+1] \leftarrow$ 右端点\;
+    }
+    \Return $EXT$\;
+\end{algorithm}
 
-    \tcp{ゲノムAの処理}
-    2行目をパースし，Aの構成を取得\;
-    \ForEach{Aにおける隣接 $\{u, v\}$}{
-        $u, v$ に対応する $EXT$ 内要素のポインタを相互に接続 (reality)\;
-        $ADJ\_NODE \leftarrow$ $u, v$ を持つ新規 adjacency ノード\;
-        $ADJ$ リストに追加\;
+% --- ADJ配列とMap配列の構成・接続 ---
+\begin{algorithm}[H]
+    \caption{ADJ配列（隣接配列）とMap配列の構築・接続}
+    \KwIn{EXT配列, 入力ファイルの2行目・3行目}
+    \KwOut{ADJ: adjacency配列, Map: 端点→ADJインデックスの配列}
+
+    $ADJ \leftarrow$ 必要なサイズの配列を初期化\;
+    $Map \leftarrow$ サイズ$2N$の配列を初期化\;
+
+    \tcp{ゲノムAの隣接をADJ配列に格納}
+    2行目をパースし，Aの隣接ごとに，
+    \ForEach{隣接 $\{u, v\}$}{
+        $ADJ[i] \leftarrow$ $u, v$ を持つ新規 adjacency ノード\;
+        $Map[u] \leftarrow i$, $Map[v] \leftarrow i$\;
+        $i \leftarrow i+1$\;
     }
-    \tcp{ゲノムBの処理}
-    3行目をパースし，Bの構成を取得\;
-    \ForEach{Bにおける隣接 $\{x, y\}$}{
-        $ADJ$ リスト内の，$x$ を含むノードと $y$ を含むノードを探索\;
-        発見したノード間にエッジ（$left\_to$ / $right\_to$）を張る\;
+
+    \tcp{ゲノムBの隣接をADJ配列のノード間に接続}
+    3行目をパースし，Bの隣接ごとに，
+    \ForEach{隣接 $\{x, y\}$}{
+        $ADJ[Map[x]]$ と $ADJ[Map[y]]$ の間にエッジ（$left\_to$ / $right\_to$）を張る\;
     }
-    \Return $EXT, ADJ$\;
+    \Return $ADJ, Map$\;
 \end{algorithm}
 
 \begin{algorithm}[H]
@@ -677,8 +1082,17 @@ $C, I$ を計数するだけで距離が確定することを示している．
     $C \leftarrow 0$, $I \leftarrow 0$\;
 
     \ForEach{未訪問の隣接ノード $v \in AG(A, B)$}{
-        $v$ から始まるコンポーネントをトラバースする\;
-        $L \leftarrow$ トラバースしたエッジ（隣接関係）の総数\;
+        $L \leftarrow 0$\;
+        $cur \leftarrow v$\;
+        \While{$cur$ が未訪問}{
+            $cur$ を訪問済みにする\;
+            $L \leftarrow L + 1$\;
+            $next \leftarrow$ $cur$ に隣接する未訪問ノード\;
+            \If{$next$ が存在しない}{
+                \textbf{break}\;
+            }
+            $cur \leftarrow next$\;
+        }
         \If{探索が開始点に戻った（サイクルを発見）}{
             $C \leftarrow C + 1$\;
         }
@@ -692,14 +1106,13 @@ $C, I$ を計数するだけで距離が確定することを示している．
     \Return $d_{\mathrm{DCJ}}$\;
 \end{algorithm}
 
-\section{正当性と計算量}
+\section{正当性と時間計算量}
+正当性については，定理\ref{thm:dcj_distance}の結果による．
+
 本アルゴリズムの探索部分は，
 各エッジをちょうど一度ずつ走査するため，
-計算量は $O(N)$ となる．
-終了性については，
-各 adjacency に訪問済みフラグを設定し，
-一度の走査で全コンポーネントを網羅するため，
-有限時間内での停止が保証される．
+エッジの数がちょうど2Nであることから，
+時間計算量は $O(N)$ となる．
 
 % --- 第4章：アルゴリズム2 ---
 
@@ -707,61 +1120,64 @@ $C, I$ を計数するだけで距離が確定することを示している．
 \chapter{アルゴリズム2：操作手順の出力}
 
 \cite{bergeron2006} の理論を基に，
-実際の変異手順を逐次的に出力するアルゴリズムを実装した．
+実際のDCJ操作手順を逐次的に出力するアルゴリズムを実装した．
 
 \section{実装方針}
 本アルゴリズムでは，
-現在のゲノム状態を目標のゲノム状態へ貪欲法により近づけていく．
+現在のゲノム状態を目標のゲノム状態へ貪欲法
+\footnote{
+    Bergeronら\cite{bergeron2006}の言葉を引用した．
+}
+により近づけていく．
 具体的には，特定の接続が目標とする接続となっていない場合，
 DCJ操作を適用してその接続を確立させていく．
 
+
+$exts$ および $goals$ は，前述のAlgorithm1で構築したEXT配列を用いる．
 \begin{algorithm}[H]
     \caption{DCJ操作によるゲノムソート手順の生成}
     \label{alg:proceed}
     \KwIn{現在のゲノム $A$ の端点集合 $exts$, 目標状態 $goals$}
-    \KwOut{実行されたDCJ操作のログ}
+
+    \KwOut{DCJ距離 $d_{\mathrm{DCJ}}$}
+
 
     $n \leftarrow$ 遺伝子数, $c \leftarrow 0$\;
+    \tcp{操作ログは各DCJ操作のたびに出力する}
 
     \tcp{第1段階：目標が通常の端点である接続を優先処理}
-    \For{$i = 0$ \KwTo $2n - 1$}{
-        $from \leftarrow exts[i]$\;
-        $to \leftarrow$ $goals[i]$ に対応する $B$ 上の目標端点\;
 
-        \If{$to$ が有効な端点 \textbf{and} $from$ の現在の接続相手 $\neq tar$}{
-            DCJ操作を実行し，$from$ と $to$ を隣接させる\;
+    \For{$i = 0$ \KwTo $2n - 1$}{
+        $src \leftarrow exts[i]$\;
+        $tar \leftarrow goals[i]$\;
+
+        \If{$tar$ が有効な端点 \textbf{and} $src$ の現在の接続相手 $\neq tar$}{
             $\text{DoubleCutJoin}(A, src, tar)$\;
+            操作内容をログとして出力\;
             $c \leftarrow c + 1$\;
         }
     }
 
     \tcp{第2段階：目標がテロメアである接続を処理}
     \For{$i = 0$ \KwTo $2n - 1$}{
-        $from \leftarrow exts[i]$\;
-        $to \leftarrow$ $goals[i]$ に対応する目標 (テロメア) \;
+        $src \leftarrow exts[i]$\;
+        $tar \leftarrow goals[i]$\;
 
-        \If{$to$ がテロメア \textbf{and} $from$ の現在の接続相手 $\neq tar$}{
-            DCJ操作を実行し，$from$ をテロメアにする\;
+        \If{$tar$ がテロメア \textbf{and} $src$ の現在の接続相手 $\neq tar$}{
             $\text{DoubleCutJoin}(A, src, tar)$\;
+            操作内容をログとして出力\;
             $c \leftarrow c + 1$\;
         }
     }
-    \Return $c$\;
+    $d_{\mathrm{DCJ}} \leftarrow c$\;
+    \Return $d_{\mathrm{DCJ}}$\;
 \end{algorithm}
 
-\section{正当性と計算量}
-本アルゴリズムの正当性は，前述の補題\ref{lem:comp_change}（成分数の変化）および補題\ref{lem:odd_path_change}（奇数長パス数の変化）から直接的に導かれる．
-これらの補題により，1回のDCJ操作で $C + I/2$ が増加する最大量は $1$ であることが示されている（補題\ref{lem:lower_bound}）．
+\section{正当性と時間計算量}
 
-アルゴリズム2で採用している「目標の接続を順次確定させていく」という貪欲的な戦略は，
-隣接グラフの観点では「長さ2のサイクル（共通の隣接）」あるいは
-「長さ1のパス（共通のテロメア）」をグラフから分離独立させる操作に相当する．
-この操作は，$C$ を1増加させるか，あるいは $I$ を2増加させることで，
-$C + I/2$ を常に 1 ずつ増加させる効果を持つ．
-したがって，各ステップごとに距離 $d_{\mathrm{DCJ}}$（(2.3)式）は $1$ ずつ減少し，
-最終的に $A=B$ となるまで最短回数でのソート手順を与えることが保証される．
+正当性については，定理\ref{thm:dcj_distance}の証明を参照されたい．
 
-また，計算量について述べると，本アルゴリズムが行う操作回数は
+また，時間計算量について述べると，本アルゴリズムが行う操作回数は
 $d_{\mathrm{DCJ}}(A, B)$ に一致する．
 補題\ref{lem:lower_bound}より，これは最大でも $N$ 回である．
 各ステップにおける端点の参照やDCJ操作は定数時間で実行でき，
@@ -774,10 +1190,23 @@ $d_{\mathrm{DCJ}}(A, B)$ に一致する．
 \chapter{評価}
 
 本研究で実装したプログラムの性能を検証するため，
-異なるスケールのデータセットを用いて実行時間およびメモリ使用量の計測を行った．
+異なるスケールのデータセットを用いて実行時間およびメモリ使用量の計測
+\footnote{
+    メモリ使用量の計測はオリジナルな処理を用いており，ヒープ領域に
+    割り当てられたものだけを計上している．
+    それ以外のスタック領域等に割り当てられたものについては，
+    誤差の範囲のサイズであるため無視して構わない．
+}
+を行った．
 
 \section{実験環境}
 実験に使用した計算機のスペックは以下の通りである．
+\footnote{
+    私物である．実行環境の違いから，
+    Windows環境の方が倍程度遅い傾向にあったが，
+    整数のマシン語長の違い等により，メモリ使用量は
+    Windows環境の方が小さかった．
+}
 \begin{itemize}
     \item \textbf{機種名}: MacBook Air (15-inch, M3)
     \item \textbf{チップ}: Apple M3（8コア: パフォーマンス 4，効率性 4）
@@ -847,20 +1276,32 @@ $N=100,000$ の規模でも約 26 MB 程度と，
 テキストデータの総容量およびパースにかかる時間は
 $O(N \log N)$ で増加する．
 
-厳密な計算量理論の観点に立てば，$N \to \infty$
+厳密な時間計算量理論の観点に立てば，$N \to \infty$
 において数値を表現するビット長自体が増大するため，
 いかなる形式であれ完全な線形時間の達成は困難である．
 しかし，アルゴリズムの理論解析で一般に用いられる
-計算モデル（Word RAM Model）では，
+計算モデル（Word RAM
+\footnote{
+    Random Access Machineの略．
+}
+ Model）では，
 マシン語長に収まる整数の操作は定数時間 $O(1)$ とみなされる．
 この前提に近づけ，実用的な速度を得るためには，
 本来であればバイナリ形式の採用などによる
 入出力の最適化が為されるべきである．
-本研究では，データ作成の簡便さとデバッグ時の可読性を優先した結果，
+本研究では，データ作成の簡便さとデバッグ時の可読性を優先し，
+テキスト入力からのパースを用いた結果，
 この入出力オーバーヘッドが残存することとなった．
+\footnote{
+    $N = 100000$ では想像以上に大きな時間がかかった．
+    そして $N = 1000000$ では私の忍耐力が持続する時間内には終了しなかった
+    ため，メモリ量など，別の部分でボトルネックが発生していたと思われる．
+    いずれにしろ，大きな $N$ でも問題なく実行できるプログラムを実装するには，
+    入力形式を大きく工夫する必要があることは明白である．
+}
 
 一方，核心となるDCJ距離計算および操作手順生成アルゴリズムそのものは，
-理論通り $O(N)$ の線形時間特性を示しており，
+理論通り $O(N)$ となっていることが観察され，
 大規模なデータセットに対しても実用的な時間内で
 解を導出可能であることが実証された．
 
@@ -885,6 +1326,206 @@ $O(N \log N)$ で増加する．
 \end{thebibliography}
 
 \appendix
+% \chapter{例1.5における最適DCJ操作手順}
+
+% 例1.5にて扱った $A: \langle 1\ -4 \rangle\ (3\ -2)\ \langle 5 \rangle$ から $B: \langle 1\ 2\ 3 \rangle\ (4\ 5)$ への変換過程の4手順を可視化する．
+
+% \begin{figure}[H]
+%     \centering
+%     % 1手順目
+%     \scalebox{0.7}{
+%     \begin{tikzpicture}[
+%         x = 2.0cm, y = 3.0cm,
+%         every node/.style={circle, draw, minimum size=1.62cm, inner sep=0pt, font=\large},
+%         adjA/.style={fill=blue!10},
+%         adjB/.style={fill=red!10},
+%         adjNew/.style={fill=green!20, draw=green!50!black, thick},
+%         edge/.style={-, ultra thick},
+%         edgeNew/.style={-, ultra thick, green!50!black}
+%     ]
+%         % Genome A nodes (top row)
+%         \node[adjA] (a1) at (0, 0) {$\{ o, -1 \}$};
+%         \node[adjNew] (a2) at (1, 0) {$\{ 1, -2 \}$};
+%         \node[adjA] (a3) at (2, 0) {$\{ -4, o \}$};
+%         \node[adjA] (a4) at (3, 0) {$\{ 3, 2 \}$};
+%         \node[adjNew] (a5) at (4, 0) {$\{ 4, -3 \}$};
+%         \node[adjA] (a6) at (5, 0) {$\{ o, -5 \}$};
+%         \node[adjA] (a7) at (6, 0) {$\{ 5, o \}$};
+
+%         % Genome B nodes (bottom row)
+%         \node[adjB] (b1) at (0, -1) {$\{ o, -1 \}$};
+%         \node[adjB] (b2) at (1, -1) {$\{ 1, -2 \}$};
+%         \node[adjB] (b3) at (2, -1) {$\{ 2, -3 \}$};
+%         \node[adjB] (b4) at (3, -1) {$\{ 3, o \}$};
+%         \node[adjB] (b5) at (4, -1) {$\{ 4, -5 \}$};
+%         \node[adjB] (b6) at (5, -1) {$\{ 5, -4 \}$};
+
+%         % Edges
+%         \draw[edge] (a1) -- (b1); % -1
+%         % Changed edges from a2 {1, -2}
+%         \draw[edge] (a2) to[bend right=10] (b2); % 1 in {1, -2}
+%         \draw[edgeNew] (a2) to[bend left=10] (b2);  % -2 in {1, -2}
+%         \draw[edge] (a3) -- (b6);
+%         \draw[edge] (a4) -- (b4); % 3
+%         \draw[edge] (a4) -- (b3); % 2
+%         % Changed edges from a5 {4, -3}
+%         \draw[edgeNew] (a5) -- (b5); % 4 in {4, -5}
+%         \draw[edge] (a5) -- (b3); % -3 in {2, -3}
+%         \draw[edge] (a6) -- (b5); % -5
+%         \draw[edge] (a7) -- (b6); % 5
+%         % --- Old connections (dotted) ---
+%         \draw[edge, dotted, gray] (a2) -- (b5);
+%         \draw[edge, dotted, gray] (a5) -- (b2);
+%     \end{tikzpicture}
+%     }
+%     \caption{1手順目：$(1,4),\ (-2,-3)\ \rightarrow\ (1,-2),\ (4,-3)$}
+% \end{figure}
+
+% % 2手順目
+% \begin{figure}[H]
+%     \centering
+%     \scalebox{0.7}{
+%     \begin{tikzpicture}[
+%         x = 2.0cm, y = 3.0cm,
+%         every node/.style={circle, draw, minimum size=1.62cm, inner sep=0pt, font=\large},
+%         adjA/.style={fill=blue!10},
+%         adjB/.style={fill=red!10},
+%         adjNew/.style={fill=green!20, draw=green!50!black, thick},
+%         edge/.style={-, ultra thick},
+%         edgeNew/.style={-, ultra thick, green!50!black}
+%     ]
+%         % Genome A nodes (top row)
+%         \node[adjA] (a1) at (0, 0) {$\{ o, -1 \}$};
+%         \node[adjA] (a2) at (1, 0) {$\{ 1, -2 \}$};
+%         \node[adjA] (a3) at (2, 0) {$\{ -4, o \}$};
+%         \node[adjNew] (a4) at (3, 0) {$\{ 2, -3 \}$};
+%         \node[adjNew] (a5) at (4, 0) {$\{ 3, 4 \}$};
+%         \node[adjA] (a6) at (5, 0) {$\{ o, -5 \}$};
+%         \node[adjA] (a7) at (6, 0) {$\{ 5, o \}$};
+
+%         % Genome B nodes (bottom row)
+%         \node[adjB] (b1) at (0, -1) {$\{ o, -1 \}$};
+%         \node[adjB] (b2) at (1, -1) {$\{ 1, -2 \}$};
+%         \node[adjB] (b3) at (2, -1) {$\{ 2, -3 \}$};
+%         \node[adjB] (b4) at (3, -1) {$\{ 3, o \}$};
+%         \node[adjB] (b5) at (4, -1) {$\{ 4, -5 \}$};
+%         \node[adjB] (b6) at (5, -1) {$\{ 5, -4 \}$};
+
+%         % Edges
+%         \draw[edge] (a1) -- (b1); % -1
+%         \draw[edge] (a2) to[bend right=10] (b2); % 1 in {1, -2}
+%         \draw[edge] (a2) to[bend left=10] (b2);  % -2 in {1, -2}
+%         \draw[edge] (a3) -- (b6); % -4
+%         \draw[edge] (a4) to[bend right=10] (b3); % 2,-3 (1本目, 緑)
+%         \draw[edgeNew] (a4) to[bend left=10] (b3);  % 2,-3 (2本目, 緑)
+%         \draw[edgeNew] (a5) -- (b4); % 3,4
+%         \draw[edge] (a5) -- (b5); % 4 in {4, -5}
+%         \draw[edge] (a6) -- (b5); % -5
+%         \draw[edge] (a7) -- (b6); % 5
+%         % --- Old connections (dotted) ---
+%         \draw[edge, dotted, gray] (a4) -- (b4);
+%         \draw[edge, dotted, gray] (a5) -- (b3);
+%     \end{tikzpicture}
+%     }
+%     \caption{2手順目：$(2,3),\ (-3,4)\ \rightarrow\ (2,-3),\ (3,4)$}
+% \end{figure}
+
+% % 3手順目
+% \begin{figure}[H]
+%     \centering
+%     \scalebox{0.7}{
+%     \begin{tikzpicture}[
+%         x = 2.0cm, y = 3.0cm,
+%         every node/.style={circle, draw, minimum size=1.62cm, inner sep=0pt, font=\large},
+%         adjA/.style={fill=blue!10},
+%         adjB/.style={fill=red!10},
+%         adjNew/.style={fill=green!20, draw=green!50!black, thick},
+%         edge/.style={-, ultra thick},
+%         edgeNew/.style={-, ultra thick, green!50!black}
+%     ]
+%         % Genome A nodes (top row)
+%         \node[adjA] (a1) at (0, 0) {$\{ o, -1 \}$};
+%         \node[adjA] (a2) at (1, 0) {$\{ 1, -2 \}$};
+%         \node[adjA] (a3) at (2, 0) {$\{ o, o \}$};
+%         \node[adjA] (a4) at (3, 0) {$\{ 2, -3 \}$};
+%         \node[adjA] (a5) at (4, 0) {$\{ 3, 4 \}$};
+%         \node[adjA] (a6) at (5, 0) {$\{ o, -5 \}$};
+%         \node[adjNew] (a7) at (6, 0) {$\{ -4, 5 \}$};
+
+%         % Genome B nodes (bottom row)
+%         \node[adjB] (b1) at (0, -1) {$\{ o, -1 \}$};
+%         \node[adjB] (b2) at (1, -1) {$\{ 1, -2 \}$};
+%         \node[adjB] (b3) at (2, -1) {$\{ 2, -3 \}$};
+%         \node[adjB] (b4) at (3, -1) {$\{ 3, o \}$};
+%         \node[adjB] (b5) at (4, -1) {$\{ 4, -5 \}$};
+%         \node[adjB] (b6) at (5, -1) {$\{ 5, -4 \}$};
+
+%         % Edges
+%         \draw[edge] (a1) -- (b1); % -1
+%         \draw[edge] (a2) to[bend right=10] (b2); % 1 in {1, -2}
+%         \draw[edge] (a2) to[bend left=10] (b2);  % -2 in {1, -2}
+%         \draw[edge] (a4) to[bend right=10] (b3); % 2,-3 (1本目, 緑)
+%         \draw[edge] (a4) to[bend left=10] (b3);  % 2,-3 (2本目, 緑)
+%         \draw[edge] (a5) -- (b4); % 3,4
+%         \draw[edge] (a5) -- (b5); % 4 in {4, -5}
+%         \draw[edge] (a6) -- (b5); % -5
+%         \draw[edgeNew] (a7) to[bend right=10] (b6); % -4,5 (1本目, 緑)
+%         \draw[edge] (a7) to[bend left=10] (b6);  % -4,5 (2本目, 緑)
+%         % --- Old connections (dotted) ---
+%         \draw[edge, dotted, gray] (a3) -- (b6);
+%     \end{tikzpicture}
+%     }
+%     \caption{3回目のDCJ操作：$(-4,o),\ (5,o)\ \rightarrow\ (-4,5),\ (o,o)$}
+% \end{figure}
+
+% % 4手順目
+% \begin{figure}[H]
+%     \centering
+%     \scalebox{0.7}{
+%     \begin{tikzpicture}[
+%         x = 2.0cm, y = 3.0cm,
+%         every node/.style={circle, draw, minimum size=1.62cm, inner sep=0pt, font=\large},
+%         adjA/.style={fill=blue!10},
+%         adjB/.style={fill=red!10},
+%         adjNew/.style={fill=green!20, draw=green!50!black, thick},
+%         edge/.style={-, ultra thick},
+%         edgeNew/.style={-, ultra thick, green!50!black}
+%     ]
+%         % Genome A nodes (top row)
+%         \node[adjA] (a1) at (0, 0) {$\{ o, -1 \}$};
+%         \node[adjA] (a2) at (1, 0) {$\{ 1, -2 \}$};
+%         \node[adjA] (a4) at (2, 0) {$\{ 2, -3 \}$};
+%         \node[adjNew] (a5) at (3, 0) {$\{ 3, o \}$};
+%         \node[adjNew] (a6) at (4, 0) {$\{ 4, -5 \}$};
+%         \node[adjA] (a7) at (5, 0) {$\{ -4, 5 \}$};
+
+%         % Genome B nodes (bottom row)
+%         \node[adjB] (b1) at (0, -1) {$\{ o, -1 \}$};
+%         \node[adjB] (b2) at (1, -1) {$\{ 1, -2 \}$};
+%         \node[adjB] (b3) at (2, -1) {$\{ 2, -3 \}$};
+%         \node[adjB] (b4) at (3, -1) {$\{ 3, o \}$};
+%         \node[adjB] (b5) at (4, -1) {$\{ 4, -5 \}$};
+%         \node[adjB] (b6) at (5, -1) {$\{ 5, -4 \}$};
+
+%         % Edges
+%         \draw[edge] (a1) -- (b1); % -1
+%         \draw[edge] (a2) to[bend right=10] (b2); % 1 in {1, -2}
+%         \draw[edge] (a2) to[bend left=10] (b2);  % -2 in {1, -2}
+%         \draw[edge] (a4) to[bend right=10] (b3); % 2,-3 (1本目, 緑)
+%         \draw[edge] (a4) to[bend left=10] (b3);  % 2,-3 (2本目, 緑)
+%         \draw[edge] (a5) -- (b4); % 3,4
+%         \draw[edgeNew] (a6) to[bend right=10] (b5); % 4,-5 (1本目, 緑)
+%         \draw[edge] (a6) to[bend left=10] (b5);  % 4,-5 (2本目, 緑)
+%         \draw[edge] (a7) to[bend right=10] (b6); % -4,5 (1本目, 緑)
+%         \draw[edge] (a7) to[bend left=10] (b6);  % -4,5 (2本目, 緑)
+
+%         % --- Old connections (dotted) ---
+%         \draw[edge, dotted, gray] (a5) -- (b5);
+%     \end{tikzpicture}
+%     }
+%     \caption{4回目のDCJ操作：$(4,3),\ (-5,o)\ \rightarrow\ (4,-5),\ (3,o)$}
+% \end{figure}
+
 \chapter{ソースコードの公開}
 
 本研究で実装した線形時間アルゴリズムのソースコード，
@@ -900,20 +1541,28 @@ $O(N \log N)$ で増加する．
 \begin{itemize}
     \item \textbf{リポジトリ名}: \texttt{dcj\_bergeron}
     \item \textbf{URL}: \texttt{https://github.com/hiratannnnnn/dcj\_bergeron}
-    \item \textbf{最終アクセス日}: 2026年1月8日
+    \item \textbf{最終編集日}: 2026年1月28日
 \end{itemize}
 
 \vspace{1em}
 
 なお，本リポジトリには以下のファイルが含まれる．
+
 \begin{enumerate}
+    \item \texttt{lib}: 汎用関数
     \item \texttt{srcs/solve.c}: アルゴリズム1（距離計算）およびアルゴリズム2（操作手順出力）の主要実装
     \item \texttt{srcs/double\_cut\_join.c}: DCJ操作の基本機能の実装
     \item \texttt{srcs/contexts.c}: 実行コンテキストおよびデータ構造の初期処理
     \item \texttt{srcs/utils\_*.c}: 入出力処理やデータ構造操作の補助関数群
-    \item \texttt{include/}: データ構造（extremity, adjacency等）を定義したヘッダファイル群
+    \item \texttt{include/}: 構造体（extremity, adjacency等）及び関数のプロトタイプ宣言
+                            を記載したヘッダファイル群
+    \item \texttt{benchmark\_author}: 私の実行環境でのベンチマーク
+    \item \texttt{example.txt}: 例1.5のテキスト形式
+    \item \texttt{LICENSE}: 簡単な謝辞
+    \item \texttt{main\_make\_ex.c}: テスト用ファイルランダム生成用プログラム
     \item \texttt{main.c}: プログラムのエントリーポイント
     \item \texttt{Makefile}: ビルド用スクリプト
+    \item \texttt{memo.md}: 実装メモ
     \item \texttt{README.md}: 実行方法および環境要件の解説
 \end{enumerate}
 

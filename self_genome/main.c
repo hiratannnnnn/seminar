@@ -13,7 +13,7 @@ int main(void)
 	int n;
 
 	//                      edit ↓ here
-	if (Extremity_init("tests/ex_1000.txt", &ctx, &n) == -1)
+	if (Extremity_init("tests/ex_20.txt", &ctx, &n) == -1)
 		return (printf("Error while reading file.\n"), 1);
 	print_Extremity_ctx(&ctx);
 

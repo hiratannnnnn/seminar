@@ -12,11 +12,30 @@ class ChessBoard(tk.Canvas):
         self.selected = None
         self.lines = {}  # {(cell1, cell2): line_id}
         self.path = path if path else []
+        self.current_step = len(self.path) if self.path else 0
         self.draw_board()
         self.bind("<Button-1>", self.on_click)
+        master.bind("<Right>", self.on_right)
+        master.bind("<Left>", self.on_left)
         if self.path:
-            self.draw_path_edges(self.path)
+            self.draw_path_edges(self.path[:self.current_step])
 
+    def on_right(self, event):
+        if self.path and self.current_step < len(self.path):
+            if self.current_step > 0:
+                self.draw_path_step(self.path[self.current_step-1], self.path[self.current_step])
+            self.current_step += 1
+
+    def on_left(self, event):
+        if self.path and self.current_step > 1:
+            id1 = self.path[self.current_step-2]
+            id2 = self.path[self.current_step-1]
+            key = tuple(sorted([self.id_to_cell(id1), self.id_to_cell(id2)]))
+            if key in self.lines:
+                self.delete(self.lines[key])
+                del self.lines[key]
+            self.current_step -= 1
+            
     def draw_board(self):
         for r in range(self.rows):
             for c in range(self.cols):
